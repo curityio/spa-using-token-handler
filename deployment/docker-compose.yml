@@ -46,8 +46,8 @@ services:
       - 3000:3000
     volumes:
       - ./reverse-proxy/kong.yml:/usr/local/kong/declarative/kong.yml
-      - ./tmp/kong-bff-plugin/plugin:/usr/local/share/lua/5.1/kong/plugins/bff-token
-      - ./tmp/kong-phantom-token-plugin/plugin:/usr/local/share/lua/5.1/kong/plugins/phantom-token
+      - ./kong-bff-plugin/plugin:/usr/local/share/lua/5.1/kong/plugins/bff-token
+      - ./kong-phantom-token-plugin/plugin:/usr/local/share/lua/5.1/kong/plugins/phantom-token
     environment:
       KONG_DATABASE: 'off'
       KONG_DECLARATIVE_CONFIG: '/usr/local/kong/declarative/kong.yml'
