@@ -1,23 +1,23 @@
 ESSENTIALS
 ----------
-1. Look at PR and discuss with Michal
+1. Get BFF merged, then update build script to use main branch
 
 2. Finish HOWTO write up and Guides
    Improve READMEs for API components in guides if required
    Link back from HOWTO to simple SPA code write up
+   Think about SPA libraries and BFF components
    Deploy to DEV and send round
 
-3. API Tests to complete
-   Ensure the gateway behaves accordingly
-   This may prove a little tricky and may require some CSRF logic to enforce web origins / CSRF headers
-   Collect open issues identified
-
-4. Implement session expiry in SPA by returning to the Unauthenticated view
+3. Implement session expiry in SPA by returning to the Unauthenticated view
    Failed token refresh with a 400 response to throw a UI error
 
-5. Finalize error codes with Michal
-   Propose based on what works best for clients
+4. API Tests
+   Gateway does not check anti forgery token during POST requests
+   Discuss with Daniel
 
-6. BFF API Deployment
+5. BFF API Config and Deployment
    Currently a compiled config.js file is copied into DockerCompose
-   Michal to turn this into a config.json or environment variables instead
+   Turn this into a config.json or environment variables instead
+
+6. Finalize error codes with Michal
+   Propose based on what works best for clients
