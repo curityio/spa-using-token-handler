@@ -10,8 +10,7 @@ app.use((request: express.Request, response: express.Response, next: express.Nex
 
     let policy = "default-src 'none';";
     policy += " script-src 'self';";
-    policy += ` connect-src 'self' http://api.example.com:3000;`;
-    policy += " child-src 'self';";
+    policy += " connect-src 'self' http://api.example.com:3000;";
     policy += " img-src 'self';";
     policy += " style-src 'self' https://cdn.jsdelivr.net;";
     policy += " object-src 'none'";
@@ -29,7 +28,7 @@ app.use((request: express.Request, response: express.Response, next: express.Nex
 let port: number = 0;
 if (process.env.NODE_ENV === 'production') {
 
-    app.use(express.static(path.resolve(__dirname, './content')));
+    app.use(express.static('./content'));
     port = 3000
 
 } else {

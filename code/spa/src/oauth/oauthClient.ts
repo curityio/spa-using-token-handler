@@ -55,7 +55,7 @@ export class OAuthClient {
      */
     public async getUserInfo(): Promise<any> {
         
-        return await this._fetch('GET', 'userinfo', null);
+        return await this._fetch('GET', 'userInfo', null);
     }
 
     /*

@@ -7,7 +7,7 @@ services:
 # The route for the BFF API is seen by the SPA as http://api.example.com/bff
 #
 - name: bff-api
-  url: http://bffserver:3001
+  url: http://bffserver:3001/bff
   routes:
   - name: bff-api-route
     paths:
