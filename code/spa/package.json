@@ -1,0 +1,29 @@
+{
+    "name": "example-spa",
+    "version": "1.0.0",
+    "description": "A sample SPA that uses Curity recommendations for web security",
+    "main": "index.ts",
+    "scripts": {
+        "start": "npm run clean && npm run copy && webpack --watch",
+        "build": "npm run clean && npm run copy && webpack",
+        "clean": "rimraf dist/*bundle*",
+        "copy": "mkdir -p dist && cp index.html app.css config.json dist/"
+    },
+    "author": "Curity AB",
+    "license": "Apache-2.0",
+    "dependencies": {
+        "axios": "^0.21.1",
+        "react": "^17.0.2",
+        "react-dom": "^17.0.2"
+    },
+    "devDependencies": {
+        "@types/react": "^17.0.13",
+        "@types/react-dom": "^17.0.8",
+        "@types/url-parse": "^1.4.3",
+        "rimraf": "^3.0.2",
+        "ts-loader": "^9.2.3",
+        "typescript": "^4.3.5",
+        "webpack": "^5.42.0",
+        "webpack-cli": "^4.3.5"
+    }
+}

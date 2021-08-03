@@ -1,0 +1,24 @@
+div
+{
+    margin-top: 10px;
+}
+button
+{
+    width: 300px;
+}
+p
+{
+    color: gray;
+    overflow-wrap: break-word;
+}
+.multiline {
+    white-space: pre-line;
+}
+.green
+{
+    color: green;
+}
+.red
+{
+    color: red;
+}

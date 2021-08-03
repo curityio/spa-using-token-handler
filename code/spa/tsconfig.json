@@ -1,0 +1,16 @@
+{
+    "compilerOptions": {
+      "target": "es2017",
+      "strict": true,
+      "lib": ["es2017", "dom"],
+      "jsx": "react",
+      "esModuleInterop": true,
+      "moduleResolution": "node"
+    },
+    "include": [
+      "./src"
+    ],
+    "exclude": [
+      "node_modules"
+    ]
+}

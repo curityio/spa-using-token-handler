@@ -1,0 +1,47 @@
+_format_version: '2.1'
+_transform: true
+
+services:
+
+#
+# The route for the BFF API is seen by the SPA as http://api.example.com/bff
+#
+- name: bff-api
+  url: http://bffserver:3001
+  routes:
+  - name: bff-api-route
+    paths:
+    - /bff
+
+#
+# The route for the business API is seen by the SPA as http://api.example.com/api
+#
+- name: business-api
+  url: http://apiserver:3002
+  routes:
+  - name: business-api-route
+    paths:
+    - /api
+
+  plugins:
+
+  # 1. The BFF plugin decrypts the secure cookie and forwards the opaque access token to the API endpoint
+  - name: bff-token
+    config:
+      encryption_key: NF65meV>Ls#8GP>;!Cnov)rIPRoK^.NP
+      cookie_name_prefix: example
+  
+  # 2. The phantom token plugin will run after the secure cookie plugin, to introspect tokens
+  - name: phantom-token
+    config:
+      introspection_endpoint: http://curityserver:8443/oauth/v2/oauth-introspect
+      client_id: api-gateway-client
+      client_secret: Password1
+      token_cache_seconds: 900
+
+  # 3. The CORS plugin runs last so that error responses returned from plugins are readable by the SPA
+  - name: cors
+    config: 
+      origins:
+      - http://www.example.com
+      credentials: true

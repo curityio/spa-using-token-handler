@@ -1,0 +1,182 @@
+<!--
+  ~ Copyright (C) 2015 Curity AB. All rights reserved.
+  ~
+  ~ The contents of this file are the property of Curity AB.
+  ~ You may not copy or use this file, in either source code
+  ~ or executable form, except in compliance with terms
+  ~ set by Curity AB.
+  ~
+  ~ For further information, please contact Curity AB.
+  -->
+
+<Configuration monitorInterval="30" packages="io.prometheus.client.log4j2">
+    <Properties>
+        <!-- Set IDSVR_HOME property in case the environment variable has not been set -->
+        <Property name="IDSVR_HOME">$${env:HOME}/idsvr-log</Property>
+    </Properties>
+    <Appenders>
+        <RollingFile name="cluster-log" fileName="${env:IDSVR_HOME}/var/log/cluster.log"
+                     filePattern="${env:IDSVR_HOME}/var/log/cluster.log.%i.gz">
+            <Policies>
+                <SizeBasedTriggeringPolicy size="10MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="5"/>
+            <PatternLayout pattern="%date{yyyy-MM-dd'T'HH:mm:ss:SSSZ} %-5level {%thread} %logger - %msg%n"/>
+        </RollingFile>
+
+        <Console name="stdout" target="SYSTEM_OUT">
+            <PatternLayout noConsoleNoAnsi="true" pattern="%date{yyyy-MM-dd'T'HH:mm:ss:SSSZ} %highlight{%-5level}{FATAL=blink bright red, ERROR=bright red, WARN=yellow, INFO=green, DEBUG=cyan, TRACE=white} %X{RequestId} %X{SessionId} %highlight{{%thread}}{FATAL=white, ERROR=white, WARN=white, INFO=white, DEBUG=white, TRACE=white} %highlight{%logger - %msg%n}{FATAL=blink bright red, ERROR=bright red, WARN=yellow, INFO=green, DEBUG=cyan, TRACE=white}"/>
+            <filters>
+                <MarkerFilter marker="REQUEST" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <MarkerFilter marker="EXTENDED_REQUEST" onMatch="DENY" onMismatch="NEUTRAL"/>
+            </filters>
+        </Console>
+
+        <Rewrite name="rewritten-stdout">
+            <AppenderRef ref="stdout"/>
+            <LoggerNameLevelRewritePolicy logger="org.apache.directory">
+                <KeyValuePair key="ERROR" value="WARN"/>
+                <KeyValuePair key="WARN" value="INFO"/>
+            </LoggerNameLevelRewritePolicy>
+        </Rewrite>
+
+        <Rewrite name="rewritten-stdout">
+            <AppenderRef ref="stdout"/>
+            <LoggerNameLevelRewritePolicy logger="org.opensaml.common.binding.decoding">
+                <KeyValuePair key="ERROR" value="INFO"/>
+            </LoggerNameLevelRewritePolicy>
+        </Rewrite>
+
+        <RollingFile name="request-log" fileName="${env:IDSVR_HOME}/var/log/request.log"
+                     filePattern="${env:IDSVR_HOME}/var/log/request.log.%i.gz">
+            <PatternLayout header="#date|request-id|client|method|uri|params|protocol|lang|accept|status|size|content-type|secure|request-headers|response-headers|duration|location%n">
+                <Pattern>%d{yyyy-MM-dd'T'HH:mm:ss:SSSZ}|%X{RequestId}|%K{client}|%K{method}|%K{uri}|%K{params}|%K{protocol}|%K{lang}|%K{accept}|%K{status}|%K{size}|%K{content-type}|%K{secure}|%K{request-headers}|%K{response-headers}|%K{duration}|%K{location}%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="10MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="5"/>
+            <filters>
+                <MarkerFilter marker="EXTENDED_REQUEST" onMatch="ACCEPT" onMismatch="NEUTRAL"/>
+                <MarkerFilter marker="REQUEST" onMatch="ACCEPT" onMismatch="DENY"/>
+            </filters>
+        </RollingFile>
+
+        <!--
+             Audit log appenders.
+             CAUTION: modifying these appenders will affect audit logging.
+         -->
+        <RollingFile name="audit-log" fileName="${env:IDSVR_HOME}/var/log/audit.log"
+                     filePattern="${env:IDSVR_HOME}/var/log/audit.log.%i.gz">
+            <Policies>
+                <SizeBasedTriggeringPolicy size="10MB"/>
+            </Policies>
+            <!--
+                An audit message is formatted as a Syslog (RFC 5424) compliant structured data message.
+            -->
+            <Rfc5424Layout appName="Curity" facility="AUDIT" newLine="true" includeMDC="false" />
+        </RollingFile>
+
+        <JDBC name="audit-db" tableName="audit">
+            <ConnectionFactory class="se.curity.identityserver.logging.AuditDatabaseConnectionFactory" method="getDatabaseConnection" />
+            <Column name="id" pattern="%structured_data_id" isUnicode="false" />
+            <Column name="event_type" pattern="%structured_data_type" isUnicode="false" />
+            <Column name="message" pattern="%structured_data_message" isUnicode="false" />
+            <Column name="instant" isEventTimestamp="true" isUnicode="false" />
+            <Column name="event_instant" pattern="%K{instant}" isUnicode="false" />
+            <Column name="server" pattern="%K{server}" isUnicode="false" />
+            <Column name="subject" pattern="%K{subject}" isUnicode="false" />
+            <Column name="client" pattern="%K{client}" isUnicode="false" />
+            <Column name="resource" pattern="%K{resource}" isUnicode="false" />
+            <Column name="authenticated_subject" pattern="%K{authenticatedSubject}" isUnicode="false" />
+            <Column name="authenticated_client" pattern="%K{authenticatedClient}" isUnicode="false" />
+            <Column name="acr" pattern="%K{acr}" isUnicode="false" />
+            <Column name="endpoint" pattern="%K{endpoint}" isUnicode="false" />
+            <Column name="session" pattern="%K{session}" isUnicode="false" />
+        </JDBC>
+
+        <RollingFile name="alarms-log" fileName="${env:IDSVR_HOME}/var/log/alarms.log"
+                     filePattern="${env:IDSVR_HOME}/var/log/alarms.log.%i.gz">
+            <Policies>
+                <SizeBasedTriggeringPolicy size="10MB"/>
+            </Policies>
+            <!--
+                An alarm message is formatted as a Syslog (RFC 5424) compliant structured data message.
+            -->
+            <Rfc5424Layout appName="Curity" facility="ALERT" newLine="true" includeMDC="false" />
+        </RollingFile>
+
+        <Prometheus name="metrics">
+            <filters>
+                <MarkerFilter marker="REQUEST" onMatch="DENY" onMismatch="NEUTRAL"/>
+            </filters>
+        </Prometheus>
+    </Appenders>
+
+    <Loggers>
+        <!--
+            To log requests' bodies and query strings (which may contain passwords and tokens!), set the
+            value of the level attribute to 'DEBUG' or 'TRACE'. In production deployments (i.e., *any* environment
+            where sensitive data may be used), this level should be set to 'INFO'; otherwise, sensitive data may
+            be logged AT ANY LOG LEVEL.
+        -->
+        <AsyncLogger name="se.curity" level="${env:LOGGING_LEVEL:-INFO}"/>
+
+        <!--
+            Curity-created plug-ins use the io.curity package, including some that are shipped with the product.
+            These may log sensitive data when set to 'DEBUG' or 'TRACE' AT ANY LOG LEVEL and should, therefore, be
+            set to 'INFO' in production deployments (i.e., *any* environment where sensitive data may be used).
+        -->
+        <AsyncLogger name="io.curity" level="${env:LOGGING_LEVEL:-INFO}"/>
+
+        <AsyncLogger name="se.curity.identityserver.config" level="${env:LOGGING_LEVEL:-INFO}" additivity="false">
+            <AppenderRef ref="stdout" level="WARN"/>
+            <AppenderRef ref="cluster-log"/>
+        </AsyncLogger>
+
+        <AsyncLogger name="se.curity.identityserver.config.ConfDConnection" level="${env:LOGGING_LEVEL:-INFO}" additivity="false">
+            <ContextMapFilter onMatch="DENY" onMismatch="NEUTRAL">
+                <KeyValuePair key="shutdown" value="true"/>
+            </ContextMapFilter>
+            <AppenderRef ref="stdout"/>
+        </AsyncLogger>
+
+        <AsyncLogger name="se.curity.identityserver.config.ConfDListener" level="${env:LOGGING_LEVEL:-INFO}" additivity="false">
+            <ContextMapFilter onMatch="DENY" onMismatch="NEUTRAL">
+                <KeyValuePair key="shutdown" value="true"/>
+            </ContextMapFilter>
+            <AppenderRef ref="stdout"/>
+        </AsyncLogger>
+
+        <AsyncLogger name="se.curity.identityserver.localization" level="INFO"/>
+        <AsyncLogger name="se.curity.identityserver.web.templateEngine" level="WARN"/>
+
+
+        <AsyncLogger name="org.eclipse.jetty.server.AbstractConnector" level="WARN">
+            <ContextMapFilter onMatch="DENY" onMismatch="NEUTRAL">
+                <KeyValuePair key="shutdown" value="true"/>
+            </ContextMapFilter>
+        </AsyncLogger>
+
+        <AsyncLogger name="com.tailf" level="OFF" />
+
+        <!--
+             Audit logger.
+             CAUTION: modifying this logger will affect audit logging.
+         -->
+        <AsyncLogger name="audit-events" level="INFO" additivity="false">
+            <AppenderRef ref="audit-log"/>
+            <AppenderRef ref="audit-db"/>
+        </AsyncLogger>
+
+        <Logger name="alarms" level="INFO" additivity="false">
+            <AppenderRef ref="alarms-log"/>
+        </Logger>
+
+        <AsyncRoot level="INFO">
+            <AppenderRef ref="rewritten-stdout"/>
+            <AppenderRef ref="request-log"/>
+            <AppenderRef ref="metrics"/>
+        </AsyncRoot>
+    </Loggers>
+</Configuration>
