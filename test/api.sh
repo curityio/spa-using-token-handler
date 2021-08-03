@@ -74,6 +74,13 @@ if [ "$HTTP_STATUS" != '401' ]; then
   echo '*** The expected error did not occur when calling an API without a secure cookie'
   exit
 fi
+JSON=$(tail -n 1 $RESPONSE_FILE)
+echo $JSON | jq
+CODE=$(jq -r .code <<< "$JSON")
+if [ "$CODE" != 'unauthorized' ]; then
+   echo '*** API POST without a secure cookie returned an unexpected error code'
+   exit
+fi
 echo '3. POST without a valid secure cookie was successfully rejected'
 
 #
@@ -99,6 +106,13 @@ if [ "$HTTP_STATUS" != '401' ]; then
   echo '*** The expected error did not occur when calling an API without an anti forgery token'
   #exit
 fi
+#JSON=$(tail -n 1 $RESPONSE_FILE)
+#echo $JSON | jq
+#CODE=$(jq -r .code <<< "$JSON")
+#if [ "$CODE" != 'unauthorized' ]; then
+#   echo '*** API POST without an anti forgery token returned an unexpected error code'
+#   exit
+#fi
 echo '5. POST without an anti forgery token was successfully rejected'
 
 #
@@ -114,6 +128,13 @@ if [ "$HTTP_STATUS" != '401' ]; then
   echo '*** The expected error did not occur when calling an API an incorrect anti forgery token'
   #exit
 fi
+#JSON=$(tail -n 1 $RESPONSE_FILE)
+#echo $JSON | jq
+#CODE=$(jq -r .code <<< "$JSON")
+#if [ "$CODE" != 'unauthorized' ]; then
+#   echo '*** API POST with an incorrect anti forgery token returned an unexpected error code'
+#   exit
+#fi
 echo '6. POST with an incorrect anti forgery token was successfully rejected'
 
 #

@@ -20,4 +20,4 @@ ESSENTIALS
    Turn this into a config.json or environment variables instead
 
 6. Finalize error codes with Michal
-   Propose based on what works best for clients
+   Think about what works best for clients

@@ -140,7 +140,7 @@ echo $JSON | jq
 IS_LOGGED_IN=$(jq -r .isLoggedIn <<< "$JSON")
 HANDLED=$(jq -r .handled <<< "$JSON")
 if [ "$IS_LOGGED_IN" != 'true'  ] || [ "$HANDLED" != 'true' ]; then
-   echo "*** End login returned an unexpected payload"
+   echo '*** End login returned an unexpected payload'
    exit 1
 fi
 

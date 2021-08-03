@@ -530,7 +530,7 @@ JSON=$(tail -n 1 $RESPONSE_FILE)
 echo $JSON | jq
 CODE=$(jq -r .code <<< "$JSON")
 if [ "$CODE" != 'server_error' ]; then
-   echo "*** Malformed JSON post returned an unexpected error code"
+   echo '*** Malformed JSON post returned an unexpected error code'
    exit
 fi
 echo '24. Malformed JSON was handled in the expected manner'
