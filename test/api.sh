@@ -2,7 +2,7 @@
 
 ################################################################################################
 # Tests to visualize behaviour when calling the example API with secure cookies, via the gateway
-# This ensures that we get responses useful to the SPA and readable error responses
+# This ensures that we get responses useful to the SPA and error responses that are readable
 ################################################################################################
 
 API_BASE_URL='http://api.example.com:3000/api'
@@ -80,6 +80,11 @@ CODE=$(jq -r .code <<< "$JSON")
 if [ "$CODE" != 'unauthorized' ]; then
    echo '*** API POST without a secure cookie returned an unexpected error code'
    exit
+fi
+ORIGIN=$(getHeaderValue 'Access-Control-Allow-Origin')
+if [ "$ORIGIN" != "$WEB_BASE_URL" ]; then
+  echo '*** The error response is not readable by the SPA'
+  exit
 fi
 echo '3. POST without a valid secure cookie was successfully rejected'
 

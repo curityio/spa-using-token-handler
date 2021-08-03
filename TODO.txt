@@ -11,13 +11,16 @@ ESSENTIALS
 3. Implement session expiry in SPA by returning to the Unauthenticated view
    Failed token refresh with a 400 response to throw a UI error
 
-4. API Tests
+4. Improve docs for Daniel and ensure they are current
+
+5. API Tests
    Gateway does not check anti forgery token during POST requests
+   Are web origin checks are handled already via CORS???
    Discuss with Daniel
 
-5. BFF API Config and Deployment
+6. BFF API Config and Deployment
    Currently a compiled config.js file is copied into DockerCompose
    Turn this into a config.json or environment variables instead
 
-6. Finalize error codes with Michal
-   Think about what works best for clients
+7. Finalize error codes with Michal
+   Think about what is most understandable for clients
