@@ -1,5 +1,8 @@
 # Web OAuth via a Back End for Front End API
 
+[![Quality](https://img.shields.io/badge/quality-experiment-red)](https://curity.io/resources/code-examples/status/)
+[![Availability](https://img.shields.io/badge/availability-source-blue)](https://curity.io/resources/code-examples/status/)
+
 A demo SPA secured via a BFF API, following 2021 best practices for browser based apps.
 
 ## Architecture

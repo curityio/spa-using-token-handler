@@ -77,7 +77,6 @@ if [ $? -ne 0 ]; then
 fi
 
 cd bff-node-express
-git checkout integration
 npm install
 if [ $? -ne 0 ]; then
   echo "Problem encountered installing the BFF API dependencies"
