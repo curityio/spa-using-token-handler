@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import {RemoteError} from '../../utilities/remoteError';
 import {UserInfoProps} from './userInfoProps';
 import {UserInfoState} from './userInfoState';
 
@@ -38,12 +39,16 @@ export function UserInfoView(props: UserInfoProps) {
 
         } catch (e) {
 
-            setState((state: any) => {
-                return {
-                    ...state,
-                    error: e.message,
-                };
-            });
+            const remoteError = e as RemoteError;
+            if (remoteError) {
+
+                setState((state: any) => {
+                    return {
+                        ...state,
+                        error: remoteError.toDisplayFormat(),
+                    };
+                });
+            }
         }
     }
 

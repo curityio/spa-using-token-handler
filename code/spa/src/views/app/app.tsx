@@ -49,7 +49,8 @@ export default function App() {
             apiClient,
             storage,
             isLoaded: false,
-            isLoggedIn: false
+            isLoggedIn: false,
+            sessionExpired: false,
         });
     }
 
@@ -85,6 +86,21 @@ export default function App() {
             return {
                 ...prevState,
                 isLoggedIn: true,
+                sessionExpired: false,
+            };
+        });
+    }
+
+    /*
+     * Called when there is a permanent 401 when calling an API
+     */
+    function setSessionExpired() {
+
+        setState((prevState: any) => {
+            return {
+                ...prevState,
+                isLoggedIn: false,
+                sessionExpired: true,
             };
         });
     }
@@ -101,6 +117,7 @@ export default function App() {
             return {
                 ...prevState,
                 isLoggedIn: false,
+                sessionExpired: true,
             };
         });
     }
@@ -135,6 +152,7 @@ export default function App() {
                 <>
                     <PageLoadView 
                         oauthClient={state.oauthClient!}
+                        sessionExpired={state.sessionExpired}
                         setIsLoaded={setIsLoaded}
                         setIsLoggedIn={setIsLoggedIn} />
 
@@ -156,7 +174,8 @@ export default function App() {
                     oauthClient={state.oauthClient!} />
 
                 <CallApiView 
-                    apiClient={state.apiClient!} />
+                    apiClient={state.apiClient!}
+                    onSessionExpired={setSessionExpired} />
 
                 <SignOutView 
                     oauthClient={state.oauthClient!}

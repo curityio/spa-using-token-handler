@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import {RemoteError} from '../../utilities/remoteError';
 import {StartAuthenticationProps} from './startAuthenticationProps';
 import {StartAuthenticationState} from './startAuthenticationState';
 
@@ -19,13 +20,17 @@ export function StartAuthenticationView(props: StartAuthenticationProps) {
 
         } catch (e) {
 
-            setState((state: any) => {
-                return {
-                    ...state,
-                    authorizationUrl: '',
-                    error: e.message,
-                };
-            });
+            const remoteError = e as RemoteError;
+            if (remoteError) {
+
+                setState((state: any) => {
+                    return {
+                        ...state,
+                        authorizationUrl: '',
+                        error: remoteError.toDisplayFormat(),
+                    };
+                });
+            }
         }
     }
 

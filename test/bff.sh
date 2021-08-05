@@ -206,7 +206,7 @@ if [ "$HTTP_STATUS" != '200' ]; then
   echo "*** Authenticated page load failed with status $HTTP_STATUS"
   exit
 fi
-JSON=$(tail -n 1 $RESPONSE_FILE) 
+JSON=$(tail -n 1 $RESPONSE_FILE)
 echo $JSON | jq
 CSRF=$(jq -r .csrf <<< "$JSON")
 IS_LOGGED_IN=$(jq -r .isLoggedIn <<< "$JSON")
@@ -221,7 +221,7 @@ echo '9. Authenticated page reload was successful'
 # Test getting user info with an invalid origin
 #
 echo '10. Testing GET User Info from an untrusted origin ...'
-HTTP_STATUS=$(curl -i -s -X GET "$BFF_API_BASE_URL/userinfo" \
+HTTP_STATUS=$(curl -i -s -X GET "$BFF_API_BASE_URL/userInfo" \
 -H "origin: http://malicious-site.com" \
 -H 'content-type: application/json' \
 -H 'accept: application/json' \
@@ -243,7 +243,7 @@ echo '10. GET User Info request for an untrusted origin was handled correctly'
 # Test getting user info without a cookie
 #
 echo '11. Testing GET User Info without secure cookies ...'
-HTTP_STATUS=$(curl -i -s -X GET "$BFF_API_BASE_URL/userinfo" \
+HTTP_STATUS=$(curl -i -s -X GET "$BFF_API_BASE_URL/userInfo" \
 -H "origin: $WEB_BASE_URL" \
 -H 'content-type: application/json' \
 -H 'accept: application/json' \
@@ -265,7 +265,7 @@ echo '11. GET User Info request without secure cookies was handled correctly'
 # Test getting user info successfully
 #
 echo '12. Testing GET User Info with secure cookies ...'
-HTTP_STATUS=$(curl -i -s -X GET "$BFF_API_BASE_URL/userinfo" \
+HTTP_STATUS=$(curl -i -s -X GET "$BFF_API_BASE_URL/userInfo" \
 -H "origin: $WEB_BASE_URL" \
 -H 'content-type: application/json' \
 -H 'accept: application/json' \

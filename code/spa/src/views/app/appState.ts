@@ -10,4 +10,5 @@ export interface AppState {
     storage: StorageHelper
     isLoaded: boolean;
     isLoggedIn: boolean;
+    sessionExpired: boolean;
 }
