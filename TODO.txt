@@ -1,26 +1,16 @@
-TODAY
------
-1. Fix CORS problems and complete API tests
-   Add PR for Michal
-
-2. Add obfuscation to JS bundles + merge
-
-3. Improve Guides / Libraries
-   BFF as a Container
-   Update code shippet for plugin
-
-4. Implement session expiry in SPA by returning to the Unauthenticated view
-   Failed token refresh with a 400 response to throw a UI error
-
-5. OAuth Tools change - see message from Urban
-   Delete this doc
-
 TOMORROW
 --------
-1. Finalize suggested error codes
+1. Add PRs for Kong plugins
+   Discuss with Michal
 
-2. BFF API Config and Deployment
-   Currently a compiled config.js file is copied into DockerCompose
-   Turn this into a config.json or environment variables instead
+2. Resource article updates
+   BFF as a Container in guides
+   Update code shippet for BFF plugin
+   Update phantom token plugin page on CORS handling
+   Delete this file
 
-3. Post PR and images subtask on channel - mention Judith
+3. Post PR and images subtask on channel
+
+4. OAuth Tools change - see message from Urban
+
+5. Review Michal PAR articles

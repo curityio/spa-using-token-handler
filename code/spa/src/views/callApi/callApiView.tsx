@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import {RemoteError} from '../../utilities/remoteError';
 import {CallApiProps} from './callApiProps';
 import {CallApiState} from './callApiState';
 
@@ -34,13 +35,25 @@ export function CallApiView(props: CallApiProps) {
 
         } catch (e) {
 
-            setState((state: any) => {
-                return {
-                    ...state,
-                    welcomeMessage: '',
-                    error: e.message,
-                };
-            });
+            const remoteError = e as RemoteError;
+            if (remoteError) {
+
+                // Permanent 401s, which include a refresh attempt, mean the session is expired
+                if (remoteError.status === 401) {
+                    
+                    props.onSessionExpired();
+
+                } else {
+                
+                    setState((state: any) => {
+                        return {
+                            ...state,
+                            welcomeMessage: '',
+                            error: remoteError.toDisplayFormat(),
+                        };
+                    });
+                }
+            }
         }
     }
 

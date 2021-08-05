@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+import {RemoteError} from '../../utilities/remoteError';
 import {PageLoadProps} from './pageLoadProps';
 import {PageLoadState} from './pageLoadState';
 
@@ -13,15 +14,23 @@ export function PageLoadView(props: PageLoadProps) {
         execute();
     }, []);
 
+    async function getLoginState(): Promise<any> {
+
+        if (props.sessionExpired) {
+            return {handled: false, isLoggedIn: false};
+        }
+
+        return await props.oauthClient.handlePageLoad(location.href);
+    }
+
     async function execute() {
 
         try {
 
-            // Every time the SPA loads it calls the BFF API, handles OAuth responses and / or reports the login state
-            const {handled, isLoggedIn} = await props.oauthClient.handlePageLoad(location.href);
+            const {handled, isLoggedIn} = await getLoginState();
             if (handled) {
                 
-                // After a login completes, the SPA can restore its location / page state / back navigation
+                // After a login completes, the SPA can restore its location, page state and control the back navigation
                 history.replaceState({}, document.title, '/');
             }
 
@@ -39,15 +48,17 @@ export function PageLoadView(props: PageLoadProps) {
 
         } catch (e) {
 
-            setState((state: any) => {
-                return {
-                    ...state,
-                    error: e.message,
-                };
-            });
+            const remoteError = e as RemoteError;
+            if (remoteError) {
+            
+                setState((state: any) => {
+                    return {
+                        ...state,
+                        error: remoteError.toDisplayFormat(),
+                    };
+                });
+            }
         }
-
-        
     }
 
     return (

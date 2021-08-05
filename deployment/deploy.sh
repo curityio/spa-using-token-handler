@@ -15,29 +15,28 @@ fi
 #
 # Download the reverse proxy back end for front end token plugin
 #
-#rm -rf kong-bff-plugin
-#git clone https://github.com/curityio/kong-bff-plugin
-#if [ $? -ne 0 ]; then
-#  echo "Problem encountered downloading the BFF plugin"
-#  exit 1
-#fi
-
-#
-# Temnporary code until the PR is passed
-#
-#cd kong-bff-plugin
-#git checkout feature/csrf
-#cd ..
+rm -rf kong-bff-plugin
+git clone https://github.com/curityio/kong-bff-plugin
+if [ $? -ne 0 ]; then
+  echo "Problem encountered downloading the BFF plugin"
+  exit 1
+fi
+cd kong-bff-plugin
+git checkout feature/csrf
+cd ..
 
 #
 # Download the reverse proxy phantom token plugin
 #
-#rm -rf kong-phantom-token-plugin
-#git clone https://github.com/curityio/kong-phantom-token-plugin
-#if [ $? -ne 0 ]; then
-#  echo "Problem encountered downloading the phantom token plugin"
-#  exit 1
-#fi
+rm -rf kong-phantom-token-plugin
+git clone https://github.com/curityio/kong-phantom-token-plugin
+if [ $? -ne 0 ]; then
+  echo "Problem encountered downloading the phantom token plugin"
+  exit 1
+fi
+cd kong-phantom-token-plugin
+git checkout feature/cors
+cd ..
 
 #
 # Spin up all containers, using the Docker Compose file, which applies the deployed configuration
