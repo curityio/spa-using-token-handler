@@ -30,38 +30,38 @@ mkdir -p tmp
 # Test sending an invalid web origin to the API in an OPTIONS request
 # The logic around CORS is configured, not coded, so ensure that it works as expected
 #
-echo '1. Testing OPTIONS request with an invalid web origin ...'
-HTTP_STATUS=$(curl -i -s -X OPTIONS "$API_BASE_URL/data" \
--H "origin: http://malicious-site.com" \
--o $RESPONSE_FILE -w '%{http_code}')
-if [ "$HTTP_STATUS" == '000' ]; then
-  echo '*** Connectivity problem encountered, please check endpoints and whether an HTTP proxy tool is running'
-  exit
-fi
-ORIGIN=$(getHeaderValue 'Access-Control-Allow-Origin')
-if [ "$ORIGIN" == 'http://malicious-site.com' ]; then
-  echo '*** CORS access was granted to a malicious origin'
-  exit
-fi
-echo '1. OPTIONS with invalid web origin was not granted access'
+#echo '1. Testing OPTIONS request with an invalid web origin ...'
+#HTTP_STATUS=$(curl -i -s -X OPTIONS "$API_BASE_URL/data" \
+#-H "origin: http://malicious-site.com" \
+#-o $RESPONSE_FILE -w '%{http_code}')
+#if [ "$HTTP_STATUS" == '000' ]; then
+#  echo '*** Connectivity problem encountered, please check endpoints and whether an HTTP proxy tool is running'
+#  exit
+#fi
+#ORIGIN=$(getHeaderValue 'Access-Control-Allow-Origin')
+#if [ "$ORIGIN" == 'http://malicious-site.com' ]; then
+#  echo '*** CORS access was granted to a malicious origin'
+#  exit
+#fi
+#echo '1. OPTIONS with invalid web origin was not granted access'
 
 #
 # Test sending a valid web origin to the API in an OPTIONS request
 #
-echo '2. Testing OPTIONS request with a valid web origin ...'
-HTTP_STATUS=$(curl -i -s -X OPTIONS "$API_BASE_URL/data" \
--H "origin: $WEB_BASE_URL" \
--o $RESPONSE_FILE -w '%{http_code}')
-if [ "$HTTP_STATUS" != '200'  ] && [ "$HTTP_STATUS" != '204' ]; then
-  echo "*** Problem encountered requesting cross origin access, status: $HTTP_STATUS"
-  exit
-fi
-ORIGIN=$(getHeaderValue 'Access-Control-Allow-Origin')
-if [ "$ORIGIN" != "$WEB_BASE_URL" ]; then
-  echo '*** The Access-Control-Allow-Origin response header has an unexpected value'
-  exit
-fi
-echo '2. OPTIONS with valid web origin granted access successfully'
+#echo '2. Testing OPTIONS request with a valid web origin ...'
+#HTTP_STATUS=$(curl -i -s -X OPTIONS "$API_BASE_URL/data" \
+#-H "origin: $WEB_BASE_URL" \
+#-o $RESPONSE_FILE -w '%{http_code}')
+#if [ "$HTTP_STATUS" != '200'  ] && [ "$HTTP_STATUS" != '204' ]; then
+#  echo "*** Problem encountered requesting cross origin access, status: $HTTP_STATUS"
+#  exit
+#fi
+#ORIGIN=$(getHeaderValue 'Access-Control-Allow-Origin')
+#if [ "$ORIGIN" != "$WEB_BASE_URL" ]; then
+#  echo '*** The Access-Control-Allow-Origin response header has an unexpected value'
+#  exit
+#fi
+#echo '2. OPTIONS with valid web origin granted access successfully'
 
 #
 # Test a POST request for data from an untrusted web origin
@@ -84,7 +84,7 @@ fi
 ORIGIN=$(getHeaderValue 'Access-Control-Allow-Origin')
 if [ "$ORIGIN" != "$WEB_BASE_URL" ]; then
   echo '*** The error response is not readable by the SPA'
-  #exit
+  exit
 fi
 echo '3. POST from an untrusted origin was successfully rejected'
 
@@ -107,7 +107,6 @@ if [ "$CODE" != 'unauthorized' ]; then
    exit
 fi
 echo '4. POST without a valid secure cookie was successfully rejected'
-exit
 
 #
 # Do a login to get a secure cookie with which to call the API
@@ -118,6 +117,10 @@ if [ "$?" != '0' ]; then
   echo '*** Problem encountered implementing an API driven login'
   exit
 fi
+JSON=$(tail -n 1 $RESPONSE_FILE) 
+echo $JSON | jq
+CSRF=$(jq -r .csrf <<< "$JSON")
+echo $CSRF
 echo '5. API driven login completed successfully'
 
 #
@@ -138,7 +141,7 @@ CODE=$(jq -r .code <<< "$JSON")
 if [ "$CODE" != 'unauthorized' ]; then
    echo '*** API POST without an anti forgery token returned an unexpected error code'
    exit
-#fi
+fi
 echo '6. POST without an anti forgery token was successfully rejected'
 
 #
@@ -169,7 +172,7 @@ echo '7. POST with an incorrect anti forgery token was successfully rejected'
 echo '8. Testing API request with correct message credentials ...'
 HTTP_STATUS=$(curl -i -s -X POST "$API_BASE_URL/data" \
 -H "origin: $WEB_BASE_URL" \
--H "x-example-csrf: abc123" \
+-H "x-example-csrf: $CSRF" \
 -b $MAIN_COOKIES_FILE \
 -o $RESPONSE_FILE -w '%{http_code}')
 if [ "$HTTP_STATUS" != '200' ]; then

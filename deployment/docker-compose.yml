@@ -48,7 +48,6 @@ services:
       - ./reverse-proxy/kong.yml:/usr/local/kong/declarative/kong.yml
       - ./kong-bff-plugin/plugin:/usr/local/share/lua/5.1/kong/plugins/bff-token
       - ./kong-phantom-token-plugin/plugin:/usr/local/share/lua/5.1/kong/plugins/phantom-token
-      - ./kong-cors-plugin/handler.lua:/usr/local/share/lua/5.1/kong/plugins/cors/handler.lua
     environment:
       KONG_DATABASE: 'off'
       KONG_DECLARATIVE_CONFIG: '/usr/local/kong/declarative/kong.yml'

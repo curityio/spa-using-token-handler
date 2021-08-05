@@ -39,10 +39,5 @@ services:
       client_id: api-gateway-client
       client_secret: Password1
       token_cache_seconds: 900
+      cors_origin: http://www.example.com
 
-  # 3. The CORS plugin runs last so that error responses returned from plugins are readable by the SPA
-  - name: cors
-    config: 
-      origins:
-      - http://www.example.com
-      credentials: true
