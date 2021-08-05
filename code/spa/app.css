@@ -9,10 +9,6 @@ button
 p
 {
     color: gray;
-    overflow-wrap: break-word;
-}
-.multiline {
-    white-space: pre-line;
 }
 .green
 {
