@@ -30,6 +30,7 @@ services:
     config:
       encryption_key: NF65meV>Ls#8GP>;!Cnov)rIPRoK^.NP
       cookie_name_prefix: example
+      trusted_web_origin: http://www.example.com
   
   # 2. The phantom token plugin will run after the secure cookie plugin, to introspect tokens
   - name: phantom-token

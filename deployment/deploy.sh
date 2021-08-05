@@ -13,7 +13,7 @@ if [ ! -f './idsvr/license.json' ]; then
 fi
 
 #
-# Download the reverse proxy back end for front end plugin
+# Download the reverse proxy back end for front end token plugin
 #
 rm -rf kong-bff-plugin
 git clone https://github.com/curityio/kong-bff-plugin
@@ -21,6 +21,13 @@ if [ $? -ne 0 ]; then
   echo "Problem encountered downloading the BFF plugin"
   exit 1
 fi
+
+#
+# Temnporary code until the PR is passed
+#
+cd kong-bff-plugin
+git checkout feature/csrf
+cd ..
 
 #
 # Download the reverse proxy phantom token plugin
