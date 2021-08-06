@@ -32,7 +32,9 @@ Add these entries to your /etc/hosts file:
 ### Get a License File for the Curity Identity Server
 
 Sign in to the [Curity Developer Portal](https://developer.curity.io/) with your Github account.\
-Then download a `license.json` file and copy it into the `idsvr` folder.
+You can get a [Free Community Edition License](https://curity.io/product/community/) if you are new to the Curity Identity Server.\
+Then copy your `license.json` file into the `idsvr` folder.
+
 
 ## Build the Code
 

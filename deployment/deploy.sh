@@ -23,13 +23,6 @@ if [ $? -ne 0 ]; then
 fi
 
 #
-# TODELETE: once the PR is done
-#
-cd kong-bff-plugin
-git checkout feature/csrf
-cd ..
-
-#
 # Download the reverse proxy phantom token plugin
 #
 rm -rf kong-phantom-token-plugin
