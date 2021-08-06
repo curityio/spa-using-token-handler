@@ -1,9 +1,8 @@
 #!/bin/bash
 
-################################################################################################
-# Tests to visualize behaviour when calling the example API with secure cookies, via the gateway
-# This ensures that we get responses useful to the SPA and error responses that are readable
-################################################################################################
+######################################################################################################
+# Tests to visualize behaviour when calling the example API with secure cookies, via the reverse proxy
+######################################################################################################
 
 API_BASE_URL='http://api.example.com:3000/api'
 WEB_BASE_URL='http://www.example.com'

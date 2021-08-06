@@ -2,7 +2,6 @@
 
 ####################################################################################
 # Tests to run against BFF endpoints outside the browser to provide extra visibility
-# Tests are focused on what the SPA needs or invalid requests an attacker might send
 ####################################################################################
 
 BFF_API_BASE_URL='http://api.example.com:3000/bff'
