@@ -8,7 +8,7 @@ API_BASE_URL='http://api.example.com:3000/api'
 WEB_BASE_URL='http://www.example.com'
 RESPONSE_FILE=tmp/response.txt
 MAIN_COOKIES_FILE=tmp/main_cookies.txt
-export http_proxy='http://127.0.0.1:8888'
+#export http_proxy='http://127.0.0.1:8888'
 
 #
 # Get a header value from the HTTP response file
