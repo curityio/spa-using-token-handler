@@ -35,7 +35,6 @@ Sign in to the [Curity Developer Portal](https://developer.curity.io/) with your
 You can get a [Free Community Edition License](https://curity.io/product/community/) if you are new to the Curity Identity Server.\
 Then copy your `license.json` file into the `idsvr` folder.
 
-
 ## Build the Code
 
 You will need to download and install NodeJS for your operating system.

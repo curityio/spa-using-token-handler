@@ -33,7 +33,7 @@ if [ $? -ne 0 ]; then
 fi
 
 #
-# TODELETE: once the PR is done
+# TODELETE: once the PR is approved
 #
 cd kong-phantom-token-plugin
 git checkout feature/cors

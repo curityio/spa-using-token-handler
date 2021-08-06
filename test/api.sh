@@ -8,7 +8,7 @@ API_BASE_URL='http://api.example.com:3000/api'
 WEB_BASE_URL='http://www.example.com'
 RESPONSE_FILE=tmp/response.txt
 MAIN_COOKIES_FILE=tmp/main_cookies.txt
-#export http_proxy='http://127.0.0.1:8888'
+export http_proxy='http://127.0.0.1:8888'
 
 #
 # Get a header value from the HTTP response file
@@ -80,11 +80,6 @@ if [ "$CODE" != 'unauthorized' ]; then
    echo '*** POST from an untrusted origin returned an unexpected error code'
    exit
 fi
-ORIGIN=$(getHeaderValue 'Access-Control-Allow-Origin')
-if [ "$ORIGIN" != "$WEB_BASE_URL" ]; then
-  echo '*** The error response is not readable by the SPA'
-  exit
-fi
 echo '3. POST from an untrusted origin was successfully rejected'
 
 #
@@ -104,6 +99,11 @@ CODE=$(jq -r .code <<< "$JSON")
 if [ "$CODE" != 'unauthorized' ]; then
    echo '*** API POST without a secure cookie returned an unexpected error code'
    exit
+fi
+ORIGIN=$(getHeaderValue 'Access-Control-Allow-Origin')
+if [ "$ORIGIN" != "$WEB_BASE_URL" ]; then
+  echo '*** The error response is not readable by the SPA'
+  exit
 fi
 echo '4. POST without a valid secure cookie was successfully rejected'
 
