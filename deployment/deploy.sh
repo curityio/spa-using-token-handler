@@ -21,6 +21,10 @@ if [ $? -ne 0 ]; then
   echo "Problem encountered downloading the BFF plugin"
   exit 1
 fi
+
+#
+# TODELETE: once the PR is done
+#
 cd kong-bff-plugin
 git checkout feature/csrf
 cd ..
@@ -34,6 +38,10 @@ if [ $? -ne 0 ]; then
   echo "Problem encountered downloading the phantom token plugin"
   exit 1
 fi
+
+#
+# TODELETE: once the PR is done
+#
 cd kong-phantom-token-plugin
 git checkout feature/cors
 cd ..
