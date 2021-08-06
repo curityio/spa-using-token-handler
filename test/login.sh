@@ -1,9 +1,8 @@
 #!/bin/bash
 
-#################################################################################
-# This script is a little hacky but enables us to get a cookie and test API calls
-# In the short term it is good enough to improve our productivity
-#################################################################################
+##############################################################
+# Basic automation to get tokens from the Authorization Server
+##############################################################
 
 BFF_API_BASE_URL='http://api.example.com:3000/bff'
 #BFF_API_BASE_URL='http://api.example.com:3001'
