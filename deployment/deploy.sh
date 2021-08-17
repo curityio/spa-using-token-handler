@@ -13,6 +13,11 @@ if [ ! -f './idsvr/license.json' ]; then
 fi
 
 #
+# This is for Curity developers only
+#
+cp ../hooks/pre-commit ../.git/hooks
+
+#
 # Download the reverse proxy back end for front end token plugin
 #
 rm -rf kong-bff-plugin
