@@ -1,0 +1,85 @@
+version: '3.8'
+services:
+
+  #
+  # The web host simply serves static content
+  #
+  webhost:
+    image: webhost:1.0.0
+    hostname: www.example.com
+    ports:
+      - 80:3000
+    volumes:
+      - ./spa/config.json:/usr/webhost/content/config.json
+    environment:
+      NODE_ENV: 'production'
+
+  #
+  # Deploy the example business API, which is a simple API that just validates JWTs
+  # It runs on port 3002 inside the cluster at http://apiserver:3002
+  # The SPA accesses it via the reverse proxy at http://api.example.com:3000/api
+  #
+  example-api:
+    image: example-api:1.0.0
+    hostname: apiserver
+    volumes:
+      - ./api/config.json:/usr/api/config.json
+
+  #
+  # The Back End for Front End API provided by Curity is hosted here, to perform the OAuth work
+  # It runs on port 3001 inside the cluster at http://bffserver:3001
+  # The SPA accesses it via the reverse proxy at http://api.example.com:3000/bff
+  #
+  bff-api:
+    image: bff-api:1.0.0
+    hostname: bffserver
+    volumes:
+      - ./bff/config.js:/usr/bff-api/dist/config.js
+
+  #
+  # The Kong reverse proxy exposes API endpoints to the browser on port 3000
+  #
+  reverse-proxy:
+    image: kong:2.5.0-alpine
+    hostname: api.example.com
+    ports:
+      - 3000:3000
+    volumes:
+      - ./reverse-proxy/kong.yml:/usr/local/kong/declarative/kong.yml
+      - ./kong-bff-plugin/plugin:/usr/local/share/lua/5.1/kong/plugins/bff-token
+      - ./kong-phantom-token-plugin/plugin:/usr/local/share/lua/5.1/kong/plugins/phantom-token
+    environment:
+      KONG_DATABASE: 'off'
+      KONG_DECLARATIVE_CONFIG: '/usr/local/kong/declarative/kong.yml'
+      KONG_PROXY_LISTEN: '0.0.0.0:3000'
+      KONG_LOG_LEVEL: 'info'
+      KONG_PLUGINS: 'bundled,bff-token,phantom-token'
+
+  #
+  # A SQL database used by the Curity Identity Server
+  #
+  curity-data:
+    image: postgres:13.2
+    hostname: dbserver
+    volumes:
+      - ./idsvr/data-backup.sql:/docker-entrypoint-initdb.d/data-backup.sql
+    environment:
+      POSTGRES_USER: 'postgres'
+      POSTGRES_PASSWORD: 'Password1'
+      POSTGRES_DB: 'idsvr'
+
+  #
+  # A standalone instance of the Curity Identity Server
+  #
+  curity-idsvr:
+    image: curity.azurecr.io/curity/idsvr:6.3.0
+    hostname: curityserver
+    ports:
+     - 6749:6749
+     - 8443:8443
+    volumes:
+     - ./idsvr/license.json:/opt/idsvr/etc/init/license/license.json
+     - ./idsvr/config-backup.xml:/opt/idsvr/etc/init/config.xml
+     - ./idsvr/log4j2.xml:/opt/idsvr/etc/log4j2.xml
+    environment:
+      PASSWORD: 'Password1'
