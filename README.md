@@ -9,7 +9,7 @@ A demo SPA secured via a BFF API, following 2021 best practices for browser base
 
 We recommend these components, where companies do not need to develop the items colored green:
 
-![Components](/code/spa/doc/components.png)
+![Components](/code/spa/doc/components.svg)
 
 This provides the following benefits:
 
