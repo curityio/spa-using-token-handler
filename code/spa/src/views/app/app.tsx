@@ -9,7 +9,7 @@ import {PageLoadView} from '../pageLoad/pageLoadView';
 import {SignOutView} from '../signOut/signOutView';
 import {StartAuthenticationView} from '../startAuthentication/startAuthenticationView';
 import {TitleView} from '../title/titleView';
-import {UserInfoView} from '../userinfo/userInfoView';
+import {UserInfoView} from '../userInfo/userInfoView';
 import {AppState} from './appState';
 
 export default function App() {
