@@ -98,17 +98,6 @@ export KONG_CONTAINER_ID=$(docker container ls | grep reverse-proxy | awk '{prin
 docker logs -f $KONG_CONTAINER_ID
 ```
 
-## Run API Tests
-
-If required the messages from the SPA to the BFF API and Business API can be tested via scripts.\
-These go through an end-to-end HTTP workflow and also verify some error conditions.
-
-```bash
-cd test
-./bff.sh
-./api.sh
-```
-
 ## Run SPA Locally
 
 To run the SPA code locally, omit the web host component from the Docker Compose file.\

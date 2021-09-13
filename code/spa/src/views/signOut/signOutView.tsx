@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import {RemoteError} from '../../utilities/remoteError';
 import {SignOutProps} from './signOutProps';
 import {SignOutState} from './signOutState';
 
@@ -22,12 +23,15 @@ export function SignOutView(props: SignOutProps) {
 
         } catch (e) {
 
-            setState((state: any) => {
-                return {
-                    ...state,
-                    error: e.message,
-                };
-            });
+            const remoteError = e as RemoteError;
+            if (remoteError) {
+                setState((state: any) => {
+                    return {
+                        ...state,
+                        error: remoteError.toDisplayFormat(),
+                    };
+                });
+            }
         }
     }
 
