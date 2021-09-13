@@ -96,11 +96,14 @@ export class OAuthClient {
                 accept: 'application/json',
                 'content-type': 'application/json',
             },
-            data: body,
 
             // Send the secure cookie to the API
             withCredentials: true,
         } as AxiosRequestConfig;
+
+        if (body) {
+            options.data = body;
+        }
 
         // If we have an anti forgery token, add it to POST requests
         if (this.antiForgeryToken) {
