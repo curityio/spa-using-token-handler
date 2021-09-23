@@ -37,7 +37,7 @@ Add these entries to your /etc/hosts file:
 
 ## Build the Code
 
-You will need to download and install NodeJS for your operating system.
+You will need to download and install NodeJS for your operating system.\
 Then run the build script to compile projects and build Docker images.
 
 ```bash
