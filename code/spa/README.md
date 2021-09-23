@@ -1,6 +1,4 @@
-# Example SPA using Back End for Front End
-
-An SPA code example, secured via OpenID Connect and the Back End for Front End (BFF) pattern.
+# Example SPA using The Token Handler Pattern
 
 ## Configuration
 
@@ -28,7 +26,7 @@ location.href=url;
 ## API Requests
 
 The example SPA makes API requests using HTTP Only secure SameSite cookies via the [ApiClient class](./src/api/apiClient.ts).\
-If required the API calls can be routed to a separate domain via a reverse proxy.
+If required the API calls can then be routed to a separate domain via a reverse proxy.
 
 ```ts
 const data = await apiClient.getWelcomeData();

@@ -1,21 +1,26 @@
-# Web OAuth via a Back End for Front End API
+# Web OAuth via a Back End for Front End (BFF)
 
 [![Quality](https://img.shields.io/badge/quality-experiment-red)](https://curity.io/resources/code-examples/status/)
 [![Availability](https://img.shields.io/badge/availability-source-blue)](https://curity.io/resources/code-examples/status/)
 
-A demo SPA secured via a BFF API, following 2021 best practices for browser based apps.
+An Single Page Application (SPA) that implements OpenID Connect security using a `Back End for Front End (BFF)` approach.
 
-## Architecture
+## The Token Handler Pattern
 
-We recommend these components, where companies do not need to develop the items colored green:
+A modern evolution of Back End for Front End is used, called the [Token Handler Pattern](https://curity.io/resources/learn/the-token-handler-pattern/).\
+This provides the best separation of web and API concerns, to maintain all of the benefits of an SPA architecture.
+
+## Components
+
+The following high level components are used, where companies plug in a token handler provided by Curity:
 
 ![Components](/code/spa/doc/components.svg)
 
 This provides the following benefits:
 
 - Standard OpenID Connect security, with only **SameSite=strict** cookies in the browser
-- Deploy the SPA anywhere
 - Good usability due to the separation of Web and API concerns
+- Deploy the SPA anywhere
 - Only simple code is needed in the SPA, by plugging in Curity components
 
 ## Prerequisites
@@ -76,8 +81,8 @@ Once the system is deployed you can also browse to these URLs:
 
 - Sign in to the [Curity Admin UI](https://localhost:6749/admin) with these credentials: **admin / Password1**
 - Browse to the [Curity Metadata Endpoint](http://login.example.com:8443/oauth/v2/oauth-anonymous/.well-known/openid-configuration)
-- Browse to the [Business API Public URL](http://api.example.com:3000/api)
-- Browse to the [BFF API Public URL](http://api.example.com:3000/bff/userinfo)
+- Browse to the [Example API Base URL](http://api.example.com:3000/api)
+- Browse to the [OAuth Agent Base URL](http://api.example.com:3000/bff/userinfo)
 
 ## View Logs
 
