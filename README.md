@@ -3,7 +3,8 @@
 [![Quality](https://img.shields.io/badge/quality-experiment-red)](https://curity.io/resources/code-examples/status/)
 [![Availability](https://img.shields.io/badge/availability-source-blue)](https://curity.io/resources/code-examples/status/)
 
-An Single Page Application (SPA) that implements OpenID Connect security using a `Back End for Front End (BFF)` approach.
+An Single Page Application (SPA) that implements OpenID Connect security with recommended browser security.\
+A `Back End for Front End (BFF)` approach is used, in line with [best practices for browser based apps](https://datatracker.ietf.org/doc/html/draft-ietf-oauth-browser-based-apps).
 
 ## The Token Handler Pattern
 
