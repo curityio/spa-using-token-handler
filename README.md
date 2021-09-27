@@ -80,9 +80,9 @@ Use of secure cookies in the browser requires additional components, and the dep
 
 ![Deployed Components](/code/spa/doc/deployed-components.png)
 
-On a web developer's computer, we recommend running the token handler via Docker, and using updated local URLs:
+On a web developer's computer, the token handler is run via Docker, and updated local URLs are used:
 
-![Developer Setup](/code/spa/doc/deployed-components.png)
+![Developer Setup](/code/spa/doc/web-developer-setup.png)
 
 Once the system is deployed you can also browse to these URLs:
 
