@@ -9,7 +9,7 @@ A `Back End for Front End (BFF)` approach is used, in line with [best practices 
 ## The Token Handler Pattern
 
 A modern evolution of Back End for Front End is used, called the [Token Handler Pattern](https://curity.io/resources/learn/the-token-handler-pattern/).\
-Companies plug in a token handler provided by Curity (or a similar provider), to perform OAuth work in an API driven manner:
+The SPA uses a token handler provided by Curity (or a similar provider) to perform an API driven OAuth flow:
 
 ![Logical Components](/code/spa/doc/logical-components.png)
 
