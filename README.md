@@ -88,7 +88,7 @@ Once the system is deployed you can also browse to these URLs:
 
 - Sign in to the [Curity Admin UI](https://localhost:6749/admin) with these credentials: **admin / Password1**
 - Browse to the [Identity Server Metadata Endpoint](http://login.example.com:8443/oauth/v2/oauth-anonymous/.well-known/openid-configuration)
-- Browse to the SPA's [Token Handler API Base URL](http://api.example.com:3000/bff), which invokes the OAuth agent
+- Browse to the SPA's [Token Handler API Base URL](http://api.example.com:3000/bff), which is the OAuth agent
 - Browse to the [Example API Base URL](http://api.example.com:3000/api), which uses the OAuth proxy to forward JWTs to APIs
 
 ## View Logs
@@ -110,7 +110,7 @@ export KONG_CONTAINER_ID=$(docker container ls | grep reverse-proxy | awk '{prin
 docker logs -f $KONG_CONTAINER_ID
 ```
 
-## Run SPA Locally
+## Run the SPA Locally
 
 To run the SPA code locally, omit the web host component from the Docker Compose file.\
 Then build the SPA in a terminal:
