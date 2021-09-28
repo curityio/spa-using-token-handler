@@ -1,8 +1,8 @@
 #!/bin/bash
 
-####################################################################################
-# Tests to run against BFF endpoints outside the browser to provide extra visibility
-####################################################################################
+##################################################################
+# Tests to run against token handler endpoints outside the browser
+##################################################################
 
 BFF_API_BASE_URL='http://api.example.com:3000/bff'
 #BFF_API_BASE_URL='http://api.example.com:3001'
