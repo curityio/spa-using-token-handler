@@ -1,14 +1,14 @@
-# Web OAuth via a Back End for Front End (BFF)
+# Web OAuth via a Backend for Frontend (BFF)
 
 [![Quality](https://img.shields.io/badge/quality-experiment-red)](https://curity.io/resources/code-examples/status/)
 [![Availability](https://img.shields.io/badge/availability-source-blue)](https://curity.io/resources/code-examples/status/)
 
 An Single Page Application (SPA) that implements OpenID Connect using recommended browser security.\
-A `Back End for Front End (BFF)` approach is used, in line with [best practices for browser based apps](https://datatracker.ietf.org/doc/html/draft-ietf-oauth-browser-based-apps).
+A `Backend for Frontend (BFF)` approach is used, in line with [best practices for browser based apps](https://datatracker.ietf.org/doc/html/draft-ietf-oauth-browser-based-apps).
 
 ## The Token Handler Pattern
 
-A modern evolution of Back End for Front End is used, called the [Token Handler Pattern](https://curity.io/resources/learn/the-token-handler-pattern/).\
+A modern evolution of Backend for Frontend is used, called the [Token Handler Pattern](https://curity.io/resources/learn/the-token-handler-pattern/).\
 The SPA uses a token handler provided by Curity (or a similar provider) to perform an API driven OAuth flow:
 
 ![Logical Components](/code/spa/doc/logical-components.png)
@@ -41,7 +41,8 @@ Add these entries to your /etc/hosts file:
 
 ## Build the Code
 
-You will need to download and install NodeJS for your operating system.\
+You will need to download and install Node.js
+for your operating system.\
 Then run the build script to compile projects and build Docker images.
 
 ```bash
