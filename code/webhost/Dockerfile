@@ -3,7 +3,7 @@ FROM node:15.11.0-alpine
 WORKDIR /usr/webhost
 COPY webhost/dist          /usr/webhost/dist
 COPY webhost/package*.json /usr/webhost/
-COPY ../spa/dist           /usr/webhost/content
+COPY spa/dist              /usr/webhost/content
 
 RUN npm install --production
 
