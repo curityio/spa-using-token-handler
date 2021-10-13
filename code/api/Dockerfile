@@ -4,7 +4,7 @@ FROM node:15.11.0-alpine
 RUN apk --no-cache add curl
 
 WORKDIR /usr/api
-COPY package*.json      /usr/api
+COPY package*.json      /usr/api/
 COPY dist               /usr/api/dist
 
 RUN npm install --production
