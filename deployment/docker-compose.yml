@@ -72,7 +72,7 @@ services:
   # A standalone instance of the Curity Identity Server
   #
   curity-idsvr:
-    image: curity.azurecr.io/curity/idsvr:6.3.0
+    image: curity.azurecr.io/curity/idsvr:6.5.0
     hostname: curityserver
     ports:
      - 6749:6749
