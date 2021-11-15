@@ -1,8 +1,16 @@
 #!/bin/bash
 
-#################################################################
-# A script to build code into Docker images, ready for deployment
-#################################################################
+##############################################################
+# Get and build code into Docker images, ready for deployment
+# See the PREREQUISITES.md document before running this script
+##############################################################
+
+DEPLOYMENT_SCENARIO='basic'
+
+#
+# This is for Curity developers only
+#
+cp ./hooks/pre-commit ./.git/hooks
 
 #
 # Build the SPA into Javascript bundles
@@ -65,36 +73,25 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
-DEPLOYMENT_SCENARIO='basic'
-
 #
-# Get deployment dependencies, and see the [Prerequisite Setup](PREREQUISITES.md)
+# Get deployment resources, including the token handler
 #
 cd ..
-if [ ! -d './deployment' ]; then
-  git clone https://github.com/curityio/spa-deployments deployment
+if [ ! -d './resources' ]; then
+  git clone https://github.com/curityio/spa-deployments resources
   if [ $? -ne 0 ]; then
     echo 'Problem encountered downloading dependencies'
     exit
   fi
-fi
-
-cd deployment
-git checkout dev
-
-if [ "$DEPLOYMENT_SCENARIO" == 'basic' ]; then
-  cd basic
-  ./build.sh
-fi
-
-if [ "$DEPLOYMENT_SCENARIO" == 'financial' ]; then
-  cd financial
-  ./build.sh
+  cd resources
+  git checkout dev
 fi
 
 #
-# Report failures
+# Build resources by running the child script
 #
+cd "$DEPLOYMENT_SCENARIO"
+./build.sh
 if [ $? -ne 0 ]; then
   echo 'Problem encountered building deployment resources'
   exit

@@ -1,0 +1,24 @@
+#!/bin/bash
+
+#
+# This prevents accidental checkins of sensitive data by Curity developers
+#
+git diff --cached --name-only | while read FILE; do
+
+  IS_LICENSE_FILE=$(echo "$FILE" | grep -i 'license.json')
+  if [ "$IS_LICENSE_FILE" != '' ]; then
+      echo "*** Attempting to check a Curity license file into a public GitHub repository ***"
+      exit 1
+  fi
+
+  IS_XML_FILE=$(echo "$FILE" | grep -i '\.xml$')
+  if [ "$IS_XML_FILE" != '' ]; then
+    
+    LICENSE_KEY=$(cat $FILE | grep 'license-key' | sed -r "s/^(.*)<license-key>(.*)<\/license-key>$/\2/i")
+    if [ "$LICENSE_KEY" != '' ]; then
+
+      echo "*** Attempting to check a Curity license into a public GitHub repository ***"
+      exit 1
+    fi
+  fi
+done

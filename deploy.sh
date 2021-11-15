@@ -2,46 +2,38 @@
 
 #####################################################################
 # A script to spin up Docker images with their deployed configuration
+# See the PREREQUISITES.md document before running this script
 #####################################################################
+
+DEPLOYMENT_SCENARIO='basic'
 
 #
 # First check prerequisites
 #
-if [ ! -f './idsvr/license.json' ]; then
-  echo "Please provide a license.json file in the deployment/idsvr folder in order to deploy the system"
+if [ ! -f './license.json' ]; then
+  echo 'Please provide a license.json file in the root folder in order to deploy the system'
   exit 1
 fi
 
 #
-# This is for Curity developers only
+# Check that the build script has been run
 #
-cp ../hooks/pre-commit ../.git/hooks
-
-#
-# Download the reverse proxy back end for front end token plugin
-#
-rm -rf kong-bff-plugin
-git clone https://github.com/curityio/kong-bff-plugin
-if [ $? -ne 0 ]; then
-  echo "Problem encountered downloading the BFF plugin"
+if [ ! -d 'resources' ]; then
+  echo 'Please run the build script before running the deployment script'
   exit 1
 fi
 
 #
-# Download the reverse proxy phantom token plugin
+# Copy in the license file
 #
-rm -rf kong-phantom-token-plugin
-git clone https://github.com/curityio/kong-phantom-token-plugin
-if [ $? -ne 0 ]; then
-  echo "Problem encountered downloading the phantom token plugin"
-  exit 1
-fi
+cp ./license.json "./resources/$DEPLOYMENT_SCENARIO/idsvr/"
 
 #
-# Spin up all containers, using the Docker Compose file, which applies the deployed configuration
+# Deploy resources by running the child script
 #
-docker compose up --force-recreate
+cd "./resources/$DEPLOYMENT_SCENARIO"
+./deploy.sh
 if [ $? -ne 0 ]; then
-  echo "Problem encountered starting Docker components"
-  exit 1
+  echo 'Problem encountered building deployment resources'
+  exit
 fi
