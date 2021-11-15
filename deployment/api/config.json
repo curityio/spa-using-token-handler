@@ -1,5 +1,0 @@
-{
-    "port": 3002,
-    "trustedWebOrigin": "http://www.example.com",
-    "jwksUrl": "http://curityserver:8443/oauth/v2/oauth-anonymous/jwks"
-}

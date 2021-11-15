@@ -1,8 +1,8 @@
 #!/bin/bash
 
-########################################################################
-# A script to build code and produce Docker images, ready for deployment
-########################################################################
+#################################################################
+# A script to build code into Docker images, ready for deployment
+#################################################################
 
 #
 # Build the SPA into Javascript bundles
@@ -21,7 +21,7 @@ if [ $? -ne 0 ]; then
 fi
 
 #
-# Build the web host code
+# Build the Web Host, which serves static content
 #
 cd ../webhost
 npm install
@@ -44,7 +44,7 @@ if [ $? -ne 0 ]; then
 fi
 
 #
-# Build the example API
+# Build the Example API, which receives JWTs
 #
 cd api
 npm install
@@ -65,32 +65,37 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
+DEPLOYMENT_SCENARIO='basic'
+
 #
-# Get and build the BFF API here
+# Get deployment dependencies, and see the [Prerequisite Setup](PREREQUISITES.md)
 #
 cd ..
-rm -rf bff-node-express
-git clone https://github.com/curityio/bff-node-express
-if [ $? -ne 0 ]; then
-  echo "Problem encountered downloading the BFF API"
-  exit 1
+if [ ! -d './deployment' ]; then
+  git clone https://github.com/curityio/spa-deployments deployment
+  if [ $? -ne 0 ]; then
+    echo 'Problem encountered downloading dependencies'
+    exit
+  fi
 fi
 
-cd bff-node-express
-npm install
-if [ $? -ne 0 ]; then
-  echo "Problem encountered installing the BFF API dependencies"
-  exit 1
+cd deployment
+git checkout dev
+
+if [ "$DEPLOYMENT_SCENARIO" == 'basic' ]; then
+  cd basic
+  ./build.sh
 fi
 
-npm run build
-if [ $? -ne 0 ]; then
-  echo "Problem encountered building the BFF API code"
-  exit 1
+if [ "$DEPLOYMENT_SCENARIO" == 'financial' ]; then
+  cd financial
+  ./build.sh
 fi
 
-docker build -f Dockerfile -t bff-api:1.0.0 .
+#
+# Report failures
+#
 if [ $? -ne 0 ]; then
-  echo "Problem encountered building the BFF API Docker file"
-  exit 1
+  echo 'Problem encountered building deployment resources'
+  exit
 fi

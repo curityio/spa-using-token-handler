@@ -46,7 +46,6 @@ for your operating system.\
 Then run the build script to compile projects and build Docker images.
 
 ```bash
-cd code
 ./build.sh
 ```
 
@@ -55,7 +54,6 @@ cd code
 Then run this script to spin up all components in a small Docker Compose network:
 
 ```bash
-cd deployment
 ./deploy.sh
 ```
 
