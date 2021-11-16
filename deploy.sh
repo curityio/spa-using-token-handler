@@ -5,7 +5,7 @@
 # See the PREREQUISITES.md document before running this script
 #####################################################################
 
-DEPLOYMENT_SCENARIO='financial'
+DEPLOYMENT_SCENARIO='basic'
 
 #
 # First check prerequisites
