@@ -67,25 +67,24 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
-docker build -f Dockerfile -t example-api:1.0.0 .
+docker build -f Dockerfile -t business-api:1.0.0 .
 if [ $? -ne 0 ]; then
   echo "Problem encountered building the example API Docker file"
   exit 1
 fi
+cd ..
 
 #
 # Get deployment resources, including the token handler
 #
-cd ..
-if [ ! -d './resources' ]; then
-  git clone https://github.com/curityio/spa-deployments resources
-  if [ $? -ne 0 ]; then
-    echo 'Problem encountered downloading dependencies'
-    exit
-  fi
-  cd resources
-  git checkout dev
+rm -rf resources
+git clone https://github.com/curityio/spa-deployments resources
+if [ $? -ne 0 ]; then
+  echo 'Problem encountered downloading dependencies'
+  exit
 fi
+cd resources
+git checkout dev
 
 #
 # Build resources by running the child script
