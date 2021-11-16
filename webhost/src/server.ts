@@ -1,16 +1,24 @@
 import express from 'express';
+import fs from 'fs';
+import https from 'https';
 import path from 'path';
-
-const app = express();
+import {Configuration} from './configuration';
 
 /*
- * First write security headers
+ * First load configuration
  */
+const buffer = fs.readFileSync('config.json');
+const configuration = JSON.parse(buffer.toString()) as Configuration;
+
+/*
+ * Write security headers when a request is first received
+ */
+const app = express();
 app.use((request: express.Request, response: express.Response, next: express.NextFunction) => {
 
     let policy = "default-src 'none';";
     policy += " script-src 'self';";
-    policy += " connect-src 'self' http://api.example.com:3000;";
+    policy += ` connect-src 'self' ${configuration.apiBaseUrl};`;
     policy += " img-src 'self';";
     policy += " style-src 'self' https://cdn.jsdelivr.net;";
     policy += " object-src 'none'";
@@ -23,20 +31,33 @@ app.use((request: express.Request, response: express.Response, next: express.Nex
 });
 
 /*
- * Then serve static content
+ * Then serve static content, which is done from a different path when running in a deployed container
  */
-let port: number = 0;
 if (process.env.NODE_ENV === 'production') {
-
     app.use(express.static('./content'));
-    port = 3000
+} else {
+    app.use(express.static(path.resolve(__dirname, '../../spa/dist')));
+}
+
+/*
+ * Start listening on either HTTP or HTTPS, depending on configuration
+ */
+if (configuration.keystoreFilePath) {
+
+    const keystore = fs.readFileSync(configuration.keystoreFilePath);
+    const sslOptions = {
+        pfx: keystore,
+        passphrase: configuration.keystorePassword,
+    };
+
+    const httpsServer = https.createServer(sslOptions, app);
+    httpsServer.listen(configuration.port, () => {
+        console.log(`Web Host is listening on HTTPS port ${configuration.port}`);
+    });
 
 } else {
 
-    app.use(express.static(path.resolve(__dirname, '../../spa/dist')));
-    port = 80
+    app.listen(configuration.port, () => {
+        console.log(`Web Host is listening on HTTP port ${configuration.port}`);
+    });
 }
-
-app.listen(port, () => {
-    console.log(`Web Host is listening on internal HTTP port ${port}`);
-});

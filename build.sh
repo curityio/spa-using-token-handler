@@ -5,7 +5,7 @@
 # See the PREREQUISITES.md document before running this script
 ##############################################################
 
-DEPLOYMENT_SCENARIO='basic'
+DEPLOYMENT_SCENARIO='financial'
 
 #
 # This is for Curity developers only
