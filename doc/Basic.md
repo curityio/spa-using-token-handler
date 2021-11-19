@@ -1,4 +1,4 @@
-# How to run the SPA and Basic Token Handler
+# How to run the SPA with the Basic Token Handler
 
 ## Overview
 
