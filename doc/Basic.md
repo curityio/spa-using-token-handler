@@ -88,3 +88,11 @@ docker logs -f $TOKEN_HANDLER_CONTAINER_ID
 export REVERSE_PROXY_CONTAINER_ID=$(docker container ls | grep reverse-proxy | awk '{print $1}')
 docker logs -f $REVERSE_PROXY_CONTAINER_ID
 ```
+
+## Free Resources
+
+When finished with your development session, run the following script to free resources:
+
+```bash
+./teardown.sh
+```
