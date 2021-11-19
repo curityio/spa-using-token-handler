@@ -73,7 +73,7 @@ Once the system is deployed you can also browse to these URLs:
 ## Token Handler Details
 
 - To better understand deployment, see the [SPA Deployments](https://github.com/curityio/spa-deployments) repository.
-- To better understand how the token handler works, see the [SPA Basic Token Handler](https://github.com/curityio/bff-node-express).
+- To better understand how the token handler works, see the [Token Handler](https://github.com/curityio/bff-node-express) repository.
 
 ## Troubleshoot
 
