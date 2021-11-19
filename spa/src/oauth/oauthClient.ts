@@ -7,25 +7,25 @@ import {OAuthConfiguration} from './oauthConfiguration';
  */
 export class OAuthClient {
 
-    private readonly _configuration: OAuthConfiguration;
-    private _antiForgeryToken: string | null;
+    private readonly configuration: OAuthConfiguration;
+    private antiForgeryToken: string | null;
 
     constructor(configuration: OAuthConfiguration) {
 
-        this._configuration = configuration;
-        this._antiForgeryToken = null;
-        this._setupCallbacks();
+        this.configuration = configuration;
+        this.antiForgeryToken = null;
+        this.setupCallbacks();
     }
 
     /*
      * The anti forgery token is made available to the API client during API calls
      */
-    public get antiForgeryToken(): string | null {
-        return this._antiForgeryToken;
+    public getAntiForgeryToken(): string | null {
+        return this.antiForgeryToken;
     }
 
     /*
-     * On every page load the SPA asks the BFF API for login related state
+     * On every page load the SPA asks the Token Handler API for login related state
      */
     public async handlePageLoad(pageUrl: string): Promise<any> {
 
@@ -33,9 +33,9 @@ export class OAuthClient {
             pageUrl,
         });
 
-        const response = await this._fetch('POST', 'login/end', request);
+        const response = await this.fetch('POST', 'login/end', request);
         if (response && response.csrf) {
-            this._antiForgeryToken = response.csrf;
+            this.antiForgeryToken = response.csrf;
         }
 
         return response;
@@ -46,7 +46,7 @@ export class OAuthClient {
      */
     public async startLogin(): Promise<string> {
 
-        const data = await this._fetch('POST', 'login/start', null)
+        const data = await this.fetch('POST', 'login/start', null)
         return data.authorizationRequestUrl;
     }
 
@@ -55,7 +55,7 @@ export class OAuthClient {
      */
     public async getUserInfo(): Promise<any> {
         
-        return await this._fetch('GET', 'userInfo', null);
+        return await this.fetch('GET', 'userInfo', null);
     }
 
     /*
@@ -63,7 +63,7 @@ export class OAuthClient {
      */
     public async refresh(): Promise<void> {
 
-        await this._fetch('POST', 'refresh', null);
+        await this.fetch('POST', 'refresh', null);
     }
 
     /*
@@ -71,8 +71,8 @@ export class OAuthClient {
      */
     public async logout(): Promise<string> {
         
-        const data = await this._fetch('POST', 'logout', null);
-        this._antiForgeryToken = null;
+        const data = await this.fetch('POST', 'logout', null);
+        this.antiForgeryToken = null;
         return data.url;
     }
 
@@ -80,15 +80,15 @@ export class OAuthClient {
      * Handle logout from another browser tab by clearing any secure values stored
      */
     public async onLoggedOut(): Promise<void> {
-        this._antiForgeryToken = null;
+        this.antiForgeryToken = null;
     }
 
     /*
-     * Call the BFF API in a parameterized manner
+     * Call the Token Handler API in a parameterized manner
      */
-    private async _fetch(method: string, path: string, body: any): Promise<any> {
+    private async fetch(method: string, path: string, body: any): Promise<any> {
 
-        let url = `${this._configuration.tokenHandlerBaseUrl}/${path}`;
+        let url = `${this.configuration.tokenHandlerBaseUrl}/${path}`;
         const options = {
             url,
             method: method as Method,
@@ -112,7 +112,7 @@ export class OAuthClient {
 
         try {
 
-            // We use axios to call the BFF API, due to its support for reading error responses
+            // We use axios to call the Token Handler API, due to its support for reading error responses
             const response = await axios.request(options);
             if (response.data) {
                 return response.data;
@@ -122,14 +122,14 @@ export class OAuthClient {
 
         } catch (e) {
 
-            throw ErrorHandler.handleFetchError('BFF API', e);
+            throw ErrorHandler.handleFetchError('Token Handler', e);
         }
     }
 
     /*
      * Set up methods invoked from DOM event handlers
      */
-    private _setupCallbacks(): void {
+    private setupCallbacks(): void {
         this.onLoggedOut = this.onLoggedOut.bind(this);
     }
 }

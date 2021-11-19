@@ -1,7 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
-import {ApiClient} from '../../api/apiClient';
-import {Configuration} from '../../configuration';
-import {OAuthClient} from '../../oauth/oauthClient';
+import React, {useEffect, useState} from 'react';
 import {StorageHelper} from '../../utilities/storageHelper';
 import {CallApiView} from '../callApi/callApiView';
 import {MultiTabView} from '../multiTab/multiTabView';
@@ -10,57 +7,33 @@ import {SignOutView} from '../signOut/signOutView';
 import {StartAuthenticationView} from '../startAuthentication/startAuthenticationView';
 import {TitleView} from '../title/titleView';
 import {UserInfoView} from '../userInfo/userInfoView';
+import {AppProps} from './appProps';
 import {AppState} from './appState';
 
-export default function App() {
+export default function App(props: AppProps) {
 
     const [state, setState] = useState<AppState | null>(null);
 
     // This only runs once to initialize the app
     useEffect(() => {
-        
         startup();
         return () => cleanup();
-
     }, []);
 
-    // This keeps the state ref used in DOM event handlers up to date
-    const stateRef = useRef(state);
-    useEffect(() => {
-
-        stateRef.current = state;
-      }, [state]);
-
     /*
-     * Add global objects to state when the app loads
+     * Create global objects when the app loads
      */
     async function startup() {
 
-        const configuration = await getConfiguration();
-        const oauthClient = new OAuthClient(configuration.oauth);
-        const apiClient = new ApiClient(configuration.businessApiBaseUrl, oauthClient);
         const storage = new StorageHelper(() => multiTabLogout());
-
+        await props.viewModel.initialize(storage);
         window.addEventListener('storage', storage.onChange);
 
         setState({
-            configuration,
-            oauthClient,
-            apiClient,
-            storage,
             isLoaded: false,
             isLoggedIn: false,
             sessionExpired: false,
         });
-    }
-
-    /*
-     * Download the app's configuration settings
-     */
-    async function getConfiguration(): Promise<Configuration> {
-
-        const response = await fetch('config.json');
-        return await response.json();
     }
 
     /*
@@ -81,7 +54,7 @@ export default function App() {
      */
     function setIsLoggedIn() {
 
-        state!.storage.setLoggedOut(false);
+        props.viewModel.storage!.setLoggedOut(false);
         setState((prevState: any) => {
             return {
                 ...prevState,
@@ -110,9 +83,7 @@ export default function App() {
      */
     function setIsLoggedOut() {
 
-        const stateToUse = state || stateRef.current;
-
-        stateToUse!.storage.setLoggedOut(true);
+        props.viewModel.storage!.setLoggedOut(true);
         setState((prevState: any) => {
             return {
                 ...prevState,
@@ -127,7 +98,7 @@ export default function App() {
      */
     async function multiTabLogout() {
 
-        await stateRef.current!.oauthClient.onLoggedOut();
+        await props.viewModel.oauthClient!.onLoggedOut();
         setIsLoggedOut();
     }
 
@@ -135,13 +106,13 @@ export default function App() {
      * Release event listeners when we exit
      */
     function cleanup() {
-        if (state && state.storage) {
-            window.removeEventListener('storage', state.storage.onChange);
+        if (props.viewModel.storage) {
+            window.removeEventListener('storage', props.viewModel.storage.onChange);
         }
     }
 
     /*
-     * The simple app's rendering depends only on its state
+     * This simple app does not use React navigation and just renders the view based on state
      */
     return (
         <>
@@ -151,7 +122,7 @@ export default function App() {
             {state && !state.isLoggedIn &&
                 <>
                     <PageLoadView 
-                        oauthClient={state.oauthClient!}
+                        oauthClient={props.viewModel.oauthClient!}
                         sessionExpired={state.sessionExpired}
                         setIsLoaded={setIsLoaded}
                         setIsLoggedIn={setIsLoggedIn} />
@@ -159,7 +130,7 @@ export default function App() {
                     {state.isLoaded && 
                         <>
                             <StartAuthenticationView 
-                                oauthClient={state.oauthClient!} />
+                                oauthClient={props.viewModel.oauthClient!} />
                         </>
                     }
                 </>
@@ -171,14 +142,14 @@ export default function App() {
                 <MultiTabView />
 
                 <UserInfoView 
-                    oauthClient={state.oauthClient!} />
+                    oauthClient={props.viewModel.oauthClient!} />
 
                 <CallApiView 
-                    apiClient={state.apiClient!}
+                    apiClient={props.viewModel.apiClient!}
                     onSessionExpired={setSessionExpired} />
 
                 <SignOutView 
-                    oauthClient={state.oauthClient!}
+                    oauthClient={props.viewModel.oauthClient!}
                     setIsLoggedOut={setIsLoggedOut} />
             </>
             }

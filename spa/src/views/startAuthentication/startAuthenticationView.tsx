@@ -37,7 +37,7 @@ export function StartAuthenticationView(props: StartAuthenticationProps) {
     return (
         <div className='container'>
             <h2>Start Authentication</h2>
-            <p>The SPA asks the BFF API for the Authorization Redirect URL, then manages its own redirect</p>
+            <p>The SPA asks the Token Handler for the Authorization Redirect URL, then manages its own redirect</p>
             <div>
                 <button 
                     id='startAuthentication' 

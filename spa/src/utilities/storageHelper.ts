@@ -3,30 +3,30 @@
  */
 export class StorageHelper {
 
-    private readonly _key;
-    private _onLoggedOut: () => Promise<void>;
+    private readonly key;
+    private onLoggedOut: () => Promise<void>;
 
     public constructor(onLoggedOut: () => Promise<void>) {
 
-        this._key = 'demoapp.loggedout';
-        this._onLoggedOut = onLoggedOut;
-        this._setupCallbacks();
+        this.key = 'demoapp.loggedout';
+        this.onLoggedOut = onLoggedOut;
+        this.setupCallbacks();
     }
 
     public setLoggedOut(state: boolean) {
-        localStorage.setItem(this._key, String(state));
+        localStorage.setItem(this.key, String(state));
     }
     
     public async onChange(event: StorageEvent): Promise<void> {
 
         if (event.storageArea == localStorage) {
-            if (event.key === this._key && event.newValue === 'true') {
-                this._onLoggedOut!();
+            if (event.key === this.key && event.newValue === 'true') {
+                this.onLoggedOut!();
             }
         }
     }
 
-    private _setupCallbacks(): void {
+    private setupCallbacks(): void {
         this.onChange = this.onChange.bind(this);
     }
 }
