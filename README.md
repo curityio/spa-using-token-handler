@@ -3,126 +3,48 @@
 [![Quality](https://img.shields.io/badge/quality-experiment-red)](https://curity.io/resources/code-examples/status/)
 [![Availability](https://img.shields.io/badge/availability-source-blue)](https://curity.io/resources/code-examples/status/)
 
-An Single Page Application (SPA) that implements OpenID Connect using recommended browser security.\
-A `Backend for Frontend (BFF)` approach is used, in line with [best practices for browser based apps](https://datatracker.ietf.org/doc/html/draft-ietf-oauth-browser-based-apps).
+A Single Page Application (SPA) that implements OpenID Connect using recommended browser security.\
+The SPA uses a `Backend for Frontend (BFF)` approach, in line with [best practices for browser based apps](https://datatracker.ietf.org/doc/html/draft-ietf-oauth-browser-based-apps).
 
 ## The Token Handler Pattern
 
 A modern evolution of Backend for Frontend is used, called the [Token Handler Pattern](https://curity.io/resources/learn/the-token-handler-pattern/).\
 The SPA uses a token handler provided by Curity (or a similar provider) to perform an API driven OAuth flow:
 
-![Logical Components](/spa/doc/logical-components.png)
+![Logical Components](/doc/logical-components.png)
+
+## Architecture Benefits
 
 This provides the best separation of web and API concerns, to maintain all of the benefits of an SPA architecture:
 
-- Standard OpenID Connect security, with only **SameSite=strict** cookies in the browser
-- Productive web focused development with only simple security code needed in the SPA
-- Good usability due to the separation of Web and API concerns
-- Deploy the SPA anywhere
+- `Strongest Browser Security`, with only SameSite=strict cookies
+- `Great User Experience` due to the separation of Web and API concerns
+- `Productive Developer Experience` with only simple security code needed in the SPA
+- `Deploy Anywhere`, such as to a Content Delivery Network
 
-See the [Curity OAuth for Web Home Page](https://curity.io/product/token-service/oauth-for-web/) for further documentation.
+## Simple Code in Apps
 
-## Prerequisites
+This repository demonstrates the business docused components companies should need to develop:
 
-### Configure Development Domains
+- An SPA coded in React
+- A simple Web Host to provide static content
+- A simple API that validates JWT access tokens
 
-Add these entries to your /etc/hosts file:
+The token handler should be developed by Curity or another provider, then plugged in.
 
-```bash
-127.0.0.1 localhost www.example.com api.example.com login.example.com
-:1        localhost
-```
+## Run the End-to-end Flow
 
-### Get a License File for the Curity Identity Server
+The SPA can be quickly run in an end-to-end flow on a development computer by following these guides:
 
-- Sign in to the [Curity Developer Portal](https://developer.curity.io/) with your Github account.
-- You can get a [Free Community Edition License](https://curity.io/product/community/) if you are new to the Curity Identity Server.
-- Then copy your `license.json` file into the `deployment/idsvr` folder.
+- [Basic SPA using an Authorization Code Flow (PKCE) and a Client Secret](/doc/Basic.md)
+- [Financial-grade SPA using Mutual TLS, PAR and JARM](/doc/Financial.md)
 
-## Build the Code
+## Website Documentation
 
-You will need to download and install Node.js
-for your operating system.\
-Then run the build script to compile projects and build Docker images.
+See the [Curity OAuth for Web Home Page](https://curity.io/product/token-service/oauth-for-web/) for detailed documentation on this design pattern.
 
-```bash
-./build.sh
-```
+## More Information
 
-## Deploy the System
+Please visit [curity.io](https://curity.io/) for more information about the Curity Identity Server.
 
-Then run this script to spin up all components in a small Docker Compose network:
 
-```bash
-./deploy.sh
-```
-
-## Use the System
-
-Then browse to http://www.example.com which first presents unauthenticated views:
-
-![Unauthenticated Views](/spa/doc/ui-unauthenticated.png)
-
-Sign in with the following test user name and password:
-
-- **demouser / Password1**
-
-Verify that page reloads and multi tab browsing work in a user friendly manner:
-
-![Authenticated Views](/spa/doc/ui-authenticated.png)
-
-The example SPA is developed using only simple React code.
-
-## Deployed System
-
-Use of secure cookies in the browser requires additional components, and the deployed system looks like this:
-
-![Deployed Components](/spa/doc/deployed-components.png)
-
-On a web developer's computer, the token handler is run via Docker, and updated local URLs are used:
-
-![Developer Setup](/spa/doc/web-developer-setup.png)
-
-Once the system is deployed you can also browse to these URLs:
-
-- Sign in to the [Curity Admin UI](https://localhost:6749/admin) with these credentials: **admin / Password1**
-- Browse to the [Identity Server Metadata Endpoint](http://login.example.com:8443/oauth/v2/oauth-anonymous/.well-known/openid-configuration)
-- Browse to the SPA's [Token Handler API Base URL](http://api.example.com:3000/bff), which is the OAuth agent
-- Browse to the [Example API Base URL](http://api.example.com:3000/api), which uses the OAuth proxy to forward JWTs to APIs
-
-## View Logs
-
-Use the following type of syntax to find the logs for a particular component:
-
-```bash
-export BFF_API_CONTAINER_ID=$(docker container ls | grep bff-api | awk '{print $1}')
-docker logs -f $BFF_API_CONTAINER_ID
-```
-
-```bash
-export CURITY_CONTAINER_ID=$(docker container ls | grep curity-idsvr | awk '{print $1}')
-docker logs -f $CURITY_CONTAINER_ID
-```
-
-```bash
-export KONG_CONTAINER_ID=$(docker container ls | grep reverse-proxy | awk '{print $1}')
-docker logs -f $KONG_CONTAINER_ID
-```
-
-## Run the SPA Locally
-
-To run the SPA code locally, omit the web host component from the Docker Compose file.\
-Then build the SPA in a terminal:
-
-```bash
-cd spa
-npm install
-npm start
-```
-
-Then build and run the webhost in another terminal:
-```bash
-cd ../webhost
-npm install
-npm start
-```
