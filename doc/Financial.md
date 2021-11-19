@@ -28,7 +28,7 @@ Ensure that these tools are installed locally:
 - [Docker Desktop](https://www.docker.com/products/docker-desktop)
 - [jq](https://stedolan.github.io/jq/download/)
 
-Also get a License File for the Curity Identity Server and copy it to the root folder:
+Get a license.json file with access to financial grade features and copy it to the root folder:
 
 - Sign in to the [Curity Developer Portal](https://developer.curity.io/) with your Github account.
 - You can get a [Free Community Edition License](https://curity.io/product/community/) if you are new to the Curity Identity Server.
