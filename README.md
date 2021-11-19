@@ -9,7 +9,7 @@ The SPA uses a `Backend for Frontend (BFF)` approach, in line with [best practic
 ## The Token Handler Pattern
 
 A modern evolution of Backend for Frontend is used, called the [Token Handler Pattern](https://curity.io/resources/learn/the-token-handler-pattern/).\
-The SPA uses a token handler provided by Curity (or a similar provider) to perform an API driven OAuth flow:
+The SPA uses a token handler to perform an API driven OpenID Connect flow:
 
 ![Logical Components](/doc/logical-components.png)
 
@@ -24,9 +24,9 @@ This provides the best separation of web and API concerns, to maintain all of th
 
 ## Simple Code in Apps
 
-This repository demonstrates the business docused components companies should need to develop:
+This repository demonstrates the business focused components companies should need to develop:
 
-- An SPA coded in React
+- A Single Page App coded in React
 - A simple Web Host to provide static content
 - A simple API that validates JWT access tokens
 
