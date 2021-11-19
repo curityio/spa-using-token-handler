@@ -88,7 +88,7 @@ export class OAuthClient {
      */
     private async _fetch(method: string, path: string, body: any): Promise<any> {
 
-        let url = `${this._configuration.bffApiBaseUrl}/${path}`;
+        let url = `${this._configuration.tokenHandlerBaseUrl}/${path}`;
         const options = {
             url,
             method: method as Method,

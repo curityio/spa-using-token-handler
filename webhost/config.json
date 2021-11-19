@@ -1,6 +1,6 @@
 {
-    "port": 3000,
-    "apiBaseUrl": "http://api.example.com:3002",
+    "port": 80,
+    "apiBaseUrl": "http://api.example.com:3000",
     "keystoreFilePath": "",
     "keystorePassword": ""
 }
