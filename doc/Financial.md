@@ -1,4 +1,4 @@
-# SPA with Financial Token Handler Developer Setup
+# How to run the SPA with the Financial-grade Token Handler
 
 ## Overview
 
@@ -6,8 +6,8 @@ The token handler uses the following behaviour:
 
 - OAuth work is done for the SPA by an API
 - Authorization Code Flow (PKCE) is used, along with a Mutual TLS client secret
-- Only the strongest `SameSite=strict` cookies are used in the browser
 - [PAR](https://tools.ietf.org/id/draft-lodderstedt-oauth-par-00.html) and [JARM](https://openid.net/specs/openid-financial-api-jarm.html) are also used, as state-of-the-art security features
+- Only the strongest `SameSite=strict` cookies are used in the browser
 - The code example uses HTTPS for all components
 
 ## Configure Development Domains

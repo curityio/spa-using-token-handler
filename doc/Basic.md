@@ -1,4 +1,4 @@
-# SPA with Basic Token Handler Developer Setup
+# How to run the SPA and Basic Token Handler
 
 ## Overview
 
@@ -55,11 +55,11 @@ Then browse to http://www.example.com and sign in with the following test user n
 
 The SPA has an initial unauthenticated view to focus on triggering a login:
 
-![Unauthenticated View](/doc/ui-unauthenticated.png)
+![Unauthenticated View](/doc/ui-unauthenticated-basic.png)
 
 The authenticated view demonstrates multi-tab browsing, which works reliably in all browsers:
 
-![Authenticated View](/doc/ui-authenticated.png)
+![Authenticated View](/doc/ui-authenticated-basic.png)
 
 ## Deployed System
 

@@ -2,15 +2,23 @@
 
 ##############################################################
 # Get and build code into Docker images, ready for deployment
-# See the PREREQUISITES.md document before running this script
 ##############################################################
 
-DEPLOYMENT_SCENARIO='financial'
+if [ "$1" == 'financial' ]; then
+  DEPLOYMENT_SCENARIO='financial'
+else
+  DEPLOYMENT_SCENARIO='basic'
+fi
+
+#
+# Ensure that we are in the folder containing this script
+#
+cd "$(dirname "${BASH_SOURCE[0]}")"
 
 #
 # This is for Curity developers only
 #
-cp ./hooks/pre-commit ./.git/hooks
+cp ./hooks/pre-commit .git/hooks
 
 #
 # Build the SPA into Javascript bundles
@@ -83,13 +91,11 @@ if [ $? -ne 0 ]; then
   echo 'Problem encountered downloading dependencies'
   exit
 fi
-cd resources
-git checkout dev
 
 #
 # Build resources by running the child script
 #
-cd "$DEPLOYMENT_SCENARIO"
+cd "./resources/$DEPLOYMENT_SCENARIO"
 ./build.sh
 if [ $? -ne 0 ]; then
   echo 'Problem encountered building deployment resources'

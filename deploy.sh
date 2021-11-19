@@ -2,10 +2,18 @@
 
 #####################################################################
 # A script to spin up Docker images with their deployed configuration
-# See the PREREQUISITES.md document before running this script
 #####################################################################
 
-DEPLOYMENT_SCENARIO='financial'
+if [ "$1" == 'financial' ]; then
+  DEPLOYMENT_SCENARIO='financial'
+else
+  DEPLOYMENT_SCENARIO='basic'
+fi
+
+#
+# Ensure that we are in the folder containing this script
+#
+cd "$(dirname "${BASH_SOURCE[0]}")"
 
 #
 # First check prerequisites
