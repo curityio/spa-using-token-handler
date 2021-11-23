@@ -7,7 +7,7 @@
 if [ "$1" == 'financial' ]; then
   DEPLOYMENT_SCENARIO='financial'
 else
-  DEPLOYMENT_SCENARIO='basic'
+  DEPLOYMENT_SCENARIO='standard'
 fi
 
 #

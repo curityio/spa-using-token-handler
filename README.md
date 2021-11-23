@@ -36,7 +36,7 @@ The token handler should be developed by Curity or another provider, then plugge
 
 The SPA can be quickly run in an end-to-end flow on a development computer by following these guides:
 
-- [Basic SPA using an Authorization Code Flow (PKCE) and a Client Secret](/doc/Basic.md)
+- [Standard SPA using an Authorization Code Flow (PKCE) and a Client Secret](/doc/Standard.md)
 - [Financial-grade SPA using Mutual TLS, PAR and JARM](/doc/Financial.md)
 
 ## Website Documentation
