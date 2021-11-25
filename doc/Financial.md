@@ -5,7 +5,7 @@
 The token handler uses the following behaviour:
 
 - OAuth work is done for the SPA by an API
-- Authorization Code Flow (PKCE) is used, along with a Mutual TLS client secret
+- Authorization Code Flow with PKCE is used, along with Mutual TLS client authentication
 - [PAR](https://tools.ietf.org/id/draft-lodderstedt-oauth-par-00.html) and [JARM](https://openid.net/specs/openid-financial-api-jarm.html) are also used, as state-of-the-art security features
 - Only the strongest `SameSite=strict` cookies are used in the browser
 - The code example uses HTTPS for all components
@@ -28,10 +28,8 @@ Ensure that these tools are installed locally:
 - [Docker Desktop](https://www.docker.com/products/docker-desktop)
 - [jq](https://stedolan.github.io/jq/download/)
 
-Get a license.json file with access to financial grade features and copy it to the root folder:
-
-- Sign in to the [Curity Developer Portal](https://developer.curity.io/) with your Github account.
-- You can get a [Free Community Edition License](https://curity.io/product/community/) if you are new to the Curity Identity Server.
+Contact Curity to get a trial license with access to financial grade features.\
+Then copy the `license.json` file to the folder where you have cloned this repository.
 
 ## Build the Code
 
