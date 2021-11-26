@@ -1,8 +1,5 @@
-.DS_Store
+license.json
 node_modules
 dist
-deployment/idsvr/license.json
-code/bff-node-express
-deployment/kong-bff-plugin
-deployment/kong-phantom-token-plugin
-test/tmp/*.txt
+resources
+.DS_Store
