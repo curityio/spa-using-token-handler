@@ -3,3 +3,4 @@ node_modules
 dist
 resources
 .DS_Store
+spa/cypress/reports/
