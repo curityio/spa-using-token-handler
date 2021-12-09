@@ -28,13 +28,14 @@ export function authenticateUser() {
         cy.root().submit()
     })
     cy.url().should('eq', BASE_URL);
-    cy.find('#getUserInfo')
+    cy.get('#getUserInfo')
         .should('exist')
 }
 
 export function signOutUser() {
     clickElement('#signOut');
-    cy.find('#startAuthentication')
+
+    cy.get('#startAuthentication')
         .should('exist');
 }
 

@@ -10,6 +10,9 @@ describe('Single Page App Tests', () => {
     cy.intercept('/tokenhandler/**', (req) => {
       req.headers['Origin'] = 'http://www.example.com'
     });
+    cy.intercept('/api/**',  (req) => {
+      req.headers['Origin'] = 'http://www.example.com'
+    });
     cy.visit(BASE_URL);
     clickElement('#startAuthentication');
     authenticateUser();
