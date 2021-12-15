@@ -96,6 +96,10 @@ fi
 # Build resources by running the child script
 #
 cd "./resources/$DEPLOYMENT_SCENARIO"
+
+## TEMP change for testing with cypress
+git checkout test/add-nginx-proxy
+
 ./build.sh
 if [ $? -ne 0 ]; then
   echo 'Problem encountered building deployment resources'
