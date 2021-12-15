@@ -1,17 +1,20 @@
 import {
   BASE_URL,
-  TIMEOUT_100,
+  ORIGIN,
   authenticateUser,
   signOutUser,
-  clickElement } from './spa';
+  clickElement
+} from './spa';
 
 describe('Single Page App Tests', () => {
   beforeEach(() => {
     cy.intercept('/tokenhandler/**', (req) => {
-      req.headers['Origin'] = 'http://www.example.com'
-    });
+      req.headers['Origin'] = ORIGIN;
+    }).as('tokenHandlerCall');
+    cy.intercept('/api/**', (req) => {
+      req.headers['Origin']  = ORIGIN
+    }).as('businessApiCall');
     cy.visit(BASE_URL);
-    clickElement('#startAuthentication');
     authenticateUser();
   });
 
@@ -22,11 +25,9 @@ describe('Single Page App Tests', () => {
   it('Get user info and call APIs from the application', () => {
     clickElement('#getUserInfo');
     cy.get('#getUserInfoResult')
-        .wait(TIMEOUT_100)
         .contains('Demo User');
-    clickElement('#getApiData');
+    clickElement('#getApiData', true);
     cy.get('#getDataResult')
-        .wait(TIMEOUT_100)
         .contains('Success response from the Business API');
   })
 

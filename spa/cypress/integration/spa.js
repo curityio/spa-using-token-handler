@@ -17,24 +17,72 @@
 export const TIMEOUT_100 = 100;
 export const TIMEOUT_500 = 500;
 export const TIMEOUT_1000 = 1000;
-export const BASE_URL = Cypress.env('BASE_URL') || 'http://www.example.com/';
-export const USERNAME = 'demouser'
-export const PASSWORD = 'Password1'
+export const ORIGIN = Cypress.env('ORIGIN') || 'http://www.example.com';
+export const BASE_URL = ORIGIN + '/';
+export const LOGIN_START_URL = Cypress.env('LOGIN_START_URL') || 'http://api.example.com:3000/tokenhandler/login/start';
+export const IDSVR_BASE_URL = Cypress.env('IDSVR_BASE_URL') || 'http://login.example.com:8443';
+export const USERNAME = 'demouser';
+export const PASSWORD = 'Password1';
 
 export function authenticateUser() {
-    cy.get('form').within(($form) => {
-        inputText('input[name=userName]', USERNAME)
-        inputText('input[name=password]', PASSWORD)
-        cy.root().submit()
+    cy.request({
+        // Get the authorization URL from the Token Handler
+        method: 'POST',
+        url: LOGIN_START_URL,
+        headers: { Origin: ORIGIN }
     })
-    cy.url().should('eq', BASE_URL);
-    cy.find('#getUserInfo')
-        .should('exist')
+    .then(response => {
+        // Call the authorization URL
+        return cy.request({
+            method: "POST",
+            url: response.body.authorizationRequestUrl,
+            followRedirect: true
+        })
+    })
+    .then(response => {
+        const jqueryHtml = getHTMLBodyAsJQueryDOM(response.body);
+        const action = jqueryHtml.find('form').attr('action');
+
+        // Post username and password
+        return cy.request({
+            method: "POST",
+            url: IDSVR_BASE_URL + action,
+            body: { userName: USERNAME, password: PASSWORD },
+            form: true,
+            followRedirect: true
+        })
+    })
+    .then(response => {
+        const jqueryHtml = getHTMLBodyAsJQueryDOM(response.body)
+        // For some reason jQuery can't find the form element, but it finds a div inside of the form...
+        const form = jqueryHtml.find('#noscript').parent();
+        const action = form.attr('action');
+        const token = form.find('input[name="token"]').val();
+        const state = form.find('input[name="state"]').val();
+
+        // Submit the final form (normally this is done by JS in the browser)
+        return cy.request({
+            method: "POST",
+            url: IDSVR_BASE_URL + action,
+            body: { token, state },
+            form: true,
+            followRedirect: false
+        })
+    })
+    .then(resp => {
+        // Navigate to the redirect URL to finish login
+        return cy.visit(resp.redirectedToUrl)
+    })
+    .then(() => {
+        cy.url().should('eq', BASE_URL);
+        cy.get('#getUserInfo')
+            .should('exist')
+    })
 }
 
 export function signOutUser() {
     clickElement('#signOut');
-    cy.find('#startAuthentication')
+    cy.get('#startAuthentication')
         .should('exist');
 }
 
@@ -45,9 +93,14 @@ export function inputText(selector, text) {
         .type(text);
 }
 
-export function clickElement(selector, clickOptions) {
+export function clickElement(selector, apiCall = false, clickOptions = null) {
+    const waitForCall = apiCall ? '@businessApiCall' : '@tokenHandlerCall';
     cy.get(selector)
         .should('exist')
         .click(clickOptions)
-        .wait(TIMEOUT_1000);
+        .wait(waitForCall);
+}
+
+function getHTMLBodyAsJQueryDOM(body) {
+    return Cypress.$(body);
 }
