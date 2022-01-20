@@ -92,7 +92,7 @@ if [ $? -ne 0 ]; then
   exit
 fi
 
-# TODO: 
+# TODO: Remove after merging
 cd resources
 git checkout feature/cookie-updates
 cd ..
