@@ -1,4 +1,4 @@
-import axios, {AxiosRequestConfig, Method} from 'axios';
+import axios, {AxiosRequestConfig, AxiosRequestHeaders, Method} from 'axios';
 import {OAuthClient} from '../oauth/oauthClient';
 import {ErrorHandler} from '../utilities/errorHandler';
 
@@ -73,10 +73,13 @@ export class ApiClient {
             withCredentials: true,
         } as AxiosRequestConfig;
 
+        var headers = options.headers as AxiosRequestHeaders
+
         // If we have an anti forgery token, add it to POST requests
         const antiForgeryToken = this.oauthClient.getAntiForgeryToken();
         if (antiForgeryToken) {
-            options.headers['x-example-csrf'] = antiForgeryToken;
+            var headers = options.headers as AxiosRequestHeaders;
+            headers['x-example-csrf'] = antiForgeryToken;
         }
 
         const response = await axios.request(options);

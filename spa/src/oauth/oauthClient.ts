@@ -1,4 +1,4 @@
-import axios, {AxiosRequestConfig, Method} from 'axios';
+import axios, {AxiosRequestConfig, AxiosRequestHeaders, Method} from 'axios';
 import {ErrorHandler} from '../utilities/errorHandler';
 import {OAuthConfiguration} from './oauthConfiguration';
 
@@ -107,7 +107,8 @@ export class OAuthClient {
 
         // If we have an anti forgery token, add it to POST requests
         if (this.antiForgeryToken) {
-            options.headers['x-example-csrf'] = this.antiForgeryToken;
+            var headers = options.headers as AxiosRequestHeaders;
+            headers['x-example-csrf'] = this.antiForgeryToken;
         }
 
         try {

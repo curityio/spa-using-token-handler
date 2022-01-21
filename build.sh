@@ -92,6 +92,11 @@ if [ $? -ne 0 ]; then
   exit
 fi
 
+# TODO: Remove after merging
+cd resources
+git checkout feature/cookie-updates
+cd ..
+
 #
 # Build resources by running the child script
 #
