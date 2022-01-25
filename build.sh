@@ -94,7 +94,7 @@ fi
 
 # TODO: Remove after merging
 cd resources
-git checkout feature/cookie-updates
+git checkout feature/cors
 cd ..
 
 #
