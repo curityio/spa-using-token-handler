@@ -29,16 +29,6 @@ app.use('/data', secure(auth));
  */
 app.post('/data', (request: express.Request, response: express.Response) => {
 
-    // TODO: remove after debugging
-    const accept = request.headers['accept'];
-    if (accept) {
-        console.log('*** API received accept header: ' + accept);
-    }
-    const authorization = request.headers['authorization'];
-    if (authorization) {
-        console.log('*** API received authorization header: ' + authorization);
-    }
-    
     const data = {message: 'Success response from the Business API'};
     response.setHeader('content-type', 'application/json');
     response.status(200).send(JSON.stringify(data, null, 2));
