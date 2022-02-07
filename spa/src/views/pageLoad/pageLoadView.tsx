@@ -20,7 +20,22 @@ export function PageLoadView(props: PageLoadProps) {
             return {handled: false, isLoggedIn: false};
         }
 
-        return await props.oauthClient.handlePageLoad(location.href);
+        try {
+            return await props.oauthClient.handlePageLoad(location.href);
+
+        } catch (e) {
+
+            const remoteError = e as RemoteError;
+            if (remoteError && remoteError.getStatus() === 401) {
+
+                // A 401 could occur if there is a leftover cookie in the browser that can no longer be processed
+                // Eg if the cookie encryption key is renewed or if the Authorization Server data is redeployed
+                // In this case we return an unauthenticated state
+                return {handled: false, isLoggedIn: false};
+            }
+
+            throw e;
+        }
     }
 
     async function execute() {
@@ -50,7 +65,7 @@ export function PageLoadView(props: PageLoadProps) {
 
             const remoteError = e as RemoteError;
             if (remoteError) {
-            
+
                 setState((state: any) => {
                     return {
                         ...state,
