@@ -92,11 +92,6 @@ if [ $? -ne 0 ]; then
   exit
 fi
 
-# TODO: delete on merge
-cd resources
-git checkout feature/cors-refinements
-cd ..
-
 #
 # Build resources by running the child script
 #
