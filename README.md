@@ -1,6 +1,6 @@
 # SPA using the Token Handler Pattern
 
-[![Quality](https://img.shields.io/badge/quality-experiment-red)](https://curity.io/resources/code-examples/status/)
+[![Quality](https://img.shields.io/badge/quality-test-yellow)](https://curity.io/resources/code-examples/status/)
 [![Availability](https://img.shields.io/badge/availability-source-blue)](https://curity.io/resources/code-examples/status/)
 
 A Single Page Application (SPA) that implements OpenID Connect using recommended browser security.\
