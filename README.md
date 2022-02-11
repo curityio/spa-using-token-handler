@@ -25,8 +25,8 @@ This provides the best separation of web and API concerns, to maintain all of th
 This repository demonstrates the business focused components companies should need to develop:
 
 - A Single Page App coded in React
-- A simple Web Host to provide static content
-- A simple API that validates JWT access tokens
+- A Web Host to provide static content
+- An API that validates JWT access tokens
 
 The token handler should be developed by Curity or another provider, then plugged in.
 
