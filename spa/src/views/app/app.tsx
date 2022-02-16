@@ -142,7 +142,8 @@ export default function App(props: AppProps) {
                 <MultiTabView />
 
                 <UserInfoView 
-                    oauthClient={props.viewModel.oauthClient!} />
+                    oauthClient={props.viewModel.oauthClient!}
+                    setIsLoggedOut={setIsLoggedOut} />
 
                 <CallApiView 
                     apiClient={props.viewModel.apiClient!}

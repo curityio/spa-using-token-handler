@@ -42,12 +42,22 @@ export function UserInfoView(props: UserInfoProps) {
             const remoteError = e as RemoteError;
             if (remoteError) {
 
-                setState((state: any) => {
-                    return {
-                        ...state,
-                        error: remoteError.toDisplayFormat(),
-                    };
-                });
+                if (remoteError.getStatus() === 401) {
+
+                    // A 401 could occur if there is a leftover cookie in the browser that can no longer be processed
+                    // Eg if the cookie encryption key is renewed or if the Authorization Server data is redeployed
+                    // In this case we return to an unauthenticated state
+                    props.setIsLoggedOut();
+
+                } else {
+
+                    setState((state: any) => {
+                        return {
+                            ...state,
+                            error: remoteError.toDisplayFormat(),
+                        };
+                    });
+                }
             }
         }
     }
@@ -56,7 +66,7 @@ export function UserInfoView(props: UserInfoProps) {
 
         <div className='container'>
             <h2>Get User Info</h2>
-            <p>The SPA sends the SameSite cookie to the BFF API to get user info from the ID token</p>
+            <p>The SPA sends the SameSite cookie to the Token Handler to get user info from the ID token</p>
             <button 
                 id='getUserInfo' 
                 className='btn btn-primary operationButton'

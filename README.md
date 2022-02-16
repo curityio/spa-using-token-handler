@@ -1,12 +1,10 @@
-# Web OAuth via a Backend for Frontend (BFF)
+# SPA using the Token Handler Pattern
 
-[![Quality](https://img.shields.io/badge/quality-experiment-red)](https://curity.io/resources/code-examples/status/)
+[![Quality](https://img.shields.io/badge/quality-test-yellow)](https://curity.io/resources/code-examples/status/)
 [![Availability](https://img.shields.io/badge/availability-source-blue)](https://curity.io/resources/code-examples/status/)
 
 A Single Page Application (SPA) that implements OpenID Connect using recommended browser security.\
 The SPA uses a `Backend for Frontend (BFF)` approach, in line with [best practices for browser based apps](https://datatracker.ietf.org/doc/html/draft-ietf-oauth-browser-based-apps).
-
-## The Token Handler Pattern
 
 A modern evolution of Backend for Frontend is used, called the [Token Handler Pattern](https://curity.io/resources/learn/the-token-handler-pattern/).\
 The SPA uses a token handler to perform an API driven OpenID Connect flow:
@@ -27,8 +25,8 @@ This provides the best separation of web and API concerns, to maintain all of th
 This repository demonstrates the business focused components companies should need to develop:
 
 - A Single Page App coded in React
-- A simple Web Host to provide static content
-- A simple API that validates JWT access tokens
+- A Web Host to provide static content
+- An API that validates JWT access tokens
 
 The token handler should be developed by Curity or another provider, then plugged in.
 
