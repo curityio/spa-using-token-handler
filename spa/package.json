@@ -7,7 +7,13 @@
         "start": "npm run clean && npm run copy && webpack --watch",
         "build": "npm run clean && npm run copy && webpack",
         "clean": "rimraf dist/*bundle*",
-        "copy": "mkdir -p dist && cp index.html app.css config.json dist/"
+        "copy": "mkdir -p dist && cp index.html app.css config.json dist/",
+        "cypress.open": "cypress open",
+        "cypress.run": "cypress run --browser chrome",
+        "cypress.run.headless": "cypress run --headless --browser chrome",
+        "merge-report": "npx mochawesome-merge cypress/reports/separate-reports/*.json > cypress/reports/index.json",
+        "generate-report": "npx marge --reportDir cypress/reports/ cypress/reports/index.json",
+        "cypress.generate.reports": "npm run merge-report; npm run generate-report"
     },
     "author": "Curity AB",
     "license": "Apache-2.0",
@@ -19,6 +25,8 @@
     "devDependencies": {
         "@types/react": "^17.0.13",
         "@types/react-dom": "^17.0.8",
+        "cypress": "^7.7.0",
+        "mochawesome": "^7.0.1",
         "rimraf": "^3.0.2",
         "ts-loader": "^9.2.3",
         "typescript": "^4.3.5",
