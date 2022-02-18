@@ -93,6 +93,13 @@ if [ $? -ne 0 ]; then
 fi
 
 #
+# TODO: delete when merging
+#
+cd resources
+git checkout feature/custom-deployment
+cd ..
+
+#
 # Build resources by running the child script
 #
 cd "./resources/$DEPLOYMENT_SCENARIO"

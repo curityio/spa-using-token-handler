@@ -11,6 +11,15 @@ else
 fi
 
 #
+# These can be edited to use different test domains
+# For the financial scenario, to simplify certificates, IDSVR_DOMAIN must be a subdomain of BASE_DOMAIN
+#
+export BASE_DOMAIN='example.com'
+export WEB_SUBDOMAIN='www'
+export API_SUBDOMAIN='api'
+export IDSVR_DOMAIN='login.example.com'
+
+#
 # Ensure that we are in the folder containing this script
 #
 cd "$(dirname "${BASH_SOURCE[0]}")"
