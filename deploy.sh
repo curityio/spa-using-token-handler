@@ -19,10 +19,9 @@ export API_SUBDOMAIN='api'
 export IDSVR_SUBDOMAIN='login'
 
 #
-# If these are configured, an external identity server can be used
+# If configured, an external identity server will be used
 #
-export EXTERNAL_IDSVR_BASE_URL=
-export EXTERNAL_IDSVR_ISSUER_URI_PATH=
+export EXTERNAL_IDSVR_ISSUER_URI=
 
 #
 # Ensure that we are in the folder containing this script
