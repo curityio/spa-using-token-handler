@@ -11,6 +11,19 @@ else
 fi
 
 #
+# These can be edited to use different test domains for the SPA, API and Authorization Server
+#
+export BASE_DOMAIN='example.com'
+export WEB_SUBDOMAIN='www'
+export API_SUBDOMAIN='api'
+export IDSVR_SUBDOMAIN='login'
+
+#
+# If configured, an external identity server will be used
+#
+export EXTERNAL_IDSVR_ISSUER_URI=
+
+#
 # Ensure that we are in the folder containing this script
 #
 cd "$(dirname "${BASH_SOURCE[0]}")"
