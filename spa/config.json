@@ -1,6 +1,6 @@
 {
     "businessApiBaseUrl": "http://api.example.com:3000/api",
     "oauth": {
-        "tokenHandlerBaseUrl": "http://api.example.com:3000/tokenhandler"
+        "oauthAgentBaseUrl": "http://api.example.com:3000/oauth-agent"
     }
 }

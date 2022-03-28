@@ -25,7 +25,7 @@ export class OAuthClient {
     }
 
     /*
-     * On every page load the SPA asks the Token Handler API for login related state
+     * On every page load the SPA asks the OAuth Agent for login related state
      */
     public async handlePageLoad(pageUrl: string): Promise<any> {
 
@@ -84,11 +84,11 @@ export class OAuthClient {
     }
 
     /*
-     * Call the Token Handler API in a parameterized manner
+     * Call the OAuth Agent in a parameterized manner
      */
     private async fetch(method: string, path: string, body: any): Promise<any> {
 
-        let url = `${this.configuration.tokenHandlerBaseUrl}/${path}`;
+        let url = `${this.configuration.oauthAgentBaseUrl}/${path}`;
         const options = {
             url,
             method: method as Method,
@@ -113,7 +113,7 @@ export class OAuthClient {
 
         try {
 
-            // We use axios to call the Token Handler API, due to its support for reading error responses
+            // Use axios to call the OAuth Agent, due to its support for reading error responses
             const response = await axios.request(options);
             if (response.data) {
                 return response.data;
@@ -123,7 +123,7 @@ export class OAuthClient {
 
         } catch (e) {
 
-            throw ErrorHandler.handleFetchError('Token Handler', e);
+            throw ErrorHandler.handleFetchError('OAuth Agent', e);
         }
     }
 

@@ -83,7 +83,7 @@ fi
 cd ..
 
 #
-# Get deployment resources, including the token handler
+# Get deployment resources, including the OAuth Agent, reverse proxy and OAuth Proxy plugin
 #
 rm -rf resources
 git clone https://github.com/curityio/spa-deployments resources
@@ -91,6 +91,13 @@ if [ $? -ne 0 ]; then
   echo 'Problem encountered downloading dependencies'
   exit
 fi
+
+#
+# TODO: delete before merging
+#
+cd resources
+git checkout feature/oauth-agent-rename
+cd ..
 
 #
 # Build resources by running the child script

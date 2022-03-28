@@ -66,7 +66,7 @@ export function UserInfoView(props: UserInfoProps) {
 
         <div className='container'>
             <h2>Get User Info</h2>
-            <p>The SPA sends the SameSite cookie to the Token Handler to get user info from the ID token</p>
+            <p>The SPA sends the SameSite cookie to the OAuth Agent to get user info from the ID token</p>
             <button 
                 id='getUserInfo' 
                 className='btn btn-primary operationButton'

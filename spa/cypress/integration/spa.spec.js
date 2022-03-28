@@ -8,9 +8,9 @@ import {
 
 describe('Single Page App Tests', () => {
   beforeEach(() => {
-    cy.intercept('/tokenhandler/**', (req) => {
+    cy.intercept('/oauth-agent/**', (req) => {
       req.headers['Origin'] = ORIGIN;
-    }).as('tokenHandlerCall');
+    }).as('oauthAgentCall');
     cy.intercept('/api/**', (req) => {
       req.headers['Origin']  = ORIGIN
     }).as('businessApiCall');

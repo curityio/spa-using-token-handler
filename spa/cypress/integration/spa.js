@@ -19,14 +19,14 @@ export const TIMEOUT_500 = 500;
 export const TIMEOUT_1000 = 1000;
 export const ORIGIN = Cypress.env('ORIGIN') || 'http://www.example.com';
 export const BASE_URL = ORIGIN + '/';
-export const LOGIN_START_URL = Cypress.env('LOGIN_START_URL') || 'http://api.example.com:3000/tokenhandler/login/start';
+export const LOGIN_START_URL = Cypress.env('LOGIN_START_URL') || 'http://api.example.com:3000/oauth-agent/login/start';
 export const IDSVR_BASE_URL = Cypress.env('IDSVR_BASE_URL') || 'http://login.example.com:8443';
 export const USERNAME = 'demouser';
 export const PASSWORD = 'Password1';
 
 export function authenticateUser() {
     cy.request({
-        // Get the authorization URL from the Token Handler
+        // Get the authorization URL from the OAuth Agent
         method: 'POST',
         url: LOGIN_START_URL,
         headers: { Origin: ORIGIN }
@@ -94,7 +94,7 @@ export function inputText(selector, text) {
 }
 
 export function clickElement(selector, apiCall = false, clickOptions = null) {
-    const waitForCall = apiCall ? '@businessApiCall' : '@tokenHandlerCall';
+    const waitForCall = apiCall ? '@businessApiCall' : '@oauthAgentCall';
     cy.get(selector)
         .should('exist')
         .click(clickOptions)
