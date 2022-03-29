@@ -80,7 +80,7 @@ export function PageLoadView(props: PageLoadProps) {
         <div className='container'>
             <div>
                 <h2>Page Load</h2>
-                <p>When the SPA loads it asks the API for the authenticated state and to handle a login response if required</p>
+                <p>When the SPA loads it asks the OAuth Agent for the authenticated state and to handle a login response if required</p>
                 {state && state.isLoaded && !state.error &&
                 <div>
                     <p className='alert alert-success' id='pageLoadResult'>Authentication required</p>

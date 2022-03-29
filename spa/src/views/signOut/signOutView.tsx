@@ -49,7 +49,7 @@ export function SignOutView(props: SignOutProps) {
     return (
         <div className='container'>
             <h2>Sign Out</h2>
-            <p>The SPA asks the API for the End Session Redirect URL, then manages its own redirect</p>
+            <p>The SPA asks the OAuth Agent for the End Session Redirect URL, then manages its own redirect</p>
             <button 
                 id='signOut' 
                 className='btn btn-primary operationButton'
