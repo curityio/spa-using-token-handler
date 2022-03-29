@@ -1,10 +1,10 @@
-# How to run the SPA with the Financial-grade Token Handler
+# How to run the SPA with the Financial-grade OAuth Agent
 
 ## Overview
 
-The token handler uses the following behaviour:
+The end-to-end solution provides the following behaviour:
 
-- OAuth work is done for the SPA by an API
+- The OAuth Agent performs OAuth work for the SPA in an API driven manner
 - Authorization Code Flow with PKCE is used, along with Mutual TLS client authentication
 - [PAR](https://tools.ietf.org/id/draft-lodderstedt-oauth-par-00.html) and [JARM](https://openid.net/specs/openid-financial-api-jarm.html) are also used, as state-of-the-art security features
 - Only the strongest `SameSite=strict` cookies are used in the browser
@@ -72,21 +72,21 @@ Once the system is deployed you can also browse to these URLs:
 
 - Sign in to the [Curity Admin UI](https://localhost:6749/admin) with credentials `admin / Password1`
 - Browse to the [Identity Server Metadata Endpoint](https://login.example.com:8443/oauth/v2/oauth-anonymous/.well-known/openid-configuration)
-- Browse to the SPA's [Token Handler API Base URL](https://api.example.com:3000/tokenhandler), which is the OAuth agent
+- Browse to the SPA's [OAuth Agent Base URL](https://api.example.com:3000/oauth-agent)
 - Browse to the [Example API Base URL](https://api.example.com:3000/api), which uses the OAuth proxy to forward JWTs to APIs
 
-## Token Handler Details
+## Internal Details
 
 - To better understand deployment, see the [SPA Deployments](https://github.com/curityio/spa-deployments) repository.
-- To better understand how the token handler works, see the [SPA Financial Grade Token Handler](https://github.com/curityio/token-handler-kotlin-spring-fapi).
+- To better understand how the OAuth Agent works, see the [SPA Financial Grade OAuth Agent](https://github.com/curityio/oauth-agent-kotlin-spring-fapi).
 
 ## Troubleshoot
 
-If you need to troubleshoot then access token handler related logs via the following commands:
+If you need to troubleshoot then access logs for token handler components via these commands:
 
 ```bash
-export TOKEN_HANDLER_CONTAINER_ID=$(docker container ls | grep token-handler-api | awk '{print $1}')
-docker logs -f $TOKEN_HANDLER_CONTAINER_ID
+export OAUTH_AGENT_CONTAINER_ID=$(docker container ls | grep oauth-agent | awk '{print $1}')
+docker logs -f $OAUTH_AGENT_CONTAINER_ID
 ```
 
 ```bash

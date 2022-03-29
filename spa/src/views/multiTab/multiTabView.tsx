@@ -7,7 +7,7 @@ export function MultiTabView() {
     }
 
     function getDescription(): string {
-        return 'All browser tabs share the SameSite cookie and use it when calling APIs';
+        return 'All browser tabs share the SameSite cookies and use them when calling APIs';
     }
     
     async function execute() {

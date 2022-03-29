@@ -83,7 +83,7 @@ fi
 cd ..
 
 #
-# Get deployment resources, including the token handler
+# Get deployment resources, including the OAuth Agent, reverse proxy and OAuth Proxy plugin
 #
 rm -rf resources
 git clone https://github.com/curityio/spa-deployments resources

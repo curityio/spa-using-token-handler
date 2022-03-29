@@ -16,10 +16,6 @@ export function PageLoadView(props: PageLoadProps) {
 
     async function getLoginState(): Promise<any> {
 
-        if (props.sessionExpired) {
-            return {handled: false, isLoggedIn: false};
-        }
-
         try {
             return await props.oauthClient.handlePageLoad(location.href);
 
@@ -45,11 +41,11 @@ export function PageLoadView(props: PageLoadProps) {
             const {handled, isLoggedIn} = await getLoginState();
             if (handled) {
                 
-                // After a login completes, the SPA can restore its location, page state and control the back navigation
+                // After a login completes, restore the location and remove the response from back navigation
                 history.replaceState({}, document.title, '/');
             }
 
-            props.setIsLoaded();
+            props.onLoaded();
             setState((state: any) => {
                 return {
                     ...state,
@@ -58,7 +54,9 @@ export function PageLoadView(props: PageLoadProps) {
             });
 
             if (isLoggedIn) {
-                props.setIsLoggedIn();
+                props.onLoggedIn();
+            } else {
+                props.onLoggedOut();
             }
 
         } catch (e) {
@@ -80,7 +78,7 @@ export function PageLoadView(props: PageLoadProps) {
         <div className='container'>
             <div>
                 <h2>Page Load</h2>
-                <p>When the SPA loads it asks the API for the authenticated state and to handle a login response if required</p>
+                <p>When the SPA loads it asks the OAuth Agent for the authenticated state and to handle a login response if required</p>
                 {state && state.isLoaded && !state.error &&
                 <div>
                     <p className='alert alert-success' id='pageLoadResult'>Authentication required</p>

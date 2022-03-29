@@ -18,7 +18,7 @@ export function SignOutView(props: SignOutProps) {
         try {
 
             const url = await props.oauthClient.logout();
-            props.setIsLoggedOut();
+            props.onLoggedOut();
             location.href = url;
 
         } catch (e) {
@@ -31,7 +31,7 @@ export function SignOutView(props: SignOutProps) {
                     // A 401 could occur if there is a leftover cookie in the browser that can no longer be processed
                     // Eg if the cookie encryption key is renewed or if the Authorization Server data is redeployed
                     // In this case we return to an unauthenticated state
-                    props.setIsLoggedOut();
+                    props.onLoggedOut();
 
                 } else {
 
@@ -49,7 +49,7 @@ export function SignOutView(props: SignOutProps) {
     return (
         <div className='container'>
             <h2>Sign Out</h2>
-            <p>The SPA asks the API for the End Session Redirect URL, then manages its own redirect</p>
+            <p>The SPA asks the OAuth Agent for the End Session Redirect URL, then manages its own redirect</p>
             <button 
                 id='signOut' 
                 className='btn btn-primary operationButton'
