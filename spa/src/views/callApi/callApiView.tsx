@@ -38,10 +38,10 @@ export function CallApiView(props: CallApiProps) {
             const remoteError = e as RemoteError;
             if (remoteError) {
 
-                // Permanent 401s, which include a refresh attempt, mean the session is expired
                 if (remoteError.getStatus() === 401) {
                     
-                    props.onSessionExpired();
+                    // Permanent 401s mean the session is expired
+                    props.onLoggedOut();
 
                 } else {
                 

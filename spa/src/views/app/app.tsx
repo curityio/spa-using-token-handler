@@ -65,20 +65,6 @@ export default function App(props: AppProps) {
     }
 
     /*
-     * Called when there is a permanent 401 when calling an API
-     */
-    function setSessionExpired() {
-
-        setState((prevState: any) => {
-            return {
-                ...prevState,
-                isLoggedIn: false,
-                sessionExpired: true,
-            };
-        });
-    }
-
-    /*
      * Called back from the sign out view or the multi tab logout handler
      */
     function setIsLoggedOut() {
@@ -123,9 +109,9 @@ export default function App(props: AppProps) {
                 <>
                     <PageLoadView 
                         oauthClient={props.viewModel.oauthClient!}
-                        sessionExpired={state.sessionExpired}
-                        setIsLoaded={setIsLoaded}
-                        setIsLoggedIn={setIsLoggedIn} />
+                        onLoaded={setIsLoaded}
+                        onLoggedIn={setIsLoggedIn}
+                        onLoggedOut={setIsLoggedOut} />
 
                     {state.isLoaded && 
                         <>
@@ -143,15 +129,15 @@ export default function App(props: AppProps) {
 
                 <UserInfoView 
                     oauthClient={props.viewModel.oauthClient!}
-                    setIsLoggedOut={setIsLoggedOut} />
+                    onLoggedOut={setIsLoggedOut} />
 
                 <CallApiView 
                     apiClient={props.viewModel.apiClient!}
-                    onSessionExpired={setSessionExpired} />
+                    onLoggedOut={setIsLoggedOut} />
 
                 <SignOutView 
                     oauthClient={props.viewModel.oauthClient!}
-                    setIsLoggedOut={setIsLoggedOut} />
+                    onLoggedOut={setIsLoggedOut} />
             </>
             }
         </>
