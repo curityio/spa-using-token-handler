@@ -93,13 +93,6 @@ if [ $? -ne 0 ]; then
 fi
 
 #
-# TODO: delete before merging
-#
-cd resources
-git checkout feature/oauth-agent-rename
-cd ..
-
-#
 # Build resources by running the child script
 #
 cd "./resources/$DEPLOYMENT_SCENARIO"
