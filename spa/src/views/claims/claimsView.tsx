@@ -15,7 +15,7 @@ export function ClaimsView(props: ClaimsProps) {
     }
 
     function getAuthenticationTime(): string {
-        return `Authenticated at: ${state.authTime}`
+        return `auth_time: ${state.authTime}`
     }
 
     async function execute() {

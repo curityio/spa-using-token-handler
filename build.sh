@@ -93,6 +93,13 @@ if [ $? -ne 0 ]; then
 fi
 
 #
+# TODO: delete after merging
+#
+cd resources
+git checkout feature/spa-extensibility
+cd ..
+
+#
 # Build resources by running the child script
 #
 cd "./resources/$DEPLOYMENT_SCENARIO"
