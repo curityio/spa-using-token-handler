@@ -59,6 +59,14 @@ export class OAuthClient {
     }
 
     /*
+     * Get ID token claims from the API and return it to the UI for display
+     */
+    public async getClaims(): Promise<any> {
+        
+        return await this.fetch('GET', 'claims', null);
+    }
+
+    /*
      * Refresh the tokens stored in secure cookies when an API returns a 401 response
      */
     public async refresh(): Promise<void> {
