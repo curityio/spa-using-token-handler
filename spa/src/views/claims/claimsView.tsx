@@ -63,7 +63,7 @@ export function ClaimsView(props: ClaimsProps) {
     return (
 
         <div className='container'>
-            <h2>Get User Info</h2>
+            <h2>Get Claims</h2>
             <p>The SPA sends the SameSite cookie to the OAuth Agent to get claims from the ID token</p>
             <button 
                 id='getUserInfo' 
