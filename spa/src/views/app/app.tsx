@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {StorageHelper} from '../../utilities/storageHelper';
 import {CallApiView} from '../callApi/callApiView';
+import {ClaimsView} from '../claims/claimsView';
 import {MultiTabView} from '../multiTab/multiTabView';
 import {PageLoadView} from '../pageLoad/pageLoadView';
 import {SignOutView} from '../signOut/signOutView';
@@ -128,6 +129,10 @@ export default function App(props: AppProps) {
                 <MultiTabView />
 
                 <UserInfoView 
+                    oauthClient={props.viewModel.oauthClient!}
+                    onLoggedOut={setIsLoggedOut} />
+
+                <ClaimsView 
                     oauthClient={props.viewModel.oauthClient!}
                     onLoggedOut={setIsLoggedOut} />
 
