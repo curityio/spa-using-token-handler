@@ -93,6 +93,13 @@ if [ $? -ne 0 ]; then
 fi
 
 #
+# TODO: delete once merged
+#
+cd resources
+git checkout feature/luarocks
+cd ..
+
+#
 # Build resources by running the child script
 #
 cd "./resources/$DEPLOYMENT_SCENARIO"
