@@ -4,10 +4,17 @@
 # A script to spin up Docker images with their deployed configuration
 #####################################################################
 
-if [ "$1" == 'financial' ]; then
-  DEPLOYMENT_SCENARIO='financial'
-else
-  DEPLOYMENT_SCENARIO='standard'
+#
+# Ensure that we are in the folder containing this script
+#
+cd "$(dirname "${BASH_SOURCE[0]}")"
+
+#
+# First check prerequisites
+#
+if [ ! -f './license.json' ]; then
+  echo 'Please provide a license.json file in the root folder in order to deploy the system'
+  exit 1
 fi
 
 #
@@ -24,16 +31,23 @@ export IDSVR_SUBDOMAIN='login'
 export EXTERNAL_IDSVR_ISSUER_URI=
 
 #
-# Ensure that we are in the folder containing this script
+# Support these OAuth Agent scenarios and default to the simpler Node.js implementation
 #
-cd "$(dirname "${BASH_SOURCE[0]}")"
+if [ "$1" == 'financial' ]; then
+  OAUTH_AGENT='financial'
+else
+  OAUTH_AGENT='standard'
+fi
 
 #
-# First check prerequisites
+# Support these OAuth Proxy scenarios and default to Kong Open Source
 #
-if [ ! -f './license.json' ]; then
-  echo 'Please provide a license.json file in the root folder in order to deploy the system'
-  exit 1
+if [ "$2" == 'nginx' ]; then
+  OAUTH_PROXY='nginx'
+elif [ "$2" == 'openresty' ]; then  
+  OAUTH_PROXY='openresty'
+else
+  OAUTH_PROXY='kong'
 fi
 
 #
@@ -47,13 +61,12 @@ fi
 #
 # Copy in the license file
 #
-cp ./license.json "./resources/$DEPLOYMENT_SCENARIO/idsvr/"
+cp ./license.json ./resources/components/idsvr/
 
 #
 # Deploy resources by running the child script
 #
-cd "./resources/$DEPLOYMENT_SCENARIO"
-./deploy.sh
+./resources/deploy.sh $OAUTH_AGENT $OAUTH_PROXY
 if [ $? -ne 0 ]; then
   echo 'Problem encountered building deployment resources'
   exit

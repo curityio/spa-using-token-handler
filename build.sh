@@ -4,12 +4,6 @@
 # Get and build code into Docker images, ready for deployment
 ##############################################################
 
-if [ "$1" == 'financial' ]; then
-  DEPLOYMENT_SCENARIO='financial'
-else
-  DEPLOYMENT_SCENARIO='standard'
-fi
-
 #
 # Ensure that we are in the folder containing this script
 #
@@ -19,6 +13,26 @@ cd "$(dirname "${BASH_SOURCE[0]}")"
 # This is for Curity developers only
 #
 cp ./hooks/pre-commit .git/hooks
+
+#
+# Support these OAuth Agent scenarios and default to the simpler Node.js implementation
+#
+if [ "$1" == 'financial' ]; then
+  OAUTH_AGENT='financial'
+else
+  OAUTH_AGENT='standard'
+fi
+
+#
+# Support these OAuth Proxy scenarios and default to Kong Open Source
+#
+if [ "$2" == 'nginx' ]; then
+  OAUTH_PROXY='nginx'
+elif [ "$2" == 'openresty' ]; then  
+  OAUTH_PROXY='openresty'
+else
+  OAUTH_PROXY='kong'
+fi
 
 #
 # Build the SPA into Javascript bundles
@@ -95,8 +109,7 @@ fi
 #
 # Build resources by running the child script
 #
-cd "./resources/$DEPLOYMENT_SCENARIO"
-./build.sh
+./resources/build.sh $OAUTH_AGENT $OAUTH_PROXY
 if [ $? -ne 0 ]; then
   echo 'Problem encountered building deployment resources'
   exit
