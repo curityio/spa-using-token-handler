@@ -46,7 +46,7 @@ export class OAuthClient {
      */
     public async startLogin(): Promise<string> {
 
-        const data = await this.fetch('POST', 'login/start', null)
+        const data = await this.fetch('POST', 'login/start', this.getRedirectOptions())
         return data.authorizationRequestUrl;
     }
 
@@ -133,6 +133,25 @@ export class OAuthClient {
 
             throw ErrorHandler.handleFetchError('OAuth Agent', e);
         }
+    }
+
+    /*
+     * If required, extra parameters can be provided during authentication redirects like this
+     */
+    private getRedirectOptions(): any {
+
+        /*
+        return {
+            extraParams: [
+                {
+                    key: 'ui_locales',
+                    value: 'sv',
+                },
+            ]
+        };
+        */
+
+        return null;
     }
 
     /*
