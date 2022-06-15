@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import {ErrorHandler} from '../../utilities/errorHandler';
 import {RemoteError} from '../../utilities/remoteError';
 import {ClaimsProps} from './claimsProps';
 import {ClaimsState} from './claimsState';
@@ -40,11 +41,8 @@ export function ClaimsView(props: ClaimsProps) {
             const remoteError = e as RemoteError;
             if (remoteError) {
 
-                if (remoteError.getStatus() === 401) {
+                if (ErrorHandler.isSessionExpiredError(remoteError)) {
 
-                    // A 401 could occur if there is a leftover cookie in the browser that can no longer be processed
-                    // Eg if the cookie encryption key is renewed or if the Authorization Server data is redeployed
-                    // In this case we return to an unauthenticated state
                     props.onLoggedOut();
 
                 } else {

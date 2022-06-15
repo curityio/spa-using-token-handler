@@ -16,6 +16,10 @@ export class RemoteError extends Error {
         return this.status;
     }
 
+    public getCode(): string {
+        return this.code;
+    }
+
     public toDisplayFormat(): string {
 
         const parts = [];

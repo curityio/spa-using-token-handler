@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+import {ErrorHandler} from '../../utilities/errorHandler';
 import {RemoteError} from '../../utilities/remoteError';
 import {PageLoadProps} from './pageLoadProps';
 import {PageLoadState} from './pageLoadState';
@@ -22,12 +23,13 @@ export function PageLoadView(props: PageLoadProps) {
         } catch (e) {
 
             const remoteError = e as RemoteError;
-            if (remoteError && remoteError.getStatus() === 401) {
 
-                // A 401 could occur if there is a leftover cookie in the browser that can no longer be processed
-                // Eg if the cookie encryption key is renewed or if the Authorization Server data is redeployed
-                // In this case we return an unauthenticated state
-                return {handled: false, isLoggedIn: false};
+            if (ErrorHandler.isSessionExpiredError(remoteError)) {
+
+                return {
+                    handled: false,
+                    isLoggedIn: false
+                };
             }
 
             throw e;

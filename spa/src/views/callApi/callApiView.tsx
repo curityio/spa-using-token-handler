@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import {ErrorHandler} from '../../utilities/errorHandler';
 import {RemoteError} from '../../utilities/remoteError';
 import {CallApiProps} from './callApiProps';
 import {CallApiState} from './callApiState';
@@ -38,9 +39,8 @@ export function CallApiView(props: CallApiProps) {
             const remoteError = e as RemoteError;
             if (remoteError) {
 
-                if (remoteError.getStatus() === 401) {
+                if (ErrorHandler.isSessionExpiredError(remoteError)) {
                     
-                    // Permanent 401s mean the session is expired
                     props.onLoggedOut();
 
                 } else {

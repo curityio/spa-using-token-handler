@@ -55,7 +55,32 @@ export class OAuthClient {
      */
     public async getUserInfo(): Promise<any> {
         
-        return await this.fetch('GET', 'userInfo', null);
+        try {
+
+            // Try the user info call
+            return await this.fetch('GET', 'userInfo', null);
+
+        } catch (e) {
+
+            // Report errors if this is not a 401
+            const remoteError = ErrorHandler.handleFetchError('OAuth Agent', e);
+            if (!ErrorHandler.isAccessTokenExpiredError(remoteError)) {
+                throw remoteError;
+            }
+
+            // Handle 401s via a refresh
+            await this.refresh();
+            try {
+
+                // Retry the user info call
+                return await this.fetch('GET', 'userInfo', null);
+
+            } catch (e) {
+
+                // Report retry errors
+                throw ErrorHandler.handleFetchError('OAuth Agent', e);
+            }
+        }
     }
 
     /*
