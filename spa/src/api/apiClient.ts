@@ -41,7 +41,7 @@ export class ApiClient {
                 throw remoteError;
             }
 
-            // Handle 401s via a refresh
+            // Handle 401s by refreshing the access token in the HTTP only cookie
             await this.oauthClient.refresh();
             try {
 

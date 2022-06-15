@@ -80,8 +80,6 @@ export default function App(props: AppProps) {
         setIsLoggedOut();
     }
 
-    
-
     /*
      * This simple app does not use React navigation and just renders the current view based on state
      */
