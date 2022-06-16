@@ -165,18 +165,25 @@ export class OAuthClient {
      */
     private getRedirectOptions(): any {
 
-        /*
-        return {
+        /*return {
             extraParams: [
                 {
                     key: 'ui_locales',
                     value: 'sv',
                 },
             ]
-        };
-        */
+        };*/
 
-        return null;
+        return {
+            extraParams: [
+                {
+                    key: 'prompt',
+                    value: 'none',
+                },
+            ]
+        };
+
+        //return null;
     }
 
     /*
