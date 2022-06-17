@@ -174,16 +174,16 @@ export class OAuthClient {
             ]
         };*/
 
-        return {
+        /*return {
             extraParams: [
                 {
                     key: 'prompt',
                     value: 'none',
                 },
             ]
-        };
+        };*/
 
-        //return null;
+        return null;
     }
 
     /*
