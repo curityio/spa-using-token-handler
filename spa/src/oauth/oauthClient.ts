@@ -1,5 +1,6 @@
 import axios, {AxiosRequestConfig, AxiosRequestHeaders, Method} from 'axios';
 import {ErrorHandler} from '../utilities/errorHandler';
+import {RemoteError} from '../utilities/remoteError';
 import {OAuthConfiguration} from './oauthConfiguration';
 
 /*
@@ -60,10 +61,13 @@ export class OAuthClient {
             // Try the user info call
             return await this.fetch('GET', 'userInfo', null);
 
-        } catch (e) {
+        } catch (remoteError) {
 
             // Report errors if this is not a 401
-            const remoteError = ErrorHandler.handleFetchError('OAuth Agent', e);
+            if (!(remoteError instanceof RemoteError)) {
+                throw remoteError;
+            }
+
             if (!remoteError.isAccessTokenExpiredError()) {
                 throw remoteError;
             }
@@ -133,6 +137,7 @@ export class OAuthClient {
             // Send the secure cookie to the API
             withCredentials: true,
         } as AxiosRequestConfig;
+        const headers = options.headers as AxiosRequestHeaders
 
         if (body) {
             options.data = body;
@@ -140,7 +145,6 @@ export class OAuthClient {
 
         // If we have an anti forgery token, add it to POST requests
         if (this.antiForgeryToken) {
-            var headers = options.headers as AxiosRequestHeaders;
             headers['x-example-csrf'] = this.antiForgeryToken;
         }
 

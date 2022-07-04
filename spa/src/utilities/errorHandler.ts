@@ -1,7 +1,7 @@
 import {RemoteError} from './remoteError';
 
 /*
- * Make errors easy for the rest of the app to deal with
+ * Shared error utility functions
  */
 export class ErrorHandler {
 
@@ -9,6 +9,10 @@ export class ErrorHandler {
      * Handle errors making OAuth or API calls
      */
     public static handleFetchError(source: string, e: any): RemoteError {
+
+        if (e instanceof RemoteError) {
+            return e;
+        }
 
         let status = 0;
         let code = 'fetch_error';

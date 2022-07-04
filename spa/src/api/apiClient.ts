@@ -73,13 +73,11 @@ export class ApiClient {
             // Send the secure cookie to the API
             withCredentials: true,
         } as AxiosRequestConfig;
-
-        var headers = options.headers as AxiosRequestHeaders
+        const headers = options.headers as AxiosRequestHeaders
 
         // If we have an anti forgery token, add it to POST requests
         const antiForgeryToken = this.oauthClient.getAntiForgeryToken();
         if (antiForgeryToken) {
-            var headers = options.headers as AxiosRequestHeaders;
             headers['x-example-csrf'] = antiForgeryToken;
         }
 
