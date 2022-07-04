@@ -77,6 +77,8 @@ export function authenticateUser() {
         cy.url().should('eq', BASE_URL);
         cy.get('#getUserInfo')
             .should('exist')
+        cy.get('#getClaims')
+            .should('exist')
     })
 }
 

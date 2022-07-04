@@ -11,9 +11,9 @@
         "cypress.open": "cypress open",
         "cypress.run": "cypress run --browser chrome",
         "cypress.run.headless": "cypress run --headless --browser chrome",
+        "cypress.generate.reports": "npm run merge-report; npm run generate-report",
         "merge-report": "npx mochawesome-merge cypress/reports/separate-reports/*.json > cypress/reports/index.json",
-        "generate-report": "npx marge --reportDir cypress/reports/ cypress/reports/index.json",
-        "cypress.generate.reports": "npm run merge-report; npm run generate-report"
+        "generate-report": "npx marge --reportDir cypress/reports/ cypress/reports/index.json"
     },
     "author": "Curity AB",
     "license": "Apache-2.0",
