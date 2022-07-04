@@ -64,7 +64,7 @@ export class OAuthClient {
 
             // Report errors if this is not a 401
             const remoteError = ErrorHandler.handleFetchError('OAuth Agent', e);
-            if (!ErrorHandler.isAccessTokenExpiredError(remoteError)) {
+            if (!remoteError.isAccessTokenExpiredError()) {
                 throw remoteError;
             }
 
@@ -170,15 +170,6 @@ export class OAuthClient {
                 {
                     key: 'ui_locales',
                     value: 'sv',
-                },
-            ]
-        };*/
-
-        /*return {
-            extraParams: [
-                {
-                    key: 'prompt',
-                    value: 'none',
                 },
             ]
         };*/

@@ -1,5 +1,4 @@
 import React, {useState} from 'react';
-import {ErrorHandler} from '../../utilities/errorHandler';
 import {RemoteError} from '../../utilities/remoteError';
 import {UserInfoProps} from './userInfoProps';
 import {UserInfoState} from './userInfoState';
@@ -43,7 +42,7 @@ export function UserInfoView(props: UserInfoProps) {
             const remoteError = e as RemoteError;
             if (remoteError) {
 
-                if (ErrorHandler.isSessionExpiredError(remoteError)) {
+                if (remoteError.isSessionExpiredError()) {
 
                     props.onLoggedOut();
 

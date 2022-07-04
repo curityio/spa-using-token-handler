@@ -1,5 +1,4 @@
 import React, {useState} from 'react';
-import {ErrorHandler} from '../../utilities/errorHandler';
 import {RemoteError} from '../../utilities/remoteError';
 import {CallApiProps} from './callApiProps';
 import {CallApiState} from './callApiState';
@@ -39,7 +38,7 @@ export function CallApiView(props: CallApiProps) {
             const remoteError = e as RemoteError;
             if (remoteError) {
 
-                if (ErrorHandler.isSessionExpiredError(remoteError)) {
+                if (remoteError.isSessionExpiredError()) {
                     
                     props.onLoggedOut();
 

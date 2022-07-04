@@ -1,5 +1,4 @@
 import React, {useState} from 'react';
-import {ErrorHandler} from '../../utilities/errorHandler';
 import {RemoteError} from '../../utilities/remoteError';
 import {ClaimsProps} from './claimsProps';
 import {ClaimsState} from './claimsState';
@@ -41,7 +40,7 @@ export function ClaimsView(props: ClaimsProps) {
             const remoteError = e as RemoteError;
             if (remoteError) {
 
-                if (ErrorHandler.isSessionExpiredError(remoteError)) {
+                if (remoteError.isSessionExpiredError()) {
 
                     props.onLoggedOut();
 

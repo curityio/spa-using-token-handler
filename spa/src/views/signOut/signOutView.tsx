@@ -1,5 +1,4 @@
 import React, {useState} from 'react';
-import {ErrorHandler} from '../../utilities/errorHandler';
 import {RemoteError} from '../../utilities/remoteError';
 import {SignOutProps} from './signOutProps';
 import {SignOutState} from './signOutState';
@@ -27,7 +26,7 @@ export function SignOutView(props: SignOutProps) {
             const remoteError = e as RemoteError;
             if (remoteError) {
 
-                if (ErrorHandler.isSessionExpiredError(remoteError)) {
+                if (remoteError.isSessionExpiredError()) {
 
                     props.onLoggedOut();
 

@@ -37,7 +37,7 @@ export class ApiClient {
 
             // Report errors if this is not a 401
             const remoteError = ErrorHandler.handleFetchError('Business API', e);
-            if (!ErrorHandler.isAccessTokenExpiredError(remoteError)) {
+            if (!remoteError.isAccessTokenExpiredError()) {
                 throw remoteError;
             }
 

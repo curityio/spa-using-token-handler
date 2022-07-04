@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react';
-import {ErrorHandler} from '../../utilities/errorHandler';
 import {RemoteError} from '../../utilities/remoteError';
 import {PageLoadProps} from './pageLoadProps';
 import {PageLoadState} from './pageLoadState';
@@ -23,7 +22,7 @@ export function PageLoadView(props: PageLoadProps) {
         } catch (e) {
 
             const remoteError = e as RemoteError;
-            if (ErrorHandler.isSessionExpiredError(remoteError)) {
+            if (remoteError.isSessionExpiredError()) {
 
                 return {
                     handled: false,
