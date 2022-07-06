@@ -24,7 +24,7 @@ export class ApiClient {
     }
 
     /*
-     * Call the Business API in a parameterized manner with reliability
+     * Call the Business API and handle retries due to expired access tokens
      */
     private async fetch(method: string, path: string): Promise<any> {
 
@@ -35,12 +35,13 @@ export class ApiClient {
 
         } catch (e) {
 
-            // Report errors
-            if (!this.isApi401Error(e)) {
-                throw ErrorHandler.handleFetchError('Business API', e);
+            // Report errors if this is not a 401
+            const remoteError = ErrorHandler.handleFetchError('Business API', e);
+            if (!remoteError.isAccessTokenExpiredError()) {
+                throw remoteError;
             }
 
-            // Handle 401s via a refresh
+            // Handle 401s by refreshing the access token in the HTTP only cookie
             await this.oauthClient.refresh();
             try {
 
@@ -72,13 +73,11 @@ export class ApiClient {
             // Send the secure cookie to the API
             withCredentials: true,
         } as AxiosRequestConfig;
-
-        var headers = options.headers as AxiosRequestHeaders
+        const headers = options.headers as AxiosRequestHeaders
 
         // If we have an anti forgery token, add it to POST requests
         const antiForgeryToken = this.oauthClient.getAntiForgeryToken();
         if (antiForgeryToken) {
-            var headers = options.headers as AxiosRequestHeaders;
             headers['x-example-csrf'] = antiForgeryToken;
         }
 
@@ -88,19 +87,5 @@ export class ApiClient {
         }
 
         return null;
-    }
-
-    /*
-     * Determine if this is a 401 response meaning the access token in the secure cookie has expired
-     */
-    private isApi401Error(error: any) {
-
-        if (error.response) {
-            if (error.response.status === 401 || error.response.status === 403) {
-                return true;
-            }
-        }
-
-        return false;
     }
 }

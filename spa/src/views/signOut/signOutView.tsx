@@ -26,11 +26,8 @@ export function SignOutView(props: SignOutProps) {
             const remoteError = e as RemoteError;
             if (remoteError) {
 
-                if (remoteError.getStatus() === 401) {
+                if (remoteError.isSessionExpiredError()) {
 
-                    // A 401 could occur if there is a leftover cookie in the browser that can no longer be processed
-                    // Eg if the cookie encryption key is renewed or if the Authorization Server data is redeployed
-                    // In this case we return to an unauthenticated state
                     props.onLoggedOut();
 
                 } else {

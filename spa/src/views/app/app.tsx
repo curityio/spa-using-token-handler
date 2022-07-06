@@ -14,21 +14,17 @@ import {AppState} from './appState';
 export default function App(props: AppProps) {
 
     const [state, setState] = useState<AppState | null>(null);
+    const storage = new StorageHelper(() => multiTabLogout());
 
-    // This only runs once to initialize the app
     useEffect(() => {
         startup();
         return () => cleanup();
     }, []);
 
-    /*
-     * Create global objects when the app loads
-     */
     async function startup() {
 
-        const storage = new StorageHelper(() => multiTabLogout());
-        await props.viewModel.initialize(storage);
         window.addEventListener('storage', storage.onChange);
+        await props.viewModel.initialize();
 
         setState({
             isLoaded: false,
@@ -37,9 +33,10 @@ export default function App(props: AppProps) {
         });
     }
 
-    /*
-     * Called back from the page load view
-     */
+    function cleanup() {
+        window.removeEventListener('storage', storage.onChange);
+    }
+
     function setIsLoaded() {
 
         setState((prevState: any) => {
@@ -50,12 +47,9 @@ export default function App(props: AppProps) {
         });
     }
 
-    /*
-     * Called back from the start authentication view
-     */
     function setIsLoggedIn() {
 
-        props.viewModel.storage!.setLoggedOut(false);
+        storage.setLoggedOut(false);
         setState((prevState: any) => {
             return {
                 ...prevState,
@@ -65,12 +59,9 @@ export default function App(props: AppProps) {
         });
     }
 
-    /*
-     * Called back from the sign out view or the multi tab logout handler
-     */
     function setIsLoggedOut() {
 
-        props.viewModel.storage!.setLoggedOut(true);
+        storage.setLoggedOut(true);
         setState((prevState: any) => {
             return {
                 ...prevState,
@@ -81,7 +72,7 @@ export default function App(props: AppProps) {
     }
 
     /*
-     * We are notified when logout occurs on another tab, then clean up this tab's state
+     * This browser tab is notified when logout occurs on another tab, then cleans up this tab's state
      */
     async function multiTabLogout() {
 
@@ -90,16 +81,7 @@ export default function App(props: AppProps) {
     }
 
     /*
-     * Release event listeners when we exit
-     */
-    function cleanup() {
-        if (props.viewModel.storage) {
-            window.removeEventListener('storage', props.viewModel.storage.onChange);
-        }
-    }
-
-    /*
-     * This simple app does not use React navigation and just renders the view based on state
+     * This simple app does not use React navigation and just renders the current view based on state
      */
     return (
         <>

@@ -38,9 +38,8 @@ export function CallApiView(props: CallApiProps) {
             const remoteError = e as RemoteError;
             if (remoteError) {
 
-                if (remoteError.getStatus() === 401) {
+                if (remoteError.isSessionExpiredError()) {
                     
-                    // Permanent 401s mean the session is expired
                     props.onLoggedOut();
 
                 } else {

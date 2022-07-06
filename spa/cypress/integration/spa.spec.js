@@ -22,10 +22,13 @@ describe('Single Page App Tests', () => {
     signOutUser();
   });
 
-  it('Get user info and call APIs from the application', () => {
+  it('Get ID token claims, user info and call APIs from the application', () => {
     clickElement('#getUserInfo');
     cy.get('#getUserInfoResult')
         .contains('Demo User');
+    clickElement('#getClaims');
+    cy.get('#getClaimsResult')
+        .contains('auth_time');
     clickElement('#getApiData', true);
     cy.get('#getDataResult')
         .contains('Success response from the Business API');

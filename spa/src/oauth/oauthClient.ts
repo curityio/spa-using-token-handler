@@ -1,5 +1,6 @@
 import axios, {AxiosRequestConfig, AxiosRequestHeaders, Method} from 'axios';
 import {ErrorHandler} from '../utilities/errorHandler';
+import {RemoteError} from '../utilities/remoteError';
 import {OAuthConfiguration} from './oauthConfiguration';
 
 /*
@@ -55,7 +56,35 @@ export class OAuthClient {
      */
     public async getUserInfo(): Promise<any> {
         
-        return await this.fetch('GET', 'userInfo', null);
+        try {
+
+            // Try the user info call
+            return await this.fetch('GET', 'userInfo', null);
+
+        } catch (remoteError) {
+
+            // Report errors if this is not a 401
+            if (!(remoteError instanceof RemoteError)) {
+                throw remoteError;
+            }
+
+            if (!remoteError.isAccessTokenExpiredError()) {
+                throw remoteError;
+            }
+
+            // Handle 401s by refreshing the access token in the HTTP only cookie
+            await this.refresh();
+            try {
+
+                // Retry the user info call
+                return await this.fetch('GET', 'userInfo', null);
+
+            } catch (e) {
+
+                // Report retry errors
+                throw ErrorHandler.handleFetchError('OAuth Agent', e);
+            }
+        }
     }
 
     /*
@@ -108,6 +137,7 @@ export class OAuthClient {
             // Send the secure cookie to the API
             withCredentials: true,
         } as AxiosRequestConfig;
+        const headers = options.headers as AxiosRequestHeaders
 
         if (body) {
             options.data = body;
@@ -115,7 +145,6 @@ export class OAuthClient {
 
         // If we have an anti forgery token, add it to POST requests
         if (this.antiForgeryToken) {
-            var headers = options.headers as AxiosRequestHeaders;
             headers['x-example-csrf'] = this.antiForgeryToken;
         }
 
@@ -140,16 +169,14 @@ export class OAuthClient {
      */
     private getRedirectOptions(): any {
 
-        /*
-        return {
+        /*return {
             extraParams: [
                 {
                     key: 'ui_locales',
                     value: 'sv',
                 },
             ]
-        };
-        */
+        };*/
 
         return null;
     }

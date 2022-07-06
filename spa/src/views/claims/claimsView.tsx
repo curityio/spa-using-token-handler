@@ -40,11 +40,8 @@ export function ClaimsView(props: ClaimsProps) {
             const remoteError = e as RemoteError;
             if (remoteError) {
 
-                if (remoteError.getStatus() === 401) {
+                if (remoteError.isSessionExpiredError()) {
 
-                    // A 401 could occur if there is a leftover cookie in the browser that can no longer be processed
-                    // Eg if the cookie encryption key is renewed or if the Authorization Server data is redeployed
-                    // In this case we return to an unauthenticated state
                     props.onLoggedOut();
 
                 } else {
@@ -66,7 +63,7 @@ export function ClaimsView(props: ClaimsProps) {
             <h2>Get Claims</h2>
             <p>The SPA sends the SameSite cookie to the OAuth Agent to get claims from the ID token</p>
             <button 
-                id='getUserInfo' 
+                id='getClaims' 
                 className='btn btn-primary operationButton'
                 onClick={execute}
                 disabled={isButtonDisabled()}>
@@ -74,7 +71,7 @@ export function ClaimsView(props: ClaimsProps) {
             </button>
             {state.authTime &&
             <div>
-                <p id='getUserInfoResult' className='alert alert-success'>{getAuthenticationTime()}</p>
+                <p id='getClaimsResult' className='alert alert-success'>{getAuthenticationTime()}</p>
             </div>}
             {state && state.error &&
             <div>
