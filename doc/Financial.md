@@ -27,6 +27,7 @@ Ensure that these tools are installed locally:
 - [Java 11 or later](https://openjdk.java.net/projects/jdk/11/)
 - [Docker Desktop](https://www.docker.com/products/docker-desktop)
 - [jq](https://stedolan.github.io/jq/download/)
+- [envsubst](https://www.gnu.org/software/gettext/)
 
 Contact Curity to get a trial license with access to financial grade features.\
 Then copy the `license.json` file to the folder where you have cloned this repository.
