@@ -25,6 +25,7 @@ Ensure that these tools are installed locally:
 - [Node.js](https://nodejs.org/en/download/)
 - [Docker Desktop](https://www.docker.com/products/docker-desktop)
 - [jq](https://stedolan.github.io/jq/download/)
+- [envsubst](https://www.gnu.org/software/gettext/)
 
 Also get a License File for the Curity Identity Server and copy it to the root folder:
 
