@@ -1,8 +1,8 @@
 import express from 'express';
 import fs from 'fs';
-import http from 'http';
 import https from 'https';
-import {InMemoryCache, jwksService, secure} from 'express-oauth-jwt';
+import {secure} from 'express-oauth-jwt';
+import {createRemoteJWKSet} from 'jose';
 import {Configuration} from './configuration';
 
 /*
@@ -12,17 +12,20 @@ const buffer = fs.readFileSync('config.json');
 const configuration = JSON.parse(buffer.toString()) as Configuration;
 
 /*
- * Create a service for validating JWT access tokens
+ * Create a service for getting token signing public keys
  */
-const client = !configuration.keystoreFilePath ? http : https;
-const auth = jwksService(new InMemoryCache(), configuration.jwksUrl, client as any);
+const jwksService = createRemoteJWKSet(new URL(configuration.jwksUrl));
 
 /*
  * Configure Express
  */
 const app = express();
 app.set('etag', false);
-app.use('/data', secure(auth));
+
+/*
+ * Implement basic JWT validation
+ */
+app.use('/data', secure(jwksService));
 
 /*
  * Business logic that runs after JWT validation
