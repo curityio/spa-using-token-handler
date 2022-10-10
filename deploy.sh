@@ -20,10 +20,10 @@ fi
 #
 # These can be edited to use different test domains for the SPA, API and Authorization Server
 #
-export BASE_DOMAIN='example.com'
-export WEB_SUBDOMAIN='www'
-export API_SUBDOMAIN='api'
-export IDSVR_SUBDOMAIN='login'
+export BASE_DOMAIN='localhost'
+export WEB_SUBDOMAIN=''
+export API_SUBDOMAIN=''
+export IDSVR_SUBDOMAIN=''
 
 #
 # If configured, an external identity server will be used
