@@ -107,13 +107,6 @@ if [ $? -ne 0 ]; then
 fi
 
 #
-# TODO: delete after merging
-#
-cd resources
-git checkout feature/same-domain-testing
-cd ..
-
-#
 # Build resources by running the child script
 #
 ./resources/build.sh $OAUTH_AGENT $OAUTH_PROXY
