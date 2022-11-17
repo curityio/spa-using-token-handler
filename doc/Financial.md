@@ -54,10 +54,6 @@ Then run this script to spin up all components in a small Docker Compose network
 ./deploy.sh financial
 ```
 
-```bash
-./deploy.sh
-```
-
 Deployed domains used can be adjusted depending on your preferences, by editing the deploy.sh script.\
 The following configuration can be used if you prefer to run token handler components in the web domain.\
 If you use a different domain to example.com, ensure that /etc/hosts is updated accordingly.
