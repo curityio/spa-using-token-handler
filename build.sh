@@ -15,24 +15,10 @@ cd "$(dirname "${BASH_SOURCE[0]}")"
 cp ./hooks/pre-commit .git/hooks
 
 #
-# Support these OAuth Agent scenarios and default to the simpler Node.js implementation
+# Forward the type of each component to the child script
 #
-if [ "$1" == 'financial' ]; then
-  OAUTH_AGENT='financial'
-else
-  OAUTH_AGENT='standard'
-fi
-
-#
-# Support these OAuth Proxy scenarios and default to Kong Open Source
-#
-if [ "$2" == 'nginx' ]; then
-  OAUTH_PROXY='nginx'
-elif [ "$2" == 'openresty' ]; then  
-  OAUTH_PROXY='openresty'
-else
-  OAUTH_PROXY='kong'
-fi
+OAUTH_AGENT="$1"
+OAUTH_PROXY="$2"
 
 #
 # Build the SPA into Javascript bundles
@@ -105,6 +91,13 @@ if [ $? -ne 0 ]; then
   echo 'Problem encountered downloading dependencies'
   exit
 fi
+
+#
+# Delete after merge
+#
+cd resources
+git checkout feature/pme-778-behaviors
+cd ..
 
 #
 # Build resources by running the child script
