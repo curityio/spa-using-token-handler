@@ -93,13 +93,6 @@ if [ $? -ne 0 ]; then
 fi
 
 #
-# Delete after merge
-#
-cd resources
-git checkout feature/pme-778-behaviors
-cd ..
-
-#
 # Build resources by running the child script
 #
 ./resources/build.sh $OAUTH_AGENT $OAUTH_PROXY
