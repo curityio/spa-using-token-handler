@@ -18,6 +18,12 @@ if [ ! -f './license.json' ]; then
 fi
 
 #
+# Forward the type of each component to the child script
+#
+OAUTH_AGENT="$1"
+OAUTH_PROXY="$2"
+
+#
 # These can be edited to use different test domains for the SPA, API and Authorization Server
 #
 export BASE_DOMAIN='example.com'
@@ -29,26 +35,6 @@ export IDSVR_SUBDOMAIN='login'
 # If configured, an external identity server will be used
 #
 export EXTERNAL_IDSVR_ISSUER_URI=
-
-#
-# Support these OAuth Agent scenarios and default to the simpler Node.js implementation
-#
-if [ "$1" == 'financial' ]; then
-  OAUTH_AGENT='financial'
-else
-  OAUTH_AGENT='standard'
-fi
-
-#
-# Support these OAuth Proxy scenarios and default to Kong Open Source
-#
-if [ "$2" == 'nginx' ]; then
-  OAUTH_PROXY='nginx'
-elif [ "$2" == 'openresty' ]; then  
-  OAUTH_PROXY='openresty'
-else
-  OAUTH_PROXY='kong'
-fi
 
 #
 # Check that the build script has been run
