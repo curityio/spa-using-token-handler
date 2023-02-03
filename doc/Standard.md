@@ -38,8 +38,23 @@ Also get a License File for the Curity Identity Server and copy it to the root f
 This will compile projects and build Docker images:
 
 ```bash
-./build.sh
+OAUTH_AGENT=""
+OAUTH_PROXY=""
+./build.sh "$OAUTH_AGENT" "$OAUTH_PROXY" 
 ```
+
+Options:
+
+- `OAUTH_AGENT`
+  - NODE (default)
+  - NET
+  - KOTLIN
+  - FINANCIAL
+- `OAUTH_PROXY`
+  - KONG (default)
+  - NGINX
+  - OPENRESTY
+
 
 ## Deploy the System
 

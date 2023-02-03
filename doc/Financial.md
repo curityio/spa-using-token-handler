@@ -38,8 +38,22 @@ Then copy the `license.json` file to the folder where you have cloned this repos
 This will compile projects, build Docker images and generate development certificates:
 
 ```bash
-./build.sh financial
+OAUTH_AGENT="FINANCIAL" 
+OAUTH_PROXY="" 
+./build.sh "$OAUTH_AGENT" "$OAUTH_PROXY" 
 ```
+
+Options:
+
+- `OAUTH_AGENT`
+  - NODE (default)
+  - NET
+  - KOTLIN
+  - FINANCIAL
+- `OAUTH_PROXY`
+  - KONG (default)
+  - NGINX
+  - OPENRESTY
 
 ## Configure SSL Trust
 
