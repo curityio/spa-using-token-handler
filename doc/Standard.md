@@ -38,6 +38,12 @@ Also get a License File for the Curity Identity Server and copy it to the root f
 This will compile projects and build Docker images:
 
 ```bash
+./build.sh
+```
+
+For further control you can override the script with options:
+
+```bash
 OAUTH_AGENT=""
 OAUTH_PROXY=""
 ./build.sh "$OAUTH_AGENT" "$OAUTH_PROXY" 
@@ -55,13 +61,20 @@ Options:
   - NGINX
   - OPENRESTY
 
-
 ## Deploy the System
 
 Then run this script to spin up all components in a small Docker Compose network:
 
 ```bash
 ./deploy.sh
+```
+
+If overriding default options, supply the same options to this script: 
+
+```bash
+OAUTH_AGENT=""
+OAUTH_PROXY=""
+./deploy.sh "$OAUTH_AGENT" "$OAUTH_PROXY" 
 ```
 
 Domains used can be adjusted depending on your preferences, by editing the deploy.sh script.\
