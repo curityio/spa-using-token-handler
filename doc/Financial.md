@@ -38,18 +38,19 @@ Then copy the `license.json` file to the folder where you have cloned this repos
 This will compile projects, build Docker images and generate development certificates:
 
 ```bash
-OAUTH_AGENT="FINANCIAL" 
-OAUTH_PROXY="" 
-./build.sh "$OAUTH_AGENT" "$OAUTH_PROXY" 
+./build.sh "FINANCIAL"
+```
+
+For further control you can override the script with options:
+
+
+```bash
+OAUTH_PROXY=""
+./build.sh "FINANCIAL" "$OAUTH_PROXY" 
 ```
 
 Options:
 
-- `OAUTH_AGENT`
-  - NODE (default)
-  - NET
-  - KOTLIN
-  - FINANCIAL
 - `OAUTH_PROXY`
   - KONG (default)
   - NGINX
@@ -65,7 +66,14 @@ For most browsers this can be done by importing it to the system trust store, eg
 Then run this script to spin up all components in a small Docker Compose network:
 
 ```bash
-./deploy.sh financial
+./deploy.sh "FINANCIAL" 
+```
+
+If overriding default options, supply the same options to this script:
+
+```bash
+OAUTH_PROXY=""
+./deploy.sh "FINANCIAL" "$OAUTH_PROXY" 
 ```
 
 Deployed domains used can be adjusted depending on your preferences, by editing the deploy.sh script.\
