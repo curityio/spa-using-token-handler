@@ -1,4 +1,4 @@
-FROM node:15.11.0-alpine
+FROM node:18-alpine
 
 WORKDIR /usr/webhost
 COPY webhost/dist          /usr/webhost/dist
