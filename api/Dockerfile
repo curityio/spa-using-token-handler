@@ -10,4 +10,7 @@ RUN addgroup -g 1001 apigroup
 RUN adduser -u 1001 -G apigroup -h /home/apiuser -D apiuser
 
 USER apiuser
-CMD ["node", "dist/server.js"]
+
+# If PKCS#12 files are loaded that were created with OpenSSL 1.1.1, this is needed
+# https://github.com/nodejs/node/issues/40672
+CMD ["node", "--openssl-legacy-provider", "dist/server.js"]
