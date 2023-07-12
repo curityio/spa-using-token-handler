@@ -1,7 +1,4 @@
-FROM node:15.11.0-alpine
-
-# For debugging
-RUN apk --no-cache add curl
+FROM node:18-alpine
 
 WORKDIR /usr/api
 COPY package*.json      /usr/api/

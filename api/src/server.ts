@@ -23,9 +23,21 @@ const app = express();
 app.set('etag', false);
 
 /*
- * Implement basic JWT validation
+ * Implement JWT validation and check for the expected issuer and audience
  */
-app.use('/data', secure(jwksService));
+const options = {
+    claims: [
+        {
+            name: 'iss',
+            value: configuration.issuer,
+        },
+        /*{
+            name: 'aud',
+            value: configuration.audience,
+        },*/
+    ]
+};
+app.use('/data', secure(jwksService, options));
 
 /*
  * Business logic that runs after JWT validation
