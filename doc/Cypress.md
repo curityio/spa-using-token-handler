@@ -1,6 +1,6 @@
 # Automated UI Tests
 
-The SPA project includes some Cypress resources to show how to run automated tests for the login related logic:
+The SPA project includes some Cypress resources to show how to run automated tests for login related logic:
 
 ```bash
 cd spa
