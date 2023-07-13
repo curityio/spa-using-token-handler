@@ -19,9 +19,9 @@ export default defineConfig({
   },
 
   env: {
-    ORIGIN: 'https://www.example.com',
-    LOGIN_START_URL: 'https://api.example.com/oauth-agent/login/start',
-    IDSVR_BASE_URL: 'https://login.example.com:8443',
+    ORIGIN: 'http://www.example.com',
+    LOGIN_START_URL: 'http://api.example.com/oauth-agent/login/start',
+    IDSVR_BASE_URL: 'http://login.example.com:8443',
   },
 
   e2e: {
