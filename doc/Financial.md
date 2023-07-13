@@ -129,6 +129,14 @@ export REVERSE_PROXY_CONTAINER_ID=$(docker container ls | grep reverse-proxy | a
 docker logs -f $REVERSE_PROXY_CONTAINER_ID
 ```
 
+## Run UI Tests
+
+You can run the SPA's [Cypress tests](Cypress).md to run automated UI tests for login related operations:
+
+```bash
+npm run uitests
+```
+
 ## Free Resources
 
 When finished with your development session, run the following script to free resources:
