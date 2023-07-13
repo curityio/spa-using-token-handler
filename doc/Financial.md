@@ -107,8 +107,8 @@ Once the system is deployed you can also browse to these URLs:
 
 - Sign in to the [Curity Admin UI](https://localhost:6749/admin) with credentials `admin / Password1`
 - Browse to the [Identity Server Metadata Endpoint](https://login.example.com:8443/oauth/v2/oauth-anonymous/.well-known/openid-configuration)
-- Browse to the SPA's [OAuth Agent Base URL](https://api.example.com:3000/oauth-agent)
-- Browse to the [Example API Base URL](https://api.example.com:3000/api), which uses the OAuth proxy to forward JWTs to APIs
+- Browse to the SPA's [OAuth Agent Base URL](https://api.example.com/oauth-agent)
+- Browse to the [Example API Base URL](https://api.example.com/api), which uses the OAuth proxy to forward JWTs to APIs
 
 ## Internal Details
 
