@@ -131,7 +131,7 @@ docker logs -f $REVERSE_PROXY_CONTAINER_ID
 
 ## Run UI Tests
 
-You can run the SPA's [Cypress tests](Cypress).md to run automated UI tests for login related operations:
+You can run the SPA's [Cypress tests](Cypress.md) to run automated UI tests for login related operations:
 
 ```bash
 npm run uitests
