@@ -131,9 +131,12 @@ docker logs -f $REVERSE_PROXY_CONTAINER_ID
 
 ## Run UI Tests
 
-You can run the SPA's [Cypress tests](Cypress.md) to run automated UI tests for login related operations:
+If required, run the SPA's [autoamted UI tests](Cypress.md) for login related operations:
 
 ```bash
+export LOGIN_START_URL='https://api.example.com/oauth-agent/login/start'
+export IDSVR_BASE_URL='https://login.example.com:8443'
+cd spa
 npm run uitests
 ```
 

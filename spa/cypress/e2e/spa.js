@@ -17,10 +17,10 @@
 export const TIMEOUT_100 = 100;
 export const TIMEOUT_500 = 500;
 export const TIMEOUT_1000 = 1000;
-export const ORIGIN = Cypress.env('ORIGIN') || 'http://www.example.com';
+export const ORIGIN = Cypress.env('ORIGIN');
 export const BASE_URL = ORIGIN + '/';
-export const LOGIN_START_URL = Cypress.env('LOGIN_START_URL') || 'http://api.example.com/oauth-agent/login/start';
-export const IDSVR_BASE_URL = Cypress.env('IDSVR_BASE_URL') || 'http://login.example.com:8443';
+export const LOGIN_START_URL = Cypress.env('LOGIN_START_URL');
+export const IDSVR_BASE_URL = Cypress.env('IDSVR_BASE_URL');
 export const USERNAME = 'demouser';
 export const PASSWORD = 'Password1';
 

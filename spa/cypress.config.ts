@@ -18,6 +18,12 @@ export default defineConfig({
     json: true,
   },
 
+  env: {
+    ORIGIN: 'https://www.example.com',
+    LOGIN_START_URL: 'https://api.example.com/oauth-agent/login/start',
+    IDSVR_BASE_URL: 'https://login.example.com:8443',
+  },
+
   e2e: {
     setupNodeEvents(on, config) {
       // implement node event listeners here
