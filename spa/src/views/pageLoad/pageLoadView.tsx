@@ -31,10 +31,6 @@ export function PageLoadView(props: PageLoadProps) {
             }
 
             throw e;
-
-        } finally {
-
-            history.replaceState({}, document.title, '/');
         }
     }
 
@@ -45,7 +41,7 @@ export function PageLoadView(props: PageLoadProps) {
             const {handled, isLoggedIn} = await getLoginState();
             if (handled) {
                 
-                // After a login completes, restore the location and remove the OAuth response from back navigation
+                // After a login completes, restore the location and remove the OAuth response details from the browser URL
                 history.replaceState({}, document.title, '/');
             }
 
@@ -68,7 +64,7 @@ export function PageLoadView(props: PageLoadProps) {
             const remoteError = e as RemoteError;
             if (remoteError) {
 
-                // Ensure there are no leftover OAuth response details, then render the error
+                // Ensure there are no leftover OAuth response details in the browser URL, then render the error
                 history.replaceState({}, document.title, '/');
                 setState((state: any) => {
                     return {
