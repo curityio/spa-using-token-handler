@@ -108,8 +108,8 @@ Once the system is deployed you can also browse to these URLs:
 
 - Sign in to the [Curity Admin UI](https://localhost:6749/admin) with credentials `admin / Password1`
 - Browse to the [Identity Server Metadata Endpoint](http://login.example.com:8443/oauth/v2/oauth-anonymous/.well-known/openid-configuration)
-- Browse to the SPA's [OAuth Agent Base URL](http://api.example.com:3000/oauth-agent)
-- Browse to the [Example API Base URL](http://api.example.com:3000/api), which uses the OAuth proxy to forward JWTs to APIs
+- Browse to the SPA's [OAuth Agent Base URL](http://api.example.com/oauth-agent)
+- Browse to the [Example API Base URL](http://api.example.com/api), which uses the OAuth proxy to forward JWTs to APIs
 
 ## Internal Details
 
@@ -128,6 +128,15 @@ docker logs -f $OAUTH_AGENT_CONTAINER_ID
 ```bash
 export REVERSE_PROXY_CONTAINER_ID=$(docker container ls | grep reverse-proxy | awk '{print $1}')
 docker logs -f $REVERSE_PROXY_CONTAINER_ID
+```
+
+## Run UI Tests
+
+If required, run the SPA's [automated UI tests](Cypress.md) for login related operations:
+
+```bash
+cd spa
+npm run uitests
 ```
 
 ## Free Resources

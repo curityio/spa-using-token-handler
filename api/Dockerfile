@@ -1,7 +1,4 @@
-FROM node:15.11.0-alpine
-
-# For debugging
-RUN apk --no-cache add curl
+FROM node:18-bullseye
 
 WORKDIR /usr/api
 COPY package*.json      /usr/api/
@@ -9,8 +6,10 @@ COPY dist               /usr/api/dist
 
 RUN npm install --production
 
-RUN addgroup -g 1001 apigroup
-RUN adduser -u 1001 -G apigroup -h /home/apiuser -D apiuser
+RUN groupadd --gid 10000 apiuser \
+  && useradd --uid 10001 --gid apiuser --shell /bin/bash --create-home apiuser
+USER 10001
 
-USER apiuser
-CMD ["node", "dist/server.js"]
+# If development PKCS#12 files are created with OpenSSL 1.1.1, the legacy provider option may be needed
+# https://github.com/nodejs/node/issues/40672
+CMD ["node", "--openssl-legacy-provider", "dist/server.js"]
