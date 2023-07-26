@@ -31,10 +31,10 @@ const options = {
             name: 'iss',
             value: configuration.issuer,
         },
-        /*{
+        {
             name: 'aud',
             value: configuration.audience,
-        },*/
+        },
     ]
 };
 app.use('/data', secure(jwksService, options));
