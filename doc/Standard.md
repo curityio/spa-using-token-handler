@@ -44,19 +44,17 @@ This will compile projects and build Docker images:
 For further control you can override the script with options:
 
 ```bash
-OAUTH_AGENT=""
-OAUTH_PROXY=""
+OAUTH_AGENT=''
+OAUTH_PROXY=''
 ./build.sh "$OAUTH_AGENT" "$OAUTH_PROXY" 
 ```
 
-Options:
-
-- `OAUTH_AGENT`
+OAUTH_AGENT supported values:
   - NODE (default)
   - NET
   - KOTLIN
-  - FINANCIAL
-- `OAUTH_PROXY`
+
+OAUTH_PROXY supported values:
   - KONG (default)
   - NGINX
   - OPENRESTY
@@ -72,10 +70,30 @@ Then run this script to spin up all components in a small Docker Compose network
 If overriding default options, supply the same options to this script: 
 
 ```bash
-OAUTH_AGENT=""
-OAUTH_PROXY=""
+OAUTH_AGENT=''
+OAUTH_PROXY=''
 ./deploy.sh "$OAUTH_AGENT" "$OAUTH_PROXY" 
 ```
+
+## Developing the SPA Locally
+
+If you want to develop the SPA locally, with deployed token handler components, built it like this.\
+The build script will enter webpack watch mode:
+
+```bash
+export DEVELOPMENT=true
+./build.sh
+```
+
+Then run another terminal and deploy it like this, with only token handler components deployed to Docker.\
+The simple web host will then run locally.
+
+```bash
+export DEVELOPMENT=true
+./deploy.sh
+```
+
+## Overriding Domains
 
 Domains used can be adjusted depending on your preferences, by editing the deploy.sh script.\
 The following configuration can be used if you prefer to run token handler components in the web domain.\
