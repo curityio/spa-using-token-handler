@@ -30,12 +30,10 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
-if [ "$DEVELOPMENT" == 'true' ]; then
-  if [ "$OAUTH_AGENT" === 'financial' ]; then
-    cp config-https.json config.json
-  else
-    cp config-http.json config.json
-  fi
+if [ "$OAUTH_AGENT" == 'FINANCIAL' ]; then
+  cp config-https.json config.json
+else
+  cp config-http.json config.json
 fi
 
 npm run build
@@ -54,12 +52,10 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
-if [ "$DEVELOPMENT" == 'true' ]; then
-  if [ "$OAUTH_AGENT" === 'financial' ]; then
-    cp config-https.json config.json
-  else
-    cp config-http.json config.json
-  fi
+if [ "$OAUTH_AGENT" == 'FINANCIAL' ]; then
+  cp config-https.json config.json
+else
+  cp config-http.json config.json
 fi
 
 npm run build
@@ -125,7 +121,7 @@ if [ $? -ne 0 ]; then
 fi
 
 #
-# If running in development mode, build the SPA bundles in watch mode
+# If running in development mode, activate watch mode
 #
 if [ "$DEVELOPMENT" == 'true' ]; then
   cd spa

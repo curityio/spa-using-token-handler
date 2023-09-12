@@ -1,6 +1,6 @@
 {
     "port": 443,
-    "apiBaseUrl": "https://api.example.com:3000",
-    "keystoreFilePath": "",
-    "keystorePassword": ""
+    "apiBaseUrl": "https://api.example.com:444",
+    "keystoreFilePath": "../resources/certs/example.server.p12",
+    "keystorePassword": "Password1"
 }

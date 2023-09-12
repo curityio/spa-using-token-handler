@@ -77,7 +77,7 @@ OAUTH_PROXY=''
 
 ## Developing the SPA Locally
 
-If you want to develop the SPA locally, with deployed token handler components, built it like this.\
+If you want to develop the SPA locally, with deployed token handler components, build it like this.\
 The build script will enter webpack watch mode:
 
 ```bash
