@@ -1,8 +1,8 @@
 #!/bin/bash
 
-##############################################################
-# Get and build code into Docker images, ready for deployment
-##############################################################
+##########################################################################################################
+# Builds the local code into Docker containers, then runs a child script to build token handler components
+##########################################################################################################
 
 #
 # Ensure that we are in the folder containing this script
@@ -30,6 +30,12 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
+if [ "$OAUTH_AGENT" == 'FINANCIAL' ]; then
+  cp config-https.json config.json
+else
+  cp config-http.json config.json
+fi
+
 npm run build
 if [ $? -ne 0 ]; then
   echo "Problem encountered building the SPA code"
@@ -44,6 +50,12 @@ npm install
 if [ $? -ne 0 ]; then
   echo "Problem encountered installing the web host dependencies"
   exit 1
+fi
+
+if [ "$OAUTH_AGENT" == 'FINANCIAL' ]; then
+  cp config-https.json config.json
+else
+  cp config-http.json config.json
 fi
 
 npm run build
@@ -99,4 +111,12 @@ fi
 if [ $? -ne 0 ]; then
   echo 'Problem encountered building deployment resources'
   exit
+fi
+
+#
+# If running in development mode, activate watch mode
+#
+if [ "$DEVELOPMENT" == 'true' ]; then
+  cd spa
+  npm start
 fi

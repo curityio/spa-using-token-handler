@@ -1,0 +1,6 @@
+{
+    "businessApiBaseUrl": "https://api.example.com:444/api",
+    "oauth": {
+        "oauthAgentBaseUrl": "https://api.example.com:444/oauth-agent"
+    }
+}

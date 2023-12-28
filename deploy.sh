@@ -1,8 +1,8 @@
 #!/bin/bash
 
-#####################################################################
-# A script to spin up Docker images with their deployed configuration
-#####################################################################
+#####################################################################################################
+# Deploy all Docker containers to a local Docker compose network, and run the SPA locally if required
+#####################################################################################################
 
 #
 # Ensure that we are in the folder containing this script
@@ -56,4 +56,12 @@ cp ./license.json ./resources/components/idsvr/
 if [ $? -ne 0 ]; then
   echo 'Problem encountered building deployment resources'
   exit
+fi
+
+#
+# If running in development mode, run the web host locally
+#
+if [ "$DEVELOPMENT" == 'true' ]; then
+  cd webhost
+  npm start
 fi

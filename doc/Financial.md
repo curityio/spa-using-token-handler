@@ -35,23 +35,20 @@ Then copy the `license.json` file to the folder where you have cloned this repos
 
 ## Build the Code
 
-This will compile projects, build Docker images and generate development certificates:
+This will compile projects, build Docker images and generate development certificates if needed:
 
 ```bash
-./build.sh "FINANCIAL"
+./build.sh 'FINANCIAL'
 ```
 
 For further control you can override the script with options:
 
-
 ```bash
-OAUTH_PROXY=""
-./build.sh "FINANCIAL" "$OAUTH_PROXY" 
+OAUTH_PROXY=''
+./build.sh 'FINANCIAL' "$OAUTH_PROXY" 
 ```
 
-Options:
-
-- `OAUTH_PROXY`
+OAUTH_PROXY supported values:
   - KONG (default)
   - NGINX
   - OPENRESTY
@@ -66,15 +63,35 @@ For most browsers this can be done by importing it to the system trust store, eg
 Then run this script to spin up all components in a small Docker Compose network:
 
 ```bash
-./deploy.sh "FINANCIAL" 
+./deploy.sh 'FINANCIAL' 
 ```
 
 If overriding default options, supply the same options to this script:
 
 ```bash
-OAUTH_PROXY=""
+OAUTH_PROXY=''
 ./deploy.sh "FINANCIAL" "$OAUTH_PROXY" 
 ```
+
+## Developing the SPA Locally
+
+If you want to develop the SPA locally, with deployed token handler components, build it like this.\
+The build script will enter webpack watch mode:
+
+```bash
+export DEVELOPMENT=true
+./build.sh
+```
+
+Then run another terminal and deploy it like this, with only token handler components deployed to Docker.\
+The simple web host will then run locally.
+
+```bash
+export DEVELOPMENT=true
+./deploy.sh
+```
+
+## Overriding Domains
 
 Deployed domains used can be adjusted depending on your preferences, by editing the deploy.sh script.\
 The following configuration can be used if you prefer to run token handler components in the web domain.\
