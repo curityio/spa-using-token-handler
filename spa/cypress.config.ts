@@ -7,7 +7,6 @@ export default defineConfig({
   defaultCommandTimeout: 10000,
   videosFolder: "cypress/reports/videos",
   screenshotsFolder: "cypress/reports/screenshots",
-  videoUploadOnPasses: false,
   retries: 1,
   reporter: "mochawesome",
 

@@ -24,6 +24,9 @@ env: {
 }
 ```
 
+If HTTP URLs are used, some browsers may redirect the origin to an HTTPS URL.\
+In this case, reload the browser at an HTTP URL of `http://www.example.com`.
+
 ## Additional Commands
 
 Various other operations are possible, as explained in the [Cypress docs](https://docs.cypress.io/guides/guides/command-line).\

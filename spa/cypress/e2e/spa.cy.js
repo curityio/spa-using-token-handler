@@ -23,6 +23,7 @@ describe('Single Page App Tests', () => {
   });
 
   it('Get ID token claims, user info and call APIs from the application', () => {
+    
     clickElement('#getUserInfo');
     cy.get('#getUserInfoResult')
         .contains('Demo User');
