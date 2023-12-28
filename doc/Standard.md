@@ -136,15 +136,18 @@ Once the system is deployed you can also browse to these URLs:
 
 ## Troubleshoot
 
-If you need to troubleshoot then access logs for token handler components via these commands:
+If you need to troubleshoot then access logs for the OAuth agent with this command:
 
 ```bash
-export OAUTH_AGENT_CONTAINER_ID=$(docker container ls | grep oauth-agent | awk '{print $1}')
+OAUTH_AGENT_CONTAINER_ID=$(docker container ls | grep oauth-agent | awk '{print $1}')
 docker logs -f $OAUTH_AGENT_CONTAINER_ID
 ```
 
+Access logs for the deployed reverse proxy with a command of this form:
+
 ```bash
-export REVERSE_PROXY_CONTAINER_ID=$(docker container ls | grep reverse-proxy | awk '{print $1}')
+REVERSE_PROXY_TYPE='kong'
+REVERSE_PROXY_CONTAINER_ID=$(docker container ls | grep $REVERSE_PROXY_TYPE | awk '{print $1}')
 docker logs -f $REVERSE_PROXY_CONTAINER_ID
 ```
 
