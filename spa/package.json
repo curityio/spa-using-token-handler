@@ -7,10 +7,11 @@
         "node": ">=18"
     },
     "scripts": {
-        "start": "npm run clean && npm run copy && webpack --watch",
-        "build": "npm run clean && npm run copy && webpack",
+        "start": "npm run clean && npm run copy && npm run serve",
         "clean": "rimraf dist",
         "copy": "mkdir dist && cp index.html app.css config.json dist/",
+        "serve": "webpack serve --config webpack/webpack.dev.js",
+        "build": "npm run clean && npm run copy && webpack --config webpack/webpack.prod.js",
         "uitests": "cypress run --headed --no-exit --browser chrome"
     },
     "author": "Curity AB",
@@ -29,9 +30,8 @@
         "ts-loader": "^9.4.2",
         "typescript": "^5.1.5",
         "webpack": "^5.88.1",
-        "webpack-cli": "^5.1.4"
-    },
-    "overrides": {
-        "tough-cookie": "4.1.3"
+        "webpack-cli": "^5.1.4",
+        "webpack-dev-server": "^4.15.1",
+        "webpack-merge": "^5.10.0"
     }
 }

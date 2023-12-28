@@ -4,6 +4,5 @@ dist
 resources
 .DS_Store
 webhost/config.json
-spa/config.json
 spa/cypress/reports/
 

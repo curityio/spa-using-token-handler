@@ -21,6 +21,14 @@ OAUTH_AGENT="$1"
 OAUTH_PROXY="$2"
 
 #
+# Development mode uses the webpack dev server, and 
+#
+if [ "$OAUTH_AGENT" == 'FINANCIAL' ] && [ "$DEVELOPMENT" == 'true' ]; then
+  echo 'Financial grade deployments are not currently supported in development mode'
+  exit 1
+fi
+
+#
 # Build the SPA into Javascript bundles
 #
 cd spa
@@ -28,12 +36,6 @@ npm install
 if [ $? -ne 0 ]; then
   echo "Problem encountered installing the SPA dependencies"
   exit 1
-fi
-
-if [ "$OAUTH_AGENT" == 'FINANCIAL' ]; then
-  cp config-https.json config.json
-else
-  cp config-http.json config.json
 fi
 
 npm run build
@@ -50,12 +52,6 @@ npm install
 if [ $? -ne 0 ]; then
   echo "Problem encountered installing the web host dependencies"
   exit 1
-fi
-
-if [ "$OAUTH_AGENT" == 'FINANCIAL' ]; then
-  cp config-https.json config.json
-else
-  cp config-http.json config.json
 fi
 
 npm run build
@@ -111,12 +107,4 @@ fi
 if [ $? -ne 0 ]; then
   echo 'Problem encountered building deployment resources'
   exit
-fi
-
-#
-# If running in development mode, activate watch mode
-#
-if [ "$DEVELOPMENT" == 'true' ]; then
-  cd spa
-  npm start
 fi

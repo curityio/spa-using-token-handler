@@ -77,20 +77,12 @@ OAUTH_PROXY=''
 
 ## Developing the SPA Locally
 
-If you want to develop the SPA locally, with deployed token handler components, build it like this.\
-The build script will enter webpack watch mode:
+You can develop the SPA locally, pointing to deployed token handler components.\
+To do so, set this environment variable before running the `build.sh` and `deploy.sh` scripts.\
+Web static content is then served locally, by the webpack dev server, with hot reloading:
 
 ```bash
 export DEVELOPMENT=true
-./build.sh
-```
-
-Then run another terminal and deploy it like this, with only token handler components deployed to Docker.\
-The simple web host will then run locally.
-
-```bash
-export DEVELOPMENT=true
-./deploy.sh
 ```
 
 ## Overriding Domains
@@ -136,19 +128,16 @@ Once the system is deployed you can also browse to these URLs:
 
 ## Troubleshoot
 
-If you need to troubleshoot then access logs for the OAuth agent with this command:
+If you need to troubleshoot, then access logs for the OAuth agent and OAuth proxy with these commands:
 
 ```bash
 OAUTH_AGENT_CONTAINER_ID=$(docker container ls | grep oauth-agent | awk '{print $1}')
 docker logs -f $OAUTH_AGENT_CONTAINER_ID
 ```
 
-Access logs for the deployed reverse proxy with a command of this form:
-
 ```bash
-REVERSE_PROXY_TYPE='kong'
-REVERSE_PROXY_CONTAINER_ID=$(docker container ls | grep $REVERSE_PROXY_TYPE | awk '{print $1}')
-docker logs -f $REVERSE_PROXY_CONTAINER_ID
+API_GATEWAY_CONTAINER_ID=$(docker container ls | grep api-gateway | awk '{print $1}')
+docker logs -f $API_GATEWAY_CONTAINER_ID
 ```
 
 ## Run UI Tests

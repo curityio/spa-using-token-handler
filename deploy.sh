@@ -59,9 +59,9 @@ if [ $? -ne 0 ]; then
 fi
 
 #
-# If running in development mode, run the web host locally
+# If running in development mode, run the SPA locally
 #
 if [ "$DEVELOPMENT" == 'true' ]; then
-  cd webhost
+  cd spa
   npm start
 fi
