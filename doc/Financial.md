@@ -24,7 +24,7 @@ Add these entries to your /etc/hosts file:
 Ensure that these tools are installed locally:
 
 - [Node.js](https://nodejs.org/en/download/)
-- [Java 11 or later](https://openjdk.java.net/projects/jdk/11/)
+- [Java 17 or later](https://openjdk.java.net/projects/jdk/17/)
 - [Docker Desktop](https://www.docker.com/products/docker-desktop)
 - [openssl](https://www.openssl.org/source/)
 - [jq](https://stedolan.github.io/jq/download/)
