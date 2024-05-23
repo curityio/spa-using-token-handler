@@ -5,4 +5,3 @@ resources
 .DS_Store
 webhost/config.json
 spa/cypress/reports/
-
