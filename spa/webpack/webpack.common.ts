@@ -1,11 +1,10 @@
-const path = require('path');
+import path from 'path';
 
-module.exports = {
+const dirname = process.cwd();
+export default {
 
-  context: path.resolve(__dirname, '../src'),
-
-  // The example supports the 4 main desktop browsers and the 2 main mobile browsers
-  target: ['web', 'es2017'],
+  context: path.resolve(dirname, './src'),
+  target: ['web'],
 
   entry: {
     app: ['./index.tsx']
@@ -24,7 +23,7 @@ module.exports = {
     extensions: ['.ts', '.tsx', '.js']
   },
   output: {
-    path: path.resolve(__dirname, '../dist'),
+    path: path.resolve(dirname, './dist'),
     filename: `[name].bundle.js`,
   },
   optimization: {
