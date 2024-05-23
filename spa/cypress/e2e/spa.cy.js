@@ -22,7 +22,7 @@ describe('Single Page App Tests', () => {
     signOutUser();
   });
 
-  it('Get ID token claims, user info and call APIs from the application', () => {
+  it('Login then get ID token claims, user info and call APIs from the application', () => {
     
     clickElement('#getUserInfo');
     cy.get('#getUserInfoResult')
