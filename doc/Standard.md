@@ -22,7 +22,7 @@ Add these entries to your /etc/hosts file:
 
 Ensure that these tools are installed locally:
 
-- [Node.js](https://nodejs.org/en/download/)
+- [Node.js 20 or later](https://nodejs.org/en/download/)
 - [Docker Desktop](https://www.docker.com/products/docker-desktop)
 - [openssl](https://www.openssl.org/source/)
 - [jq](https://stedolan.github.io/jq/download/)
@@ -106,11 +106,11 @@ Then browse to http://www.example.com and sign in with the following test user n
 
 The SPA has an initial unauthenticated view to focus on triggering a login:
 
-![Unauthenticated View](/doc/ui-unauthenticated-standard.png)
+![Unauthenticated View](/doc/images/ui-unauthenticated-standard.png)
 
 The authenticated view demonstrates multi-tab browsing, which works reliably in all browsers:
 
-![Authenticated View](/doc/ui-authenticated-standard.png)
+![Authenticated View](/doc/images/ui-authenticated-standard.png)
 
 ## Deployed System
 

@@ -94,11 +94,11 @@ Then browse to https://www.example.com and sign in with the following test user 
 
 The SPA has an initial unauthenticated view to focus on triggering a login:
 
-![Unauthenticated View](/doc/ui-unauthenticated-financial.png)
+![Unauthenticated View](/doc/images/ui-unauthenticated-financial.png)
 
 The authenticated view demonstrates multi-tab browsing, which works reliably in all browsers:
 
-![Authenticated View](/doc/ui-authenticated-financial.png)
+![Authenticated View](/doc/images/ui-authenticated-financial.png)
 
 ## Deployed System
 

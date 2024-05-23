@@ -9,7 +9,7 @@ The SPA uses a `Backend for Frontend (BFF)` approach, in line with [best practic
 A modern evolution of Backend for Frontend is used, called the [Token Handler Pattern](https://curity.io/resources/learn/the-token-handler-pattern/).\
 The SPA uses an OAuth Agent to perform an API driven OpenID Connect flow:
 
-![Logical Components](/doc/logical-components.png)
+![Logical Components](/doc/images/logical-components.png)
 
 ## Architecture Benefits
 
