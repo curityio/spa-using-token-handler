@@ -98,7 +98,7 @@ Once the system is deployed you can also browse to these URLs:
 
 ## Deployment Details
 
-To understand token handler deployment details you can study the [build](deployment/build.sh) and [deployment](deployment/financial/deploy.sh) scripts.
+To understand token handler deployment details you can study the [build](../deployment/build.sh) and [deployment](../deployment/financial/deploy.sh) scripts.
 
 ## Troubleshoot
 
