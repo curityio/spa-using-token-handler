@@ -23,8 +23,7 @@ Add these entries to your /etc/hosts file:
 Ensure that these tools are installed locally:
 
 - [Node.js 20 or later](https://nodejs.org/en/download/)
-- [Docker Desktop](https://www.docker.com/products/docker-desktop)
-- [openssl](https://www.openssl.org/source/)
+- [Docker](https://www.docker.com/products/docker-desktop)
 - [jq](https://stedolan.github.io/jq/download/)
 - [envsubst](https://www.gnu.org/software/gettext/)
 

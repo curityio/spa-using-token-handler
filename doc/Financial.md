@@ -25,7 +25,7 @@ Ensure that these tools are installed locally:
 
 - [Node.js 20 or later](https://nodejs.org/en/download/)
 - [Java 17 or later](https://openjdk.java.net/projects/jdk/17/)
-- [Docker Desktop](https://www.docker.com/products/docker-desktop)
+- [Docker](https://www.docker.com/products/docker-desktop)
 - [openssl](https://www.openssl.org/source/)
 - [jq](https://stedolan.github.io/jq/download/)
 - [envsubst](https://www.gnu.org/software/gettext/)
