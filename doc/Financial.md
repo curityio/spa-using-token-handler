@@ -96,6 +96,10 @@ Once the system is deployed you can also browse to these URLs:
 - Browse to the SPA's [OAuth Agent Base URL](https://api.example.com/oauth-agent)
 - Browse to the [Example API Base URL](https://api.example.com/api), which uses the OAuth proxy to forward JWTs to APIs
 
+## Deployment Details
+
+To understand token handler deployment details you can study the [build](deployment/build.sh) and [deployment](deployment/financial/deploy.sh) scripts.
+
 ## Troubleshoot
 
 If you need to troubleshoot, then access logs for the OAuth agent and OAuth proxy with these commands:

@@ -7,7 +7,7 @@ services:
 # In same domain setups the web static content and token handler components can be hosted together behind the API gateway
 #
 - name: webhost
-  url: $SCHEME://webhost-$INTERNAL_DOMAIN:3000
+  url: https://webhost-$INTERNAL_DOMAIN:3000
   routes:
   - name: webhost-api-route
     paths:
@@ -17,7 +17,7 @@ services:
 # The route for the OAuth Agent is seen by the SPA as http://api.example.com/oauth-agent
 #
 - name: oauth-agent
-  url: $SCHEME://oauthagent-$INTERNAL_DOMAIN:3001/oauth-agent
+  url: https://oauthagent-$INTERNAL_DOMAIN:3001/oauth-agent
   routes:
   - name: oauth-agent-api-route
     paths:
@@ -27,7 +27,7 @@ services:
 # The route for the business API is seen by the SPA as http://api.example.com/api
 #
 - name: business-api
-  url: $SCHEME://api-$INTERNAL_DOMAIN:3002
+  url: https://api-$INTERNAL_DOMAIN:3002
   routes:
   - name: business-api-route
     paths:
@@ -41,7 +41,7 @@ services:
       cookie_name_prefix: example
       encryption_key: $ENCRYPTION_KEY
       trusted_web_origins:
-      - $SCHEME://$WEB_DOMAIN
+      - https://$WEB_DOMAIN
       cors_enabled: $CORS_ENABLED
   
   # 2. The phantom token plugin will run after the secure cookie plugin, to introspect tokens

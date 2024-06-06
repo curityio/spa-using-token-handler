@@ -5,12 +5,7 @@
 lua_shared_dict phantom-token 10m;
 server {
     server_name apigateway;
-    listen      3000 ssl;
-
-    ssl_certificate             /usr/local/share/certs/example.server.pem;
-    ssl_certificate_key         /usr/local/share/certs/example.server.key;
-    ssl_trusted_certificate     /usr/local/share/certs/example.ca.pem;
-    lua_ssl_trusted_certificate /usr/local/share/certs/example.ca.pem;
+    listen      3000;
 
     location / {
         
@@ -18,7 +13,7 @@ server {
         resolver 127.0.0.11;
         
         # Route directly to web static content
-        proxy_pass $SCHEME://webhost-$INTERNAL_DOMAIN:3000/;
+        proxy_pass http://webhost-$INTERNAL_DOMAIN:3000/;
     }
 
     location /oauth-agent {
@@ -27,7 +22,7 @@ server {
         resolver 127.0.0.11;
         
         # Route directly to the OAuth Agent inside the cluster
-        proxy_pass $SCHEME://oauthagent-$INTERNAL_DOMAIN:3001/oauth-agent;
+        proxy_pass http://oauthagent-$INTERNAL_DOMAIN:3001/oauth-agent;
     }
  
     location /api/ {
@@ -43,7 +38,7 @@ server {
                 cookie_name_prefix = 'example',
                 encryption_key = '$ENCRYPTION_KEY',
                 trusted_web_origins = {
-                    '$SCHEME://$WEB_DOMAIN'
+                    'http://$WEB_DOMAIN'
                 },
                 cors_enabled = $CORS_ENABLED
             }
@@ -62,6 +57,6 @@ server {
         }
 
         # Then forward the JWT to the below API
-        proxy_pass $SCHEME://api-$INTERNAL_DOMAIN:3002/;
+        proxy_pass http://api-$INTERNAL_DOMAIN:3002/;
     }
 }

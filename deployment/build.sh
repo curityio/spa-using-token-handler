@@ -4,11 +4,7 @@
 # A script to build security components into Docker images
 ##########################################################
 
-#
-# Ensure that we are in the folder containing this script
-#
 cd "$(dirname "${BASH_SOURCE[0]}")"
-cp ./hooks/pre-commit ./.git/hooks
 
 #
 # Get the OAuth agent and default to Node.js
@@ -36,9 +32,17 @@ fi
 echo "Building resources for the $OAUTH_AGENT OAuth agent and $OAUTH_PROXY API gateway and plugin ..."
 
 #
+# Move to the API gateway folder
+#
+if [ "$OAUTH_AGENT" == 'FINANCIAL' ]; then
+  cd financial/components/api-gateway
+else  
+  cd standard/components/api-gateway
+fi
+
+#
 # Build the API gateway's custom dockerfile, which includes the OAuth proxy plugin
 #
-cd components/api-gateway
 if [ "$OAUTH_PROXY" == 'NGINX' ]; then
 
   docker build --no-cache -f nginx/Dockerfile -t custom_nginx:1.25.1-alpine .

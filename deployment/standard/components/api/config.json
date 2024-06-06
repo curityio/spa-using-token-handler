@@ -1,0 +1,8 @@
+{
+    "port": 3002,
+    "jwksUrl": "http://login-internal.example.com:8443/oauth/v2/oauth-anonymous/jwks",
+    "issuer": "http://login.example.com:8443/oauth/v2/oauth-anonymous",
+    "audience": "api.example.com",
+    "keystoreFilePath": "",
+    "keystorePassword": ""
+}

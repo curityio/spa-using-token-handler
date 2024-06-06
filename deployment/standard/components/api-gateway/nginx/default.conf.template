@@ -6,11 +6,7 @@ proxy_cache_path cache levels=1:2 keys_zone=api_cache:10m max_size=10g inactive=
 
 server {
     server_name apigateway;
-    listen      3000 ssl;
-
-    ssl_certificate         /usr/local/share/certs/example.server.pem;
-    ssl_certificate_key     /usr/local/share/certs/example.server.key;
-    ssl_trusted_certificate /usr/local/share/certs/example.ca.pem;
+    listen      3000;
 
     location / {
         
@@ -18,7 +14,7 @@ server {
         resolver 127.0.0.11;
         
         # Route directly to web static content
-        proxy_pass $SCHEME://webhost-$INTERNAL_DOMAIN:3000/;
+        proxy_pass http://webhost-$INTERNAL_DOMAIN:3000/;
     }
 
     location /oauth-agent {
@@ -27,7 +23,7 @@ server {
         resolver 127.0.0.11;
         
         # Route directly to the OAuth Agent inside the cluster
-        proxy_pass $SCHEME://oauthagent-$INTERNAL_DOMAIN:3001/oauth-agent;
+        proxy_pass http://oauthagent-$INTERNAL_DOMAIN:3001/oauth-agent;
     }
  
     location /api/ {
@@ -39,7 +35,7 @@ server {
         oauth_proxy on;
         oauth_proxy_cookie_name_prefix example;
         oauth_proxy_encryption_key $ENCRYPTION_KEY;
-        oauth_proxy_trusted_web_origin $SCHEME://$WEB_DOMAIN;
+        oauth_proxy_trusted_web_origin http://$WEB_DOMAIN;
         oauth_proxy_cors_enabled $CORS_ENABLED_NGINX;
 
         # Then run the Phantom Token plugin to translate opaque access tokens to JWT access tokens
@@ -48,7 +44,7 @@ server {
         phantom_token_introspection_endpoint curity;
         
         # Then forward the JWT to the below API
-        proxy_pass $SCHEME://api-$INTERNAL_DOMAIN:3002/;
+        proxy_pass http://api-$INTERNAL_DOMAIN:3002/;
     }
 
     location curity {

@@ -21,14 +21,6 @@ OAUTH_AGENT="$1"
 OAUTH_PROXY="$2"
 
 #
-# Development mode uses the webpack dev server, and 
-#
-if [ "$OAUTH_AGENT" == 'FINANCIAL' ] && [ "$DEVELOPMENT" == 'true' ]; then
-  echo 'Financial grade deployments are not currently supported in development mode'
-  exit 1
-fi
-
-#
 # Build the SPA into Javascript bundles
 #
 cd spa
@@ -91,19 +83,18 @@ fi
 cd ..
 
 #
-# Get deployment resources, including the OAuth Agent, reverse proxy and OAuth Proxy plugin
+# Development mode uses the webpack dev server, and 
 #
-rm -rf resources
-git clone https://github.com/curityio/spa-deployments resources
-if [ $? -ne 0 ]; then
-  echo 'Problem encountered downloading dependencies'
-  exit
+if [ "$OAUTH_AGENT" == 'FINANCIAL' ]; then
+  ./deployment/build.sh $OAUTH_AGENT $OAUTH_PROXY
+else
+  ./deployment/build.sh $OAUTH_AGENT $OAUTH_PROXY
 fi
 
 #
-# Build resources by running the child script
+# Build security components by running the child script
 #
-./deployment/build.sh $OAUTH_AGENT $OAUTH_PROXY
+
 if [ $? -ne 0 ]; then
   echo 'Problem encountered building deployment resources'
   exit

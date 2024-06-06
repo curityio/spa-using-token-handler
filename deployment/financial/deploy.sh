@@ -10,14 +10,6 @@
 cd "$(dirname "${BASH_SOURCE[0]}")"
 
 #
-# Check for a license file
-#
-if [ ! -f './components/idsvr/license.json' ]; then
-  echo "Please provide a license.json file in the components/idsvr folder in order to deploy the system"
-  exit 1
-fi
-
-#
 # Check that helper tools are installed
 #
 jq -V 1>/dev/null
@@ -37,31 +29,10 @@ if [ $? -ne 0 ]; then
 fi
 
 #
-# Get platform specific differences
-#
-case "$(uname -s)" in
-
-  Linux)
-    LINE_SEPARATOR='\n'
-	;;
-  
-  Darwin)
-    LINE_SEPARATOR='\n'
- 	;;
-
-  MINGW64*)
-    LINE_SEPARATOR='\r\n'
-	;;
-esac
-
-#
-# Get the OAuth agent and default to Node.js
+# Get the OAuth agent
 #
 OAUTH_AGENT="$1"
-if [ "$OAUTH_AGENT" == '' ]; then
-  OAUTH_AGENT="NODE"
-fi
-if [ "$OAUTH_AGENT" != 'NODE' ] && [ "$OAUTH_AGENT" != 'NET' ] && [ "$OAUTH_AGENT" != 'KOTLIN' ] && [ "$OAUTH_AGENT" != 'FINANCIAL' ]; then
+if [ "$OAUTH_AGENT" != 'FINANCIAL' ]; then
   echo 'An invalid value was supplied for the OAUTH_AGENT parameter'
   exit 1
 fi
@@ -80,25 +51,6 @@ fi
 echo "Deploying resources for the $OAUTH_AGENT OAuth agent and $OAUTH_PROXY API gateway and plugin ..."
 
 #
-# Set some properties differently for the more complex financial grade setup
-#
-if [ "$OAUTH_AGENT" == 'FINANCIAL' ]; then
-  DOCKER_COMPOSE_FILE='docker-compose-financial.yml'
-  SCHEME='https'
-  GATEWAY_PORT='443'
-  SSL_CERT_FILE_PATH='./certs/example.server.p12'
-  SSL_CERT_PASSWORD='Password1'
-  NGINX_TEMPLATE_FILE_NAME='default.conf.financial.template'
-else
-  DOCKER_COMPOSE_FILE='docker-compose-standard.yml'
-  SCHEME='http'
-  GATEWAY_PORT='80'
-  SSL_CERT_FILE_PATH=''
-  SSL_CERT_PASSWORD=''
-  NGINX_TEMPLATE_FILE_NAME='default.conf.standard.template'
-fi
-
-#
 # Adjust these domains if required
 #
 BASE_DOMAIN='example.com'
@@ -108,8 +60,8 @@ IDSVR_DOMAIN="login.$BASE_DOMAIN"
 INTERNAL_DOMAIN="internal.$BASE_DOMAIN"
 
 # Get the external and internal base URLs for the Curity identity server
-IDSVR_BASE_URL="$SCHEME://$IDSVR_DOMAIN:8443"
-IDSVR_INTERNAL_BASE_URL="$SCHEME://login-$INTERNAL_DOMAIN:8443"
+IDSVR_BASE_URL="https://$IDSVR_DOMAIN:8443"
+IDSVR_INTERNAL_BASE_URL="https://login-$INTERNAL_DOMAIN:8443"
 
 # Get external endpoints
 ISSUER_URI="$IDSVR_BASE_URL/oauth/v2/oauth-anonymous"
@@ -130,6 +82,12 @@ ENCRYPTION_KEY=$(openssl rand 32 | xxd -p -c 64)
 echo -n $ENCRYPTION_KEY > encryption.key
 
 #
+# Reference certificate files we will create
+#
+SSL_CERT_FILE_PATH='./certs/example.server.p12'
+SSL_CERT_PASSWORD='Password1'
+
+#
 # Disable CORS when web content and token handler are hosted in the same domain
 #
 if [ "$WEB_DOMAIN" == "$API_DOMAIN" ]; then
@@ -143,8 +101,6 @@ fi
 #
 # Export variables needed for substitution and deployment
 #
-export GATEWAY_PORT
-export SCHEME
 export BASE_DOMAIN
 export WEB_DOMAIN
 export API_DOMAIN
@@ -167,20 +123,34 @@ export CORS_ENABLED
 export CORS_ENABLED_NGINX
 
 #
-# Create certificates when deploying a financial grade setup
-# Also set a variable passed through to components/idsvr/config-backup-financial.xml
+# Create certificates
 #
-if [ "$OAUTH_AGENT" == 'FINANCIAL' ]; then
-
-  if [ ! -f './certs/example.ca.pem' ]; then
-    ./certs/create-certs.sh
-    if [ $? -ne 0 ]; then
-      echo "Problem encountered creating and installing certificates"
-      exit 1
-    fi
+if [ ! -f './certs/example.ca.pem' ]; then
+  ./certs/create-certs.sh
+  if [ $? -ne 0 ]; then
+    echo "Problem encountered creating and installing certificates"
+    exit 1
   fi
-  export FINANCIAL_GRADE_CLIENT_CA=$(openssl base64 -in './certs/example.ca.pem' | tr -d "$LINE_SEPARATOR")
 fi
+
+#
+# Set a variable passed through to components/idsvr/config-backup-financial.xml
+#
+case "$(uname -s)" in
+
+  Linux)
+    LINE_SEPARATOR='\n'
+	;;
+  
+  Darwin)
+    LINE_SEPARATOR='\n'
+ 	;;
+
+  MINGW64*)
+    LINE_SEPARATOR='\r\n'
+	;;
+esac
+export FINANCIAL_GRADE_CLIENT_CA=$(openssl base64 -in './certs/example.ca.pem' | tr -d "$LINE_SEPARATOR")
 
 #
 # Update template files with the encryption key and other supplied environment variables
@@ -200,11 +170,11 @@ if [ "$OAUTH_PROXY" == 'KONG' ]; then
 
 elif [ "$OAUTH_PROXY" == 'NGINX' ]; then
 
-  envsubst < "./nginx/$NGINX_TEMPLATE_FILE_NAME" | sed -e 's/§/$/g' > ./nginx/default.conf
+  envsubst < ./nginx/default.conf.template | sed -e 's/§/$/g' > ./nginx/default.conf
 
 elif [ "$OAUTH_PROXY" == 'OPENRESTY' ]; then
 
-  envsubst < "./openresty/$NGINX_TEMPLATE_FILE_NAME" | sed -e 's/§/$/g' > ./openresty/default.conf
+  envsubst < ./openresty/default.conf.template | sed -e 's/§/$/g' > ./openresty/default.conf
 fi
 cd ../..
 
@@ -212,7 +182,7 @@ cd ../..
 # Spin up all containers, using the Docker Compose file, which applies the deployed configuration
 #
 docker compose --project-name spa down
-docker compose --file $DOCKER_COMPOSE_FILE --profile $OAUTH_PROXY --project-name spa up --detach
+docker compose --profile $OAUTH_PROXY --project-name spa up --detach
 if [ $? -ne 0 ]; then
   echo "Problem encountered starting Docker components"
   exit 1
@@ -221,6 +191,4 @@ fi
 #
 # Dynamically update Curity Identity Server certificates after deploying the financial grade scenario
 #
-if [ "$OAUTH_AGENT" == 'FINANCIAL' ]; then
-  ./deploy-idsvr-certs.sh
-fi
+./deploy-idsvr-certs.sh
