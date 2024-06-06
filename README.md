@@ -39,7 +39,7 @@ The SPA can be quickly run in an end-to-end flow on a development computer by fo
 
 ## Website Documentation
 
-See the [Curity OAuth for Web Home Page](https://curity.io/product/token-handler/) for detailed documentation on this design pattern.
+See the [Token Handler Overview](https://curity.io/resources/learn/token-handler-overview) for detailed documentation on this design pattern.
 
 ## More Information
 
