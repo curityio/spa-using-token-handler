@@ -1,8 +1,8 @@
 #!/bin/bash
 
-##########################################################################################################
-# Builds the local code into Docker containers, then runs a child script to build token handler components
-##########################################################################################################
+#############################################################################################################
+# Builds application components into Docker containers, then runs a child script to build security components
+#############################################################################################################
 
 #
 # Ensure that we are in the folder containing this script
@@ -101,16 +101,9 @@ if [ $? -ne 0 ]; then
 fi
 
 #
-# TODO: delete after merge
-#
-cd resources
-git checkout feature/dependency_updates
-cd ..
-
-#
 # Build resources by running the child script
 #
-./resources/build.sh $OAUTH_AGENT $OAUTH_PROXY
+./deployment/build.sh $OAUTH_AGENT $OAUTH_PROXY
 if [ $? -ne 0 ]; then
   echo 'Problem encountered building deployment resources'
   exit

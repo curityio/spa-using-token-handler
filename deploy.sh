@@ -52,7 +52,7 @@ cp ./license.json ./resources/components/idsvr/
 #
 # Deploy resources by running the child script
 #
-./resources/deploy.sh $OAUTH_AGENT $OAUTH_PROXY
+./deployment/deploy.sh $OAUTH_AGENT $OAUTH_PROXY
 if [ $? -ne 0 ]; then
   echo 'Problem encountered building deployment resources'
   exit

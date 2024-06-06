@@ -1,0 +1,62 @@
+###############################################################################################
+# An NGINX configuration to test the dynamic module for the example SPA in an end-to-end manner
+###############################################################################################
+
+proxy_cache_path cache levels=1:2 keys_zone=api_cache:10m max_size=10g inactive=60m use_temp_path=off;
+
+server {
+    server_name apigateway;
+    listen      3000;
+
+    location / {
+        
+        # Use the Docker embedded DNS server
+        resolver 127.0.0.11;
+        
+        # Route directly to web static content
+        proxy_pass http://webhost-$INTERNAL_DOMAIN:3000/;
+    }
+
+    location /oauth-agent {
+
+        # Use the Docker embedded DNS server
+        resolver 127.0.0.11;
+        
+        # Route directly to the OAuth Agent inside the cluster
+        proxy_pass $SCHEME://oauthagent-$INTERNAL_DOMAIN:3001/oauth-agent;
+    }
+ 
+    location /api/ {
+
+        # Use the Docker embedded DNS server
+        resolver 127.0.0.11;
+
+        # First run the OAuth Proxy plugin to translate secure cookies to opaque access tokens
+        oauth_proxy on;
+        oauth_proxy_cookie_name_prefix example;
+        oauth_proxy_encryption_key $ENCRYPTION_KEY;
+        oauth_proxy_trusted_web_origin $SCHEME://$WEB_DOMAIN;
+        oauth_proxy_cors_enabled $CORS_ENABLED_NGINX;
+
+        # Then run the Phantom Token plugin to translate opaque access tokens to JWT access tokens
+        phantom_token on;
+        phantom_token_client_credential api-gateway-client Password1;
+        phantom_token_introspection_endpoint curity;
+        
+        # Then forward the JWT to the below API
+        proxy_pass $SCHEME://api-$INTERNAL_DOMAIN:3002/;
+    }
+
+    location curity {
+
+        # Use the Docker embedded DNS server
+        resolver 127.0.0.11;
+
+        # Do the introspection when required
+        proxy_pass $INTROSPECTION_ENDPOINT;
+        proxy_cache_methods POST;
+        proxy_cache api_cache;
+        proxy_cache_key §request_body;
+        proxy_ignore_headers Set-Cookie;
+    }
+}

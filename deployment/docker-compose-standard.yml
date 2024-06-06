@@ -1,0 +1,130 @@
+services:
+
+  #
+  # The web host simply serves static content
+  #
+  webhost:
+    image: webhost:1.0.0
+    hostname: webhost-${INTERNAL_DOMAIN}
+    volumes:
+      - ./components/webhost/config.json:/usr/webhost/config.json
+      - ./components/spa/config.json:/usr/webhost/content/config.json
+    environment:
+      NODE_ENV: 'production'
+
+  #
+  # Deploy the example business API, which is a simple API that just validates JWTs
+  # It runs on port 3002 inside the cluster at http://api.internal-example.com:3002
+  # The SPA accesses it via the API gateway at http://api.example.com/api
+  #
+  business-api:
+    image: business-api:1.0.0
+    hostname: api-${INTERNAL_DOMAIN}
+    volumes:
+      - ./components/api/config.json:/usr/api/config.json
+
+  #
+  # An OAuth Agent provided by Curity is hosted here, to perform the OpenID Connect work
+  # It runs on port 3001 inside the cluster at http://oauthagent.internal-example.com:3001
+  # The SPA accesses it via the API gateway at http://api.example.com/oauth-agent
+  #
+  oauth-agent:
+    image: oauthagent:1.0.0
+    hostname: oauthagent-${INTERNAL_DOMAIN}
+    environment:
+      PORT: 3001
+      TRUSTED_WEB_ORIGIN: "http://${WEB_DOMAIN}"
+      ISSUER: "${ISSUER_URI}"
+      AUTHORIZE_ENDPOINT: "${AUTHORIZE_ENDPOINT}"
+      TOKEN_ENDPOINT: '${TOKEN_ENDPOINT}'
+      USERINFO_ENDPOINT: '${USERINFO_ENDPOINT}'
+      LOGOUT_ENDPOINT: '${LOGOUT_ENDPOINT}'
+      CLIENT_ID: 'spa-client'
+      CLIENT_SECRET: 'Password1'
+      REDIRECT_URI: 'http://${WEB_DOMAIN}/'
+      POST_LOGOUT_REDIRECT_URI: 'http://${WEB_DOMAIN}/'
+      SCOPE: 'openid profile'
+      COOKIE_DOMAIN: '${API_DOMAIN}'
+      COOKIE_NAME_PREFIX: 'example'
+      COOKIE_ENCRYPTION_KEY: "${ENCRYPTION_KEY}"
+      CORS_ENABLED: '${CORS_ENABLED}'
+      SERVER_CERT_P12_PATH:
+      SERVER_CERT_P12_PASSWORD:
+
+  #
+  # A gateway that uses Kong and LUA plugins
+  #
+  kong-api-gateway:
+    image: custom_kong:3.7.0
+    hostname: apigateway
+    ports:
+      - ${GATEWAY_PORT}:3000
+    volumes:
+      - ./components/api-gateway/kong/kong.yml:/usr/local/kong/declarative/kong.yml
+    environment:
+      KONG_DATABASE: 'off'
+      KONG_DECLARATIVE_CONFIG: '/usr/local/kong/declarative/kong.yml'
+      KONG_PROXY_LISTEN: '0.0.0.0:3000'
+      KONG_LOG_LEVEL: 'info'
+      KONG_PLUGINS: 'bundled,oauth-proxy,phantom-token'
+      KONG_NGINX_HTTP_LUA_SHARED_DICT: 'phantom-token 10m'
+    profiles:
+      - KONG
+
+  #
+  # Use NGINX and C modules
+  #
+  nginx-api-gateway:
+    image: custom_nginx:1.25.1-alpine
+    hostname: apigateway
+    ports:
+      - ${GATEWAY_PORT}:3000
+    volumes:
+      - ./components/api-gateway/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./components/api-gateway/nginx/default.conf:/etc/nginx/templates/default.conf.template
+    profiles:
+      - NGINX
+
+  #
+  # Use OpenResty and LUA plugins
+  #
+  openresty-api-gateway:
+    image: custom_openresty/openresty:1.25.3.1-jammy
+    hostname: apigateway
+    ports:
+      - ${GATEWAY_PORT}:3000
+    volumes:
+      - ./components/api-gateway/openresty/default.conf:/etc/nginx/conf.d/default.conf
+    profiles:
+      - OPENRESTY
+
+  #
+  # A SQL database used by the Curity Identity Server
+  #
+  curity-data:
+    image: postgres:16.3
+    hostname: dbserver
+    volumes:
+      - ./components/idsvr/data-backup.sql:/docker-entrypoint-initdb.d/data-backup.sql
+    environment:
+      POSTGRES_USER: 'postgres'
+      POSTGRES_PASSWORD: 'Password1'
+      POSTGRES_DB: 'idsvr'
+
+  #
+  # A standalone instance of the Curity Identity Server
+  #
+  curity-idsvr:
+    image: curity.azurecr.io/curity/idsvr:latest
+    hostname: login-${INTERNAL_DOMAIN}
+    ports:
+      - 6749:6749
+      - 8443:8443
+    volumes:
+      - ./components/idsvr/license.json:/opt/idsvr/etc/init/license/license.json
+      - ./components/idsvr/config-backup-standard.xml:/opt/idsvr/etc/init/config.xml
+    environment:
+      PASSWORD: 'Password1'
+      IDSVR_BASE_URL: "${IDSVR_BASE_URL}"
+      WEB_DOMAIN: "${WEB_DOMAIN}"
+      LOGGING_LEVEL: 'INFO'
