@@ -10,6 +10,6 @@ deployment/*/components/api-gateway/openresty/default.conf
 deployment/*/components/api/config.json
 deployment/*/components/spa/config.json
 deployment/*/components/webhost/config.json
-deployment/*/oauth-agent
+deployment/*/components/oauth-agent
 deployment/*/certs/example*
 deployment/*/certs/extensions.cnf

@@ -29,7 +29,7 @@ if [ "$OAUTH_PROXY" != 'KONG' ] && [ "$OAUTH_PROXY" != 'NGINX' ] && [ "$OAUTH_PR
   echo 'An invalid value was supplied for the OAUTH_PROXY parameter'
   exit 1
 fi
-echo "Building resources for the $OAUTH_AGENT OAuth agent and $OAUTH_PROXY API gateway and plugin ..."
+echo "Building security components for the $OAUTH_AGENT OAuth agent and $OAUTH_PROXY API gateway and plugin ..."
 
 #
 # Move to the API gateway folder
