@@ -51,7 +51,7 @@ if [ "$OAUTH_PROXY" != 'KONG' ] && [ "$OAUTH_PROXY" != 'NGINX' ] && [ "$OAUTH_PR
   echo 'An invalid value was supplied for the OAUTH_PROXY parameter'
   exit 1
 fi
-echo "Deploying resources for the $OAUTH_AGENT OAuth agent and $OAUTH_PROXY API gateway and plugin ..."
+echo "Deploying components with the $OAUTH_AGENT OAuth agent and $OAUTH_PROXY API gateway and plugin ..."
 
 #
 # Change these domains if you prefer

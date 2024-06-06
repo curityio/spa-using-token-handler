@@ -4,12 +4,12 @@ node_modules
 dist
 webhost/config.json
 spa/cypress/reports/
-deployment/*/components/api-gateway/kong/kong.yml
-deployment/*/components/api-gateway/nginx/default.conf
-deployment/*/components/api-gateway/openresty/default.conf
 deployment/*/components/api/config.json
 deployment/*/components/spa/config.json
 deployment/*/components/webhost/config.json
 deployment/*/components/oauth-agent
+deployment/*/components/api-gateway/kong/kong.yml
+deployment/*/components/api-gateway/nginx/default.conf
+deployment/*/components/api-gateway/openresty/default.conf
 deployment/*/certs/example*
 deployment/*/certs/extensions.cnf
