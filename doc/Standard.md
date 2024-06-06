@@ -75,29 +75,6 @@ OAUTH_PROXY=''
 ./deploy.sh "$OAUTH_AGENT" "$OAUTH_PROXY" 
 ```
 
-## Developing the SPA Locally
-
-You can develop the SPA locally, pointing to deployed token handler components.\
-To do so, set this environment variable before running the `build.sh` and `deploy.sh` scripts.\
-Web static content is then served locally, by the webpack dev server, with hot reloading:
-
-```bash
-export DEVELOPMENT=true
-```
-
-## Overriding Domains
-
-Domains used can be adjusted depending on your preferences, by editing the deploy.sh script.\
-The following configuration can be used if you prefer to run token handler components in the web domain.\
-If you use a different domain to example.com, ensure that /etc/hosts is updated accordingly.
-
-```text
-export BASE_DOMAIN='example.com'
-export WEB_SUBDOMAIN='www'
-export API_SUBDOMAIN='www'
-export IDSVR_SUBDOMAIN='login'
-```
-
 ## Use the System
 
 Then browse to http://www.example.com and sign in with the following test user name and password:
@@ -120,11 +97,6 @@ Once the system is deployed you can also browse to these URLs:
 - Browse to the [Identity Server Metadata Endpoint](http://login.example.com:8443/oauth/v2/oauth-anonymous/.well-known/openid-configuration)
 - Browse to the SPA's [OAuth Agent Base URL](http://api.example.com/oauth-agent)
 - Browse to the [Example API Base URL](http://api.example.com/api), which uses the OAuth proxy to forward JWTs to APIs
-
-## Internal Details
-
-- To better understand deployment, see the [SPA Deployments](https://github.com/curityio/spa-deployments) repository.
-- To better understand how the OAuth Agent works, see the [Node.js OAuth Agent](https://github.com/curityio/oauth-agent-node-express) repository.
 
 ## Troubleshoot
 

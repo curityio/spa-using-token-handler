@@ -73,19 +73,6 @@ OAUTH_PROXY=''
 ./deploy.sh "FINANCIAL" "$OAUTH_PROXY" 
 ```
 
-## Overriding Domains
-
-Deployed domains used can be adjusted depending on your preferences, by editing the deploy.sh script.\
-The following configuration can be used if you prefer to run token handler components in the web domain.\
-If you use a different domain to example.com, ensure that /etc/hosts is updated accordingly.
-
-```text
-export BASE_DOMAIN='example.com'
-export WEB_SUBDOMAIN='www'
-export API_SUBDOMAIN='www'
-export IDSVR_SUBDOMAIN='login'
-```
-
 ## Use the System
 
 Then browse to https://www.example.com and sign in with the following test user name and password:
@@ -108,11 +95,6 @@ Once the system is deployed you can also browse to these URLs:
 - Browse to the [Identity Server Metadata Endpoint](https://login.example.com:8443/oauth/v2/oauth-anonymous/.well-known/openid-configuration)
 - Browse to the SPA's [OAuth Agent Base URL](https://api.example.com/oauth-agent)
 - Browse to the [Example API Base URL](https://api.example.com/api), which uses the OAuth proxy to forward JWTs to APIs
-
-## Internal Details
-
-- To better understand deployment, see the [SPA Deployments](https://github.com/curityio/spa-deployments) repository.
-- To better understand how the OAuth Agent works, see the [SPA Financial Grade OAuth Agent](https://github.com/curityio/oauth-agent-kotlin-spring-fapi).
 
 ## Troubleshoot
 

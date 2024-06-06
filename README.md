@@ -35,11 +35,11 @@ The token handler components should be developed by Curity or another provider, 
 The SPA can be quickly run in an end-to-end flow on a development computer by following these guides:
 
 - [Standard SPA using an Authorization Code Flow (PKCE) and a Client Secret](/doc/Standard.md)
-- [Financial-grade SPA using Mutual TLS, PAR and JARM](/doc/Financial.md)
+- [Financial-grade SPA, adding Mutual TLS, PAR and JARM](/doc/Financial.md)
 
 ## Website Documentation
 
-See the [Curity OAuth for Web Home Page](https://curity.io/product/token-service/oauth-for-web/) for detailed documentation on this design pattern.
+See the [Curity OAuth for Web Home Page](https://curity.io/product/token-handler/) for detailed documentation on this design pattern.
 
 ## More Information
 
