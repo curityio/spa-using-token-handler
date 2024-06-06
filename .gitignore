@@ -11,5 +11,6 @@ deployment/*/components/oauth-agent
 deployment/*/components/api-gateway/kong/kong.yml
 deployment/*/components/api-gateway/nginx/default.conf
 deployment/*/components/api-gateway/openresty/default.conf
+deployment/*/encryption.key
 deployment/*/certs/example*
 deployment/*/certs/extensions.cnf
