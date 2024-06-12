@@ -1,13 +1,11 @@
 import React, {useState} from 'react';
+import {ErrorRenderer} from '../../utilities/errorRenderer';
 import {RemoteError} from '../../utilities/remoteError';
 import {SignOutProps} from './signOutProps';
-import {SignOutState} from './signOutState';
 
 export function SignOutView(props: SignOutProps) {
 
-    const [state, setState] = useState<SignOutState>({
-        error: null,
-    });
+    const [errorText, setErrorText] = useState('');
 
     function isButtonDisabled(): boolean {
         return false;
@@ -21,25 +19,14 @@ export function SignOutView(props: SignOutProps) {
             props.onLoggedOut();
             location.href = url;
 
-        } catch (e) {
+        } catch (e: any) {
 
-            const remoteError = e as RemoteError;
-            if (remoteError) {
-
-                if (remoteError.isSessionExpiredError()) {
-
-                    props.onLoggedOut();
-
-                } else {
-
-                    setState((state: any) => {
-                        return {
-                            ...state,
-                            error: remoteError.toDisplayFormat(),
-                        };
-                    });
-                }
+            if (e instanceof RemoteError && e.isSessionExpiredError()) {
+                props.onLoggedOut();
+                return;
             }
+
+            setErrorText(ErrorRenderer.toDisplayFormat(e));
         }
     }
 
@@ -54,9 +41,9 @@ export function SignOutView(props: SignOutProps) {
                 disabled={isButtonDisabled()}>
                     Sign Out
             </button>
-            {state && state.error &&
+            {errorText &&
             <div>
-                <p className='alert alert-danger' id='signOutErrorResult'>{state.error}</p>
+                <p className='alert alert-danger' id='signOutErrorResult'>{errorText}</p>
             </div>}
             <hr/>
         </div>

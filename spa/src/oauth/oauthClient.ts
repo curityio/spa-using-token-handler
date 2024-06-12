@@ -1,5 +1,6 @@
 import axios, {AxiosRequestConfig, AxiosRequestHeaders, Method} from 'axios';
 import {ErrorHandler} from '../utilities/errorHandler';
+import {PageLoadResponse} from '../utilities/pageLoadResponse';
 import {RemoteError} from '../utilities/remoteError';
 
 /*
@@ -27,7 +28,7 @@ export class OAuthClient {
     /*
      * On every page load the SPA asks the OAuth Agent for login related state
      */
-    public async handlePageLoad(pageUrl: string): Promise<any> {
+    public async handlePageLoad(pageUrl: string): Promise<PageLoadResponse> {
 
         const request = JSON.stringify({
             pageUrl,
@@ -38,7 +39,10 @@ export class OAuthClient {
             this.antiForgeryToken = response.csrf;
         }
 
-        return response;
+        return {
+            isLoggedIn: response.isLoggedIn,
+            handled: response.handled,
+        }
     }
 
     /*
@@ -78,7 +82,7 @@ export class OAuthClient {
                 // Retry the user info call
                 return await this.fetch('GET', 'userInfo', null);
 
-            } catch (e) {
+            } catch (e: any) {
 
                 // Report retry errors
                 throw ErrorHandler.handleFetchError('OAuth Agent', e);
@@ -157,7 +161,7 @@ export class OAuthClient {
 
             return null;
 
-        } catch (e) {
+        } catch (e: any) {
 
             throw ErrorHandler.handleFetchError('OAuth Agent', e);
         }

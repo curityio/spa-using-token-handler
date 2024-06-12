@@ -33,7 +33,7 @@ export class ApiClient {
             // Try the API call
             return await this.fetchImpl(method, path);
 
-        } catch (e) {
+        } catch (e: any) {
 
             // Report errors if this is not a 401
             const remoteError = ErrorHandler.handleFetchError('Business API', e);
@@ -48,7 +48,7 @@ export class ApiClient {
                 // Retry the API call
                 return await this.fetchImpl(method, path);
 
-            } catch (e) {
+            } catch (e: any) {
 
                 // Report retry errors
                 throw ErrorHandler.handleFetchError('Business API', e);

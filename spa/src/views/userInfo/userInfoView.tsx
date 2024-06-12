@@ -1,22 +1,15 @@
 import React, {useState} from 'react';
+import {ErrorRenderer} from '../../utilities/errorRenderer';
 import {RemoteError} from '../../utilities/remoteError';
 import {UserInfoProps} from './userInfoProps';
-import {UserInfoState} from './userInfoState';
 
 export function UserInfoView(props: UserInfoProps) {
 
-    const [state, setState] = useState<UserInfoState>({
-        givenName: '',
-        familyName: '',
-        error: null,
-    });
+    const [userName, setUserName] = useState('');
+    const [errorText, setErrorText] = useState('');
 
     function isButtonDisabled(): boolean {
         return false;
-    }
-
-    function getUserFullName(): string {
-        return `${state.givenName} ${state.familyName}`
     }
 
     async function execute() {
@@ -24,38 +17,24 @@ export function UserInfoView(props: UserInfoProps) {
         try {
 
             let userInfo = await props.oauthClient.getUserInfo();
+
+            setErrorText('');
+            
             if (userInfo.given_name && userInfo.family_name) {
-
-                setState((state: any) => {
-                    return {
-                        ...state,
-                        givenName: userInfo.given_name,
-                        familyName: userInfo.family_name,
-                        error: null,
-                    };
-                });
-
+                setUserName(`${userInfo.given_name} ${userInfo.family_name}`);
+            } else {
+                setUserName('No username details returned from userinfo');
             }
 
-        } catch (e) {
+        } catch (e: any) {
 
-            const remoteError = e as RemoteError;
-            if (remoteError) {
-
-                if (remoteError.isSessionExpiredError()) {
-
-                    props.onLoggedOut();
-
-                } else {
-
-                    setState((state: any) => {
-                        return {
-                            ...state,
-                            error: remoteError.toDisplayFormat(),
-                        };
-                    });
-                }
+            if (e instanceof RemoteError && e.isSessionExpiredError()) {
+                props.onLoggedOut();
+                return;
             }
+
+            setUserName('');
+            setErrorText(ErrorRenderer.toDisplayFormat(e));
         }
     }
 
@@ -71,13 +50,13 @@ export function UserInfoView(props: UserInfoProps) {
                 disabled={isButtonDisabled()}>
                     Get User Info
             </button>
-            {state.givenName && state.familyName &&
+            {userName &&
             <div>
-                <p id='getUserInfoResult' className='alert alert-success'>{getUserFullName()}</p>
+                <p id='getUserInfoResult' className='alert alert-success'>{userName}</p>
             </div>}
-            {state && state.error &&
+            {errorText &&
             <div>
-                <p className='alert alert-danger' id='getUserInfoErrorResult'>{state.error}</p>
+                <p className='alert alert-danger' id='getUserInfoErrorResult'>{errorText}</p>
             </div>}
             <hr/>
         </div>

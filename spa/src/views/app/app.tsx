@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import {StorageHelper} from '../../utilities/storageHelper';
+import {ErrorRenderer} from '../../utilities/errorRenderer';
+import {MultiTabLogout} from '../../utilities/multiTabLogout';
 import {CallApiView} from '../callApi/callApiView';
 import {ClaimsView} from '../claims/claimsView';
 import {MultiTabView} from '../multiTab/multiTabView';
@@ -9,75 +10,65 @@ import {StartAuthenticationView} from '../startAuthentication/startAuthenticatio
 import {TitleView} from '../title/titleView';
 import {UserInfoView} from '../userInfo/userInfoView';
 import {AppProps} from './appProps';
-import {AppState} from './appState';
 
 export default function App(props: AppProps) {
 
-    const [state, setState] = useState<AppState | null>(null);
-    const storage = new StorageHelper(() => multiTabLogout());
+    const [isPageLoaded, setIsPageLoaded] = useState(false);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [pageLoadError, setPageLoadError] = useState('');
+    const multiTabLogout = new MultiTabLogout(() => onExternalLogout());
 
     useEffect(() => {
         startup();
         return () => cleanup();
     }, []);
 
+    /*
+     * The SPA downloads configuration, then calls the OAuth agent to see if logged in or to handle login responses
+     */
     async function startup() {
 
-        window.addEventListener('storage', storage.onChange);
-        await props.viewModel.initialize();
+        window.addEventListener('storage', multiTabLogout.listenForLoggedOutEvent);
+        multiTabLogout.initialize();
 
-        setState({
-            isLoaded: false,
-            isLoggedIn: false,
-            sessionExpired: false,
-        });
+        try {
+            await props.viewModel.loadConfiguration();
+            await props.viewModel.handlePageLoad();
+
+            setIsPageLoaded(true);
+            setIsLoggedIn(props.viewModel.pageLoadResponse!.isLoggedIn);
+
+        } catch (e: any) {
+
+            setPageLoadError(ErrorRenderer.toDisplayFormat(e));
+        }
+
+        
     }
 
+    /*
+     * Free resources when the view unloads
+     */
     function cleanup() {
-        window.removeEventListener('storage', storage.onChange);
+        window.removeEventListener('storage', multiTabLogout.listenForLoggedOutEvent);
     }
 
-    function setIsLoaded() {
+    /*
+     * When the user logs out, the SPA raises an event to other browser tabs
+     */
+    function onLoggedOut() {
 
-        setState((prevState: any) => {
-            return {
-                ...prevState,
-                isLoaded: true,
-            };
-        });
-    }
-
-    function setIsLoggedIn() {
-
-        storage.setLoggedOut(false);
-        setState((prevState: any) => {
-            return {
-                ...prevState,
-                isLoggedIn: true,
-                sessionExpired: false,
-            };
-        });
-    }
-
-    function setIsLoggedOut() {
-
-        storage.setLoggedOut(true);
-        setState((prevState: any) => {
-            return {
-                ...prevState,
-                isLoggedIn: false,
-                sessionExpired: true,
-            };
-        });
+        setIsLoggedIn(false);
+        multiTabLogout.raiseLoggedOutEvent();
     }
 
     /*
      * This browser tab is notified when logout occurs on another tab, then cleans up this tab's state
      */
-    async function multiTabLogout() {
+    async function onExternalLogout() {
 
         await props.viewModel.oauthClient!.onLoggedOut();
-        setIsLoggedOut();
+        onLoggedOut();
     }
 
     /*
@@ -86,46 +77,43 @@ export default function App(props: AppProps) {
     return (
         <>
             <TitleView />
+            <PageLoadView
+                isPageLoaded = {isPageLoaded}
+                isLoggedIn = {isLoggedIn}
+                pageLoadError = {pageLoadError} />
 
-            {/* Unauthenticated views */}
-            {state && !state.isLoggedIn &&
+            {isPageLoaded &&
                 <>
-                    <PageLoadView 
-                        oauthClient={props.viewModel.oauthClient!}
-                        onLoaded={setIsLoaded}
-                        onLoggedIn={setIsLoggedIn}
-                        onLoggedOut={setIsLoggedOut} />
 
-                    {state.isLoaded && 
+                    {/* Unauthenticated views */}
+                    {!isLoggedIn &&
+                        <StartAuthenticationView 
+                            oauthClient={props.viewModel.oauthClient!} />
+                    }
+
+                    {/* Authenticated views */}
+                    {isLoggedIn &&
                         <>
-                            <StartAuthenticationView 
-                                oauthClient={props.viewModel.oauthClient!} />
+                            <MultiTabView />
+
+                            <UserInfoView 
+                                oauthClient={props.viewModel.oauthClient!}
+                                onLoggedOut={() => onLoggedOut()} />
+
+                            <ClaimsView 
+                                oauthClient={props.viewModel.oauthClient!}
+                                onLoggedOut={() => onLoggedOut()} />
+
+                            <CallApiView 
+                                apiClient={props.viewModel.apiClient!}
+                                onLoggedOut={() => onLoggedOut()} />
+
+                            <SignOutView 
+                                oauthClient={props.viewModel.oauthClient!}
+                                onLoggedOut={() => onLoggedOut()} />
                         </>
                     }
                 </>
-            }
-
-            {/* Authenticated views */}
-            {state && state.isLoaded && state.isLoggedIn &&
-            <>
-                <MultiTabView />
-
-                <UserInfoView 
-                    oauthClient={props.viewModel.oauthClient!}
-                    onLoggedOut={setIsLoggedOut} />
-
-                <ClaimsView 
-                    oauthClient={props.viewModel.oauthClient!}
-                    onLoggedOut={setIsLoggedOut} />
-
-                <CallApiView 
-                    apiClient={props.viewModel.apiClient!}
-                    onLoggedOut={setIsLoggedOut} />
-
-                <SignOutView 
-                    oauthClient={props.viewModel.oauthClient!}
-                    onLoggedOut={setIsLoggedOut} />
-            </>
             }
         </>
     );

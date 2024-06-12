@@ -1,4 +1,4 @@
-# SPA using the Token Handler Pattern
+# SPA using Open Source Token Handler
 
 [![Quality](https://img.shields.io/badge/quality-test-yellow)](https://curity.io/resources/code-examples/status/)
 [![Availability](https://img.shields.io/badge/availability-source-blue)](https://curity.io/resources/code-examples/status/)
