@@ -94,12 +94,6 @@ export default function App(props: AppProps) {
                     {/* Authenticated views */}
                     {isLoggedIn &&
                         <>
-                            <MultiTabView />
-
-                            <UserInfoView 
-                                oauthClient={props.viewModel.oauthClient!}
-                                onLoggedOut={() => onLoggedOut()} />
-
                             <ClaimsView 
                                 oauthClient={props.viewModel.oauthClient!}
                                 onLoggedOut={() => onLoggedOut()} />
@@ -107,6 +101,12 @@ export default function App(props: AppProps) {
                             <CallApiView 
                                 apiClient={props.viewModel.apiClient!}
                                 onLoggedOut={() => onLoggedOut()} />
+
+                            <UserInfoView 
+                                oauthClient={props.viewModel.oauthClient!}
+                                onLoggedOut={() => onLoggedOut()} />
+
+                            <MultiTabView />
 
                             <SignOutView 
                                 oauthClient={props.viewModel.oauthClient!}

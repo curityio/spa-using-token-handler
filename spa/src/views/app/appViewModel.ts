@@ -1,7 +1,8 @@
 import {ApiClient} from '../../api/apiClient';
 import {Configuration} from '../../configuration';
 import {OAuthClient} from '../../oauth/oauthClient';
-import { PageLoadResponse } from '../../utilities/pageLoadResponse';
+import {PageLoadResponse} from '../../utilities/pageLoadResponse';
+import {RemoteError} from '../../utilities/remoteError';
 
 export class AppViewModel {
 
@@ -42,6 +43,16 @@ export class AppViewModel {
         try {
 
             this.pageLoadResponse =  await this.oauthClient!.handlePageLoad(location.href);
+        
+        } catch (e: any) {
+
+            if (e instanceof RemoteError && e.isSessionExpiredError()) {
+
+                this.pageLoadResponse = {
+                    isLoggedIn: false,
+                    handled: false,
+                }
+            }
 
         } finally {
             
