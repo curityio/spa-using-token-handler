@@ -1,6 +1,0 @@
-{
-    "businessApiBaseUrl": "https://$API_DOMAIN/api",
-    "oauth": {
-        "oauthAgentBaseUrl": "https://$API_DOMAIN/oauth-agent"
-    }
-}

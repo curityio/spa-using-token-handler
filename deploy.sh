@@ -27,9 +27,9 @@ OAUTH_PROXY="$2"
 # Deploy security components by running the child script
 #
 if [ "$OAUTH_AGENT" == 'FINANCIAL' ]; then
-  ./deployment/financial/deploy.sh $OAUTH_AGENT $OAUTH_PROXY
+  ./deployments/financial/deploy.sh $OAUTH_AGENT $OAUTH_PROXY
 else
-  ./deployment/standard/deploy.sh $OAUTH_AGENT $OAUTH_PROXY
+  ./deployments/standard/deploy.sh $OAUTH_AGENT $OAUTH_PROXY
 fi
 if [ $? -ne 0 ]; then
   echo 'Problem encountered building deployment resources'

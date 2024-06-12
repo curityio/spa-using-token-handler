@@ -1,19 +1,18 @@
 import axios, {AxiosRequestConfig, AxiosRequestHeaders, Method} from 'axios';
 import {ErrorHandler} from '../utilities/errorHandler';
 import {RemoteError} from '../utilities/remoteError';
-import {OAuthConfiguration} from './oauthConfiguration';
 
 /*
  * The entry point for making OAuth calls
  */
 export class OAuthClient {
 
-    private readonly configuration: OAuthConfiguration;
+    private readonly oauthAgentBaseUrl: string;
     private antiForgeryToken: string | null;
 
-    constructor(configuration: OAuthConfiguration) {
+    constructor(oauthAgentBaseUrl: string) {
 
-        this.configuration = configuration;
+        this.oauthAgentBaseUrl = oauthAgentBaseUrl;
         this.antiForgeryToken = null;
         this.setupCallbacks();
     }
@@ -125,7 +124,7 @@ export class OAuthClient {
      */
     private async fetch(method: string, path: string, body: any): Promise<any> {
 
-        let url = `${this.configuration.oauthAgentBaseUrl}/${path}`;
+        let url = `${this.oauthAgentBaseUrl}/${path}`;
         const options = {
             url,
             method: method as Method,

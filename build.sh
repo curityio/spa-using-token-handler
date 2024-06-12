@@ -86,9 +86,9 @@ cd ..
 # Development mode uses the webpack dev server, and 
 #
 if [ "$OAUTH_AGENT" == 'FINANCIAL' ]; then
-  ./deployment/build.sh $OAUTH_AGENT $OAUTH_PROXY
+  ./deployments/build.sh $OAUTH_AGENT $OAUTH_PROXY
 else
-  ./deployment/build.sh $OAUTH_AGENT $OAUTH_PROXY
+  ./deployments/build.sh $OAUTH_AGENT $OAUTH_PROXY
 fi
 
 #

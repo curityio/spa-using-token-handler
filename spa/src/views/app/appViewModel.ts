@@ -23,7 +23,7 @@ export class AppViewModel {
             const response = await fetch('config.json');
             this.configuration = await response.json() as Configuration;
 
-            this.oauthClient = new OAuthClient(this.configuration.oauth);
+            this.oauthClient = new OAuthClient(this.configuration.oauthAgentBaseUrl);
             this.apiClient = new ApiClient(this.configuration.businessApiBaseUrl, this.oauthClient);
             this.initialized = true;
         }
