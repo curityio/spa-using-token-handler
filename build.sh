@@ -83,13 +83,9 @@ fi
 cd ..
 
 #
-# Development mode uses the webpack dev server, and 
+# Build security components using the child script
 #
-if [ "$OAUTH_AGENT" == 'FINANCIAL' ]; then
-  ./deployments/build.sh $OAUTH_AGENT $OAUTH_PROXY
-else
-  ./deployments/build.sh $OAUTH_AGENT $OAUTH_PROXY
-fi
+./deployments/build.sh $OAUTH_AGENT $OAUTH_PROXY
 
 #
 # Build security components by running the child script

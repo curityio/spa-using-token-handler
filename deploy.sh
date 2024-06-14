@@ -24,7 +24,7 @@ OAUTH_AGENT="$1"
 OAUTH_PROXY="$2"
 
 #
-# Deploy security components by running the child script
+# Run a more complex deployment for the financial-grade scenario
 #
 if [ "$OAUTH_AGENT" == 'FINANCIAL' ]; then
   ./deployments/financial/deploy.sh $OAUTH_AGENT $OAUTH_PROXY
