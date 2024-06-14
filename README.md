@@ -18,14 +18,6 @@ This provides the best separation of web and API concerns, to maintain all of th
 - `Productive Developer Experience` with only simple security code needed in the SPA
 - `Deploy Anywhere`, such as to a Content Delivery Network
 
-## Simple Code in Apps
-
-This repository demonstrates the business focused components you should need to develop:
-
-- A Single Page App coded in React
-- A Web Host to provide static content
-- An API that validates JWT access tokens
-
 ## Run the End-to-end Flow
 
 The SPA can be quickly run in an end-to-end flow on a development computer by following these guides:
@@ -35,7 +27,7 @@ The SPA can be quickly run in an end-to-end flow on a development computer by fo
 
 ## Website Documentation
 
-See the [Token Handler Design Overview](https://curity.io/resources/learn/token-handler-overview/) for further documentation on this design pattern.
+- See the [Token Handler Design Overview](https://curity.io/resources/learn/token-handler-overview/) for further documentation on this design pattern.
 
 ## More Information
 
