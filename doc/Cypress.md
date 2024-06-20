@@ -9,7 +9,7 @@ npm run uitests
 
 This will spin up the Chrome browser and run UI tests against the login operations:
 
-![cypress tests](cypress-tests.png)
+![cypress tests](images/cypress-tests.png)
 
 ## Test Parameters
 

@@ -1,0 +1,4 @@
+{
+    "businessApiBaseUrl": "http://$API_DOMAIN/api",
+    "oauthAgentBaseUrl": "http://$API_DOMAIN/oauth-agent"
+}

@@ -18,50 +18,20 @@ if [ ! -f './license.json' ]; then
 fi
 
 #
-# Forward the type of each component to the child script
+# Get the OAuth Agent and OAuth Proxy arguments provided
 #
 OAUTH_AGENT="$1"
 OAUTH_PROXY="$2"
 
 #
-# These can be edited to use different test domains for the SPA, API and Authorization Server
+# Run a more complex deployment for the financial-grade scenario
 #
-export BASE_DOMAIN='example.com'
-export WEB_SUBDOMAIN='www'
-export API_SUBDOMAIN='api'
-export IDSVR_SUBDOMAIN='login'
-
-#
-# If configured, an external identity server will be used
-#
-export EXTERNAL_IDSVR_ISSUER_URI=
-
-#
-# Check that the build script has been run
-#
-if [ ! -d 'resources' ]; then
-  echo 'Please run the build script before running the deployment script'
-  exit 1
+if [ "$OAUTH_AGENT" == 'FINANCIAL' ]; then
+  ./deployments/financial/deploy.sh $OAUTH_AGENT $OAUTH_PROXY
+else
+  ./deployments/standard/deploy.sh $OAUTH_AGENT $OAUTH_PROXY
 fi
-
-#
-# Copy in the license file
-#
-cp ./license.json ./resources/components/idsvr/
-
-#
-# Deploy resources by running the child script
-#
-./resources/deploy.sh $OAUTH_AGENT $OAUTH_PROXY
 if [ $? -ne 0 ]; then
   echo 'Problem encountered building deployment resources'
   exit
-fi
-
-#
-# If running in development mode, run the SPA locally
-#
-if [ "$DEVELOPMENT" == 'true' ]; then
-  cd spa
-  npm start
 fi

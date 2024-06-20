@@ -22,9 +22,8 @@ Add these entries to your /etc/hosts file:
 
 Ensure that these tools are installed locally:
 
-- [Node.js](https://nodejs.org/en/download/)
-- [Docker Desktop](https://www.docker.com/products/docker-desktop)
-- [openssl](https://www.openssl.org/source/)
+- [Node.js 20 or later](https://nodejs.org/en/download/)
+- [Docker](https://www.docker.com/products/docker-desktop)
 - [jq](https://stedolan.github.io/jq/download/)
 - [envsubst](https://www.gnu.org/software/gettext/)
 
@@ -75,29 +74,6 @@ OAUTH_PROXY=''
 ./deploy.sh "$OAUTH_AGENT" "$OAUTH_PROXY" 
 ```
 
-## Developing the SPA Locally
-
-You can develop the SPA locally, pointing to deployed token handler components.\
-To do so, set this environment variable before running the `build.sh` and `deploy.sh` scripts.\
-Web static content is then served locally, by the webpack dev server, with hot reloading:
-
-```bash
-export DEVELOPMENT=true
-```
-
-## Overriding Domains
-
-Domains used can be adjusted depending on your preferences, by editing the deploy.sh script.\
-The following configuration can be used if you prefer to run token handler components in the web domain.\
-If you use a different domain to example.com, ensure that /etc/hosts is updated accordingly.
-
-```text
-export BASE_DOMAIN='example.com'
-export WEB_SUBDOMAIN='www'
-export API_SUBDOMAIN='www'
-export IDSVR_SUBDOMAIN='login'
-```
-
 ## Use the System
 
 Then browse to http://www.example.com and sign in with the following test user name and password:
@@ -106,11 +82,11 @@ Then browse to http://www.example.com and sign in with the following test user n
 
 The SPA has an initial unauthenticated view to focus on triggering a login:
 
-![Unauthenticated View](/doc/ui-unauthenticated-standard.png)
+![Unauthenticated View](/doc/images/unauthenticated.png)
 
 The authenticated view demonstrates multi-tab browsing, which works reliably in all browsers:
 
-![Authenticated View](/doc/ui-authenticated-standard.png)
+![Authenticated View](/doc/images/authenticated.png)
 
 ## Deployed System
 
@@ -121,10 +97,9 @@ Once the system is deployed you can also browse to these URLs:
 - Browse to the SPA's [OAuth Agent Base URL](http://api.example.com/oauth-agent)
 - Browse to the [Example API Base URL](http://api.example.com/api), which uses the OAuth proxy to forward JWTs to APIs
 
-## Internal Details
+## Deployment Details
 
-- To better understand deployment, see the [SPA Deployments](https://github.com/curityio/spa-deployments) repository.
-- To better understand how the OAuth Agent works, see the [Node.js OAuth Agent](https://github.com/curityio/oauth-agent-node-express) repository.
+To understand token handler deployment details you can study the [build](../deployments/build.sh) and [deployment](../deployments/standard/deploy.sh) scripts.
 
 ## Troubleshoot
 

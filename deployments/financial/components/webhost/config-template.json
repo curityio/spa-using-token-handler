@@ -1,0 +1,6 @@
+{
+    "port": 3000,
+    "apiBaseUrl": "https://$API_DOMAIN",
+    "keystoreFilePath": "$SSL_CERT_FILE_PATH",
+    "keystorePassword": "$SSL_CERT_PASSWORD"
+}

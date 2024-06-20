@@ -1,0 +1,11 @@
+[ server_ext ]
+basicConstraints = CA:FALSE
+keyUsage = nonRepudiation, digitalSignature, keyEncipherment
+subjectAltName=DNS:$BASE_DOMAIN,DNS:$WEB_DOMAIN,DNS:$API_DOMAIN,DNS:$IDSVR_DOMAIN,DNS:api-${INTERNAL_DOMAIN},DNS:oauthagent-${INTERNAL_DOMAIN},DNS:login-${INTERNAL_DOMAIN}
+extendedKeyUsage = serverAuth
+
+[ client_ext ]
+authorityKeyIdentifier=keyid,issuer
+basicConstraints=CA:FALSE
+keyUsage = digitalSignature, nonRepudiation, keyEncipherment, dataEncipherment
+extendedKeyUsage = clientAuth

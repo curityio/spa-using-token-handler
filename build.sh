@@ -1,8 +1,8 @@
 #!/bin/bash
 
-##########################################################################################################
-# Builds the local code into Docker containers, then runs a child script to build token handler components
-##########################################################################################################
+#############################################################################################################
+# Builds application components into Docker containers, then runs a child script to build security components
+#############################################################################################################
 
 #
 # Ensure that we are in the folder containing this script
@@ -19,14 +19,6 @@ cp ./hooks/pre-commit .git/hooks
 #
 OAUTH_AGENT="$1"
 OAUTH_PROXY="$2"
-
-#
-# Development mode uses the webpack dev server, and 
-#
-if [ "$OAUTH_AGENT" == 'FINANCIAL' ] && [ "$DEVELOPMENT" == 'true' ]; then
-  echo 'Financial grade deployments are not currently supported in development mode'
-  exit 1
-fi
 
 #
 # Build the SPA into Javascript bundles
@@ -91,19 +83,14 @@ fi
 cd ..
 
 #
-# Get deployment resources, including the OAuth Agent, reverse proxy and OAuth Proxy plugin
+# Build security components using the child script
 #
-rm -rf resources
-git clone https://github.com/curityio/spa-deployments resources
-if [ $? -ne 0 ]; then
-  echo 'Problem encountered downloading dependencies'
-  exit
-fi
+./deployments/build.sh $OAUTH_AGENT $OAUTH_PROXY
 
 #
-# Build resources by running the child script
+# Build security components by running the child script
 #
-./resources/build.sh $OAUTH_AGENT $OAUTH_PROXY
+
 if [ $? -ne 0 ]; then
   echo 'Problem encountered building deployment resources'
   exit

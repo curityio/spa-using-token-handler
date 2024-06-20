@@ -1,13 +1,10 @@
 import React, {useState} from 'react';
-import {RemoteError} from '../../utilities/remoteError';
+import {ErrorRenderer} from '../../utilities/errorRenderer';
 import {StartAuthenticationProps} from './startAuthenticationProps';
-import {StartAuthenticationState} from './startAuthenticationState';
 
 export function StartAuthenticationView(props: StartAuthenticationProps) {
 
-    const [state, setState] = useState<StartAuthenticationState>({
-        error: null,
-    });
+    const [errorText, setErrorText] = useState('');
 
     /*
      * Get the login URL, store state if needed, then redirect
@@ -18,19 +15,9 @@ export function StartAuthenticationView(props: StartAuthenticationProps) {
 
             location.href = await props.oauthClient.startLogin();
 
-        } catch (e) {
+        } catch (e: any) {
 
-            const remoteError = e as RemoteError;
-            if (remoteError) {
-
-                setState((state: any) => {
-                    return {
-                        ...state,
-                        authorizationUrl: '',
-                        error: remoteError.toDisplayFormat(),
-                    };
-                });
-            }
+            setErrorText(ErrorRenderer.toDisplayFormat(e));
         }
     }
 
@@ -47,9 +34,9 @@ export function StartAuthenticationView(props: StartAuthenticationProps) {
                         Sign In
                 </button>
             </div>
-            {state && state.error &&
+            {errorText &&
             <div>
-                <p className='alert alert-danger' id='getDataErrorResult'>{state.error}</p>
+                <p className='alert alert-danger' id='getDataErrorResult'>{errorText}</p>
             </div>}
             <hr/>
         </div>

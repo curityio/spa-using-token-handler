@@ -19,13 +19,21 @@ app.use((request: express.Request, response: express.Response, next: express.Nex
     let policy = "default-src 'none';";
     policy += " script-src 'self';";
     policy += ` connect-src 'self' ${configuration.apiBaseUrl};`;
+    policy += " child-src 'self';";
     policy += " img-src 'self';";
     policy += " style-src 'self' https://cdn.jsdelivr.net;";
-    policy += " object-src 'none'";
-    response.setHeader('content-security-policy', policy);
+    policy += ` font-src 'self';`;
+    policy += " object-src 'none';";
+    policy += " frame-ancestors 'none';";
+    policy += " base-uri 'self';";
+    policy += " form-action 'self';";
 
-    // A production ready implementation would also include other recommended headers:
-    // https://infosec.mozilla.org/guidelines/web_security
+    response.setHeader('content-security-policy', policy);
+    response.setHeader('strict-transport-security', 'max-age=31536000; includeSubdomains; preload');
+    response.setHeader('x-frame-options', 'DENY');
+    response.setHeader('x-xss-protection', '1; mode=block');
+    response.setHeader('x-content-type-options', 'nosniff');
+    response.setHeader('referrer-policy', 'same-origin');
 
     next();
 });

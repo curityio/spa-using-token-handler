@@ -1,21 +1,19 @@
 import React, {useState} from 'react';
+import {ErrorRenderer} from '../../utilities/errorRenderer';
 import {RemoteError} from '../../utilities/remoteError';
 import {ClaimsProps} from './claimsProps';
-import {ClaimsState} from './claimsState';
 
 export function ClaimsView(props: ClaimsProps) {
 
-    const [state, setState] = useState<ClaimsState>({
-        authTime: '',
-        error: null,
-    });
+    const [authTime, setAuthTime] = useState('');
+    const [errorText, setErrorText] = useState('');
 
     function isButtonDisabled(): boolean {
         return false;
     }
 
     function getAuthenticationTime(): string {
-        return `auth_time: ${state.authTime}`
+        return `auth_time: ${authTime}`
     }
 
     async function execute() {
@@ -25,35 +23,19 @@ export function ClaimsView(props: ClaimsProps) {
             let claims = await props.oauthClient.getClaims();
             if (claims.auth_time) {
 
-                setState((state: any) => {
-                    return {
-                        ...state,
-                        authTime: claims.auth_time,
-                        error: null,
-                    };
-                });
-
+                setAuthTime(claims.auth_time);
+                setErrorText('');
             }
 
-        } catch (e) {
+        } catch (e: any) {
 
-            const remoteError = e as RemoteError;
-            if (remoteError) {
-
-                if (remoteError.isSessionExpiredError()) {
-
-                    props.onLoggedOut();
-
-                } else {
-
-                    setState((state: any) => {
-                        return {
-                            ...state,
-                            error: remoteError.toDisplayFormat(),
-                        };
-                    });
-                }
+            if (e instanceof RemoteError && e.isSessionExpiredError()) {
+                props.onLoggedOut();
+                return;
             }
+
+            setAuthTime('');
+            setErrorText(ErrorRenderer.toDisplayFormat(e));
         }
     }
 
@@ -69,13 +51,13 @@ export function ClaimsView(props: ClaimsProps) {
                 disabled={isButtonDisabled()}>
                     Get ID Token Claims
             </button>
-            {state.authTime &&
+            {authTime &&
             <div>
                 <p id='getClaimsResult' className='alert alert-success'>{getAuthenticationTime()}</p>
             </div>}
-            {state && state.error &&
+            {errorText &&
             <div>
-                <p className='alert alert-danger' id='getUserInfoErrorResult'>{state.error}</p>
+                <p className='alert alert-danger' id='getUserInfoErrorResult'>{errorText}</p>
             </div>}
             <hr/>
         </div>

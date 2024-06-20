@@ -1,93 +1,31 @@
-import React, {useEffect, useState} from 'react';
-import {RemoteError} from '../../utilities/remoteError';
+import React from 'react';
 import {PageLoadProps} from './pageLoadProps';
-import {PageLoadState} from './pageLoadState';
 
 export function PageLoadView(props: PageLoadProps) {
 
-    const [state, setState] = useState<PageLoadState>({
-        isLoaded: false,
-        error: null,
-    });
+    function getAuthenticationState(): string {
 
-    useEffect(() => {
-        execute();
-    }, []);
-
-    async function getLoginState(): Promise<any> {
-
-        try {
-            return await props.oauthClient.handlePageLoad(location.href);
-
-        } catch (e) {
-
-            const remoteError = e as RemoteError;
-            if (remoteError.isSessionExpiredError()) {
-
-                return {
-                    handled: false,
-                    isLoggedIn: false
-                };
-            }
-
-            throw e;
-        }
-    }
-
-    async function execute() {
-
-        try {
-
-            const {handled, isLoggedIn} = await getLoginState();
-            if (handled) {
-                
-                // After a login completes, restore the location and remove the OAuth response details from the browser URL
-                history.replaceState({}, document.title, '/');
-            }
-
-            props.onLoaded();
-            setState((state: any) => {
-                return {
-                    ...state,
-                    isLoaded: true,
-                };
-            });
-
-            if (isLoggedIn) {
-                props.onLoggedIn();
-            } else {
-                props.onLoggedOut();
-            }
-
-        } catch (e) {
-
-            const remoteError = e as RemoteError;
-            if (remoteError) {
-
-                // Ensure there are no leftover OAuth response details in the browser URL, then render the error
-                history.replaceState({}, document.title, '/');
-                setState((state: any) => {
-                    return {
-                        ...state,
-                        error: remoteError.toDisplayFormat(),
-                    };
-                });
-            }
+        if (!props.isPageLoaded) {
+            return 'Page loading ...';
+        } else if (props.isLoggedIn) {
+            return 'You are authenticated';
+        } else {
+            return 'Authentication required';
         }
     }
 
     return (
+        
         <div className='container'>
             <div>
                 <h2>Page Load</h2>
                 <p>When the SPA loads it asks the OAuth Agent for the authenticated state and to handle a login response if required</p>
-                {state && state.isLoaded && !state.error &&
                 <div>
-                    <p className='alert alert-success' id='pageLoadResult'>Authentication required</p>
-                </div>}
-                {state && state.error &&
+                    <p className='alert alert-success' id='pageLoadResult'>{getAuthenticationState()}</p>
+                </div>
+                {props.pageLoadError &&
                 <div>
-                    <p className='alert alert-danger' id='pageLoadErrorResult'>{state.error}</p>
+                    <p className='alert alert-danger' id='pageLoadErrorResult'>{props.pageLoadError}</p>
                 </div>}
                 <hr/>
             </div>

@@ -1,14 +1,12 @@
 import React, {useState} from 'react';
+import {ErrorRenderer} from '../../utilities/errorRenderer';
 import {RemoteError} from '../../utilities/remoteError';
 import {CallApiProps} from './callApiProps';
-import {CallApiState} from './callApiState';
 
 export function CallApiView(props: CallApiProps) {
 
-    const [state, setState] = useState<CallApiState | null>({
-        welcomeMessage: '',
-        error: null,
-    });
+    const [welcomeMessage, setWelcomeMessage] = useState('');
+    const [errorText, setErrorText] = useState('');
 
     function isButtonDisabled(): boolean {
         return false;
@@ -24,35 +22,19 @@ export function CallApiView(props: CallApiProps) {
             const data = await props.apiClient.getWelcomeData();
             if (data.message) {
 
-                setState((state: any) => {
-                    return {
-                        ...state,
-                        welcomeMessage: data.message,
-                        error: null,
-                    };
-                });
+                setWelcomeMessage(data.message);
+                setErrorText('');
             }
 
-        } catch (e) {
+        } catch (e: any) {
 
-            const remoteError = e as RemoteError;
-            if (remoteError) {
-
-                if (remoteError.isSessionExpiredError()) {
-                    
-                    props.onLoggedOut();
-
-                } else {
-                
-                    setState((state: any) => {
-                        return {
-                            ...state,
-                            welcomeMessage: '',
-                            error: remoteError.toDisplayFormat(),
-                        };
-                    });
-                }
+            if (e instanceof RemoteError && e.isSessionExpiredError()) {
+                props.onLoggedOut();
+                return;
             }
+
+            setWelcomeMessage('');
+            setErrorText(ErrorRenderer.toDisplayFormat(e));
         }
     }
 
@@ -68,13 +50,13 @@ export function CallApiView(props: CallApiProps) {
                 disabled={isButtonDisabled()}>
                     Get Data
             </button>
-            {state && state.welcomeMessage &&
+            {welcomeMessage &&
             <div>
-                <p className='alert alert-success' id='getDataResult'>{state.welcomeMessage}</p>
+                <p className='alert alert-success' id='getDataResult'>{welcomeMessage}</p>
             </div>}
-            {state && state.error &&
+            {errorText &&
             <div>
-                <p className='alert alert-danger' id='getDataErrorResult'>{state.error}</p>
+                <p className='alert alert-danger' id='getDataErrorResult'>{errorText}</p>
             </div>}
             <hr/>
         </div>

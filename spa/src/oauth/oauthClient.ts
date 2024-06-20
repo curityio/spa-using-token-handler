@@ -1,19 +1,19 @@
 import axios, {AxiosRequestConfig, AxiosRequestHeaders, Method} from 'axios';
 import {ErrorHandler} from '../utilities/errorHandler';
+import {PageLoadResponse} from '../utilities/pageLoadResponse';
 import {RemoteError} from '../utilities/remoteError';
-import {OAuthConfiguration} from './oauthConfiguration';
 
 /*
  * The entry point for making OAuth calls
  */
 export class OAuthClient {
 
-    private readonly configuration: OAuthConfiguration;
+    private readonly oauthAgentBaseUrl: string;
     private antiForgeryToken: string | null;
 
-    constructor(configuration: OAuthConfiguration) {
+    constructor(oauthAgentBaseUrl: string) {
 
-        this.configuration = configuration;
+        this.oauthAgentBaseUrl = oauthAgentBaseUrl;
         this.antiForgeryToken = null;
         this.setupCallbacks();
     }
@@ -28,7 +28,7 @@ export class OAuthClient {
     /*
      * On every page load the SPA asks the OAuth Agent for login related state
      */
-    public async handlePageLoad(pageUrl: string): Promise<any> {
+    public async handlePageLoad(pageUrl: string): Promise<PageLoadResponse> {
 
         const request = JSON.stringify({
             pageUrl,
@@ -39,7 +39,10 @@ export class OAuthClient {
             this.antiForgeryToken = response.csrf;
         }
 
-        return response;
+        return {
+            isLoggedIn: response.isLoggedIn,
+            handled: response.handled,
+        }
     }
 
     /*
@@ -79,7 +82,7 @@ export class OAuthClient {
                 // Retry the user info call
                 return await this.fetch('GET', 'userInfo', null);
 
-            } catch (e) {
+            } catch (e: any) {
 
                 // Report retry errors
                 throw ErrorHandler.handleFetchError('OAuth Agent', e);
@@ -125,7 +128,7 @@ export class OAuthClient {
      */
     private async fetch(method: string, path: string, body: any): Promise<any> {
 
-        let url = `${this.configuration.oauthAgentBaseUrl}/${path}`;
+        let url = `${this.oauthAgentBaseUrl}/${path}`;
         const options = {
             url,
             method: method as Method,
@@ -158,7 +161,7 @@ export class OAuthClient {
 
             return null;
 
-        } catch (e) {
+        } catch (e: any) {
 
             throw ErrorHandler.handleFetchError('OAuth Agent', e);
         }

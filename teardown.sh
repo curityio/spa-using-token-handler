@@ -12,4 +12,4 @@ cd "$(dirname "${BASH_SOURCE[0]}")"
 #
 # Free resources by running the child script
 #
-./resources/teardown.sh
+./deployments/teardown.sh

@@ -23,9 +23,9 @@ Add these entries to your /etc/hosts file:
 
 Ensure that these tools are installed locally:
 
-- [Node.js](https://nodejs.org/en/download/)
+- [Node.js 20 or later](https://nodejs.org/en/download/)
 - [Java 17 or later](https://openjdk.java.net/projects/jdk/17/)
-- [Docker Desktop](https://www.docker.com/products/docker-desktop)
+- [Docker](https://www.docker.com/products/docker-desktop)
 - [openssl](https://www.openssl.org/source/)
 - [jq](https://stedolan.github.io/jq/download/)
 - [envsubst](https://www.gnu.org/software/gettext/)
@@ -73,19 +73,6 @@ OAUTH_PROXY=''
 ./deploy.sh "FINANCIAL" "$OAUTH_PROXY" 
 ```
 
-## Overriding Domains
-
-Deployed domains used can be adjusted depending on your preferences, by editing the deploy.sh script.\
-The following configuration can be used if you prefer to run token handler components in the web domain.\
-If you use a different domain to example.com, ensure that /etc/hosts is updated accordingly.
-
-```text
-export BASE_DOMAIN='example.com'
-export WEB_SUBDOMAIN='www'
-export API_SUBDOMAIN='www'
-export IDSVR_SUBDOMAIN='login'
-```
-
 ## Use the System
 
 Then browse to https://www.example.com and sign in with the following test user name and password:
@@ -94,11 +81,11 @@ Then browse to https://www.example.com and sign in with the following test user 
 
 The SPA has an initial unauthenticated view to focus on triggering a login:
 
-![Unauthenticated View](/doc/ui-unauthenticated-financial.png)
+![Unauthenticated View](/doc/images/unauthenticated.png)
 
 The authenticated view demonstrates multi-tab browsing, which works reliably in all browsers:
 
-![Authenticated View](/doc/ui-authenticated-financial.png)
+![Authenticated View](/doc/images/authenticated.png)
 
 ## Deployed System
 
@@ -109,10 +96,9 @@ Once the system is deployed you can also browse to these URLs:
 - Browse to the SPA's [OAuth Agent Base URL](https://api.example.com/oauth-agent)
 - Browse to the [Example API Base URL](https://api.example.com/api), which uses the OAuth proxy to forward JWTs to APIs
 
-## Internal Details
+## Deployment Details
 
-- To better understand deployment, see the [SPA Deployments](https://github.com/curityio/spa-deployments) repository.
-- To better understand how the OAuth Agent works, see the [SPA Financial Grade OAuth Agent](https://github.com/curityio/oauth-agent-kotlin-spring-fapi).
+To understand token handler deployment details you can study the [build](../deployments/build.sh) and [deployment](../deployments/financial/deploy.sh) scripts.
 
 ## Troubleshoot
 
