@@ -1,7 +1,7 @@
 FROM node:20-bookworm-slim
 
 RUN groupadd --gid 10000 webuser \
-  && useradd --uid 10001 --gid webuser --shell /bin/bash --create-home webuser \
+  && useradd --uid 10001 --gid webuser --shell /bin/bash --create-home webuser
 
 WORKDIR /usr/webhost
 COPY --chown=10001:10000 webhost/dist          /usr/webhost/dist
