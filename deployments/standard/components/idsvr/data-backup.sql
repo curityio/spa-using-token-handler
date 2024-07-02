@@ -106,6 +106,7 @@ COMMENT ON COLUMN nonces.status IS 'Status of the nonce from {''issued'', ''revo
 
 CREATE TABLE accounts (
   account_id  VARCHAR(64)   PRIMARY KEY NOT NULL DEFAULT uuid_generate_v4(),
+  tenant_id   VARCHAR(64),
   username    VARCHAR(64)   NOT NULL,
   password    VARCHAR(128),
   email       VARCHAR(64),
@@ -116,15 +117,23 @@ CREATE TABLE accounts (
   updated     BIGINT        NOT NULL
 );
 
-CREATE UNIQUE INDEX IDX_ACCOUNTS_USERNAME ON accounts (username);
-CREATE UNIQUE INDEX IDX_ACCOUNTS_PHONE    ON accounts (phone);
-CREATE UNIQUE INDEX IDX_ACCOUNTS_EMAIL    ON accounts (email);
+CREATE UNIQUE INDEX IDX_ACCOUNTS_TENANT_USERNAME ON accounts (tenant_id, username);
+CREATE UNIQUE INDEX IDX_ACCOUNTS_TENANT_PHONE    ON accounts (tenant_id, phone);
+CREATE UNIQUE INDEX IDX_ACCOUNTS_TENANT_EMAIL    ON accounts (tenant_id, email);
+
+-- Indexes enforcing uniqueness of username, phone, email for default tenant.
+CREATE UNIQUE INDEX IDX_ACCOUNTS_TENANT_USERNAME_DEFAULT ON accounts(username) WHERE tenant_id IS NULL;
+CREATE UNIQUE INDEX IDX_ACCOUNTS_TENANT_PHONE_DEFAULT ON accounts(phone) WHERE tenant_id IS NULL;
+CREATE UNIQUE INDEX IDX_ACCOUNTS_TENANT_EMAIL_DEFAULT ON accounts(email) WHERE tenant_id IS NULL;
+
 CREATE INDEX IDX_ACCOUNTS_ATTRIBUTES_NAME ON accounts USING GIN ( (attributes->'name') );
 
 COMMENT ON COLUMN accounts.account_id IS 'Account id, or username, of this account. Unique.';
+COMMENT ON COLUMN accounts.tenant_id IS 'The tenant ID of this account. Unique in combination with username, phone, email.';
+COMMENT ON COLUMN accounts.username IS 'The username of this account. Unique in combination with tenant_id.';
 COMMENT ON COLUMN accounts.password IS 'The hashed password. Optional';
-COMMENT ON COLUMN accounts.email IS 'The associated email address. Optional';
-COMMENT ON COLUMN accounts.phone IS 'The phone number of the account owner. Optional';
+COMMENT ON COLUMN accounts.email IS 'The associated email address. Unique in combination with tenant_id. Optional';
+COMMENT ON COLUMN accounts.phone IS 'The phone number of the account owner. Unique in combination with tenant_id. Optional';
 COMMENT ON COLUMN accounts.attributes IS 'Key/value map of additional attributes associated with the account.';
 COMMENT ON COLUMN accounts.active IS 'Indicates if this account has been activated or not. Activation is usually via email or sms.';
 COMMENT ON COLUMN accounts.created IS 'Time since epoch of account creation, in seconds';
@@ -132,24 +141,28 @@ COMMENT ON COLUMN accounts.updated IS 'Time since epoch of latest account update
 
 
 CREATE TABLE linked_accounts (
-  account_id                  VARCHAR(64),
+  account_id                  VARCHAR(64) NOT NULL,
+  tenant_id                   VARCHAR(64),
   linked_account_id           VARCHAR(64) NOT NULL,
   linked_account_domain_name  VARCHAR(64) NOT NULL,
   linking_account_manager     VARCHAR(128),
   created                     TIMESTAMP   NOT NULL,
 
-  PRIMARY KEY (linked_account_id, linked_account_domain_name)
+  PRIMARY KEY (account_id, linked_account_id, linked_account_domain_name)
 );
 
-CREATE INDEX IDX_LINKED_ACCOUNTS_ACCOUNTS_ID ON linked_accounts (account_id ASC);
+CREATE UNIQUE INDEX IDX_LINKED_ACCOUNTS_TENANT_ACCOUNT_DOMAIN ON linked_accounts (tenant_id, linked_account_id, linked_account_domain_name);
+CREATE UNIQUE INDEX IDX_LINKED_ACCOUNTS_TENANT_ACCOUNT_DOMAIN_DEFAULT ON linked_accounts (linked_account_id, linked_account_domain_name) WHERE tenant_id IS NULL;
 
 COMMENT ON COLUMN linked_accounts.account_id IS 'Account ID, typically a global one, of the account being linked from (the linker)';
+COMMENT ON COLUMN linked_accounts.tenant_id IS 'The tenant ID of this linked account';
 COMMENT ON COLUMN linked_accounts.linked_account_id IS 'Account ID, typically a local or legacy one, of the account being linked (the linkee)';
 COMMENT ON COLUMN linked_accounts.linked_account_domain_name IS 'The domain (i.e., organizational group or realm) of the account being linked';
 
 
 CREATE TABLE credentials (
   id          VARCHAR(36)  PRIMARY KEY DEFAULT uuid_generate_v4(),
+  tenant_id   VARCHAR(64),
   subject     VARCHAR(64)  NOT NULL,
   password    VARCHAR(128) NOT NULL,
   attributes  JSONB        NOT NULL,
@@ -157,10 +170,12 @@ CREATE TABLE credentials (
   updated     TIMESTAMP    NOT NULL
 );
 
-CREATE UNIQUE INDEX IDX_CREDENTIALS_SUBJECT ON credentials (subject);
+CREATE UNIQUE INDEX IDX_CREDENTIALS_TENANT_SUBJECT ON credentials (tenant_id, subject);
+CREATE UNIQUE INDEX IDX_CREDENTIALS_TENANT_SUBJECT_DEFAULT ON credentials (subject) WHERE tenant_id IS NULL;
 
 COMMENT ON COLUMN credentials.id IS 'ID of this credential (unique)';
-COMMENT ON COLUMN credentials.subject IS 'The subject of this credential (unique)';
+COMMENT ON COLUMN credentials.tenant_id IS 'The tenant ID of this credential';
+COMMENT ON COLUMN credentials.subject IS 'The subject of this credential (unique to a tenant)';
 COMMENT ON COLUMN credentials.password IS 'The hashed password';
 COMMENT ON COLUMN credentials.attributes IS 'Key/value map of additional attributes associated with the credential';
 COMMENT ON COLUMN credentials.created IS 'When this credential was created';
@@ -184,7 +199,8 @@ COMMENT ON COLUMN sessions.expires IS 'Moment when session record expires, as me
 
 CREATE TABLE devices (
   id          VARCHAR(64) PRIMARY KEY NOT NULL,
-  device_id   VARCHAR(64),
+  device_id   VARCHAR(256),
+  tenant_id   VARCHAR(64),
   account_id  VARCHAR(256),
   external_id VARCHAR(32),
   alias       VARCHAR(30),
@@ -197,11 +213,13 @@ CREATE TABLE devices (
   updated     BIGINT      NOT NULL
 );
 
-CREATE INDEX IDX_DEVICES_ACCOUNT_ID                   ON devices (account_id ASC);
-CREATE UNIQUE INDEX IDX_DEVICES_DEVICE_ID_ACCOUNT_ID  ON devices (device_id ASC, account_id ASC);
+CREATE UNIQUE INDEX IDX_DEVICES_TENANT_ACCOUNT_ID_DEVICE_ID ON devices (tenant_id, account_id ASC, device_id ASC);
+CREATE UNIQUE INDEX IDX_DEVICES_TENANT_ACCOUNT_ID_DEVICE_ID_DEFAULT  ON devices (account_id ASC, device_id ASC) WHERE tenant_id IS NULL;
+CREATE INDEX IDX_DEVICE_ID ON devices (device_id ASC);
 
 COMMENT ON COLUMN devices.id IS 'Unique ID of the device';
 COMMENT ON COLUMN devices.device_id IS 'The device ID that identifies the physical device';
+COMMENT ON COLUMN devices.tenant_id IS 'The tenant ID of this device';
 COMMENT ON COLUMN devices.account_id IS 'The user account ID that is associated with the device';
 COMMENT ON COLUMN devices.alias IS 'The user-recognizable name or mnemonic identifier of the device (e.g., my work iPhone)';
 COMMENT ON COLUMN devices.form_factor IS 'The type or form of device (e.g., laptop, phone, tablet, etc.)';
@@ -318,19 +336,26 @@ CREATE INDEX IDX_DATABASE_CLIENTS_METADATA_TAGS ON database_clients USING GIN ((
 CREATE INDEX IDX_DATABASE_CLIENTS_METADATA_TAGS_NULL ON database_clients (client_metadata) WHERE client_metadata->'tags' IS NULL;
 
 CREATE TABLE buckets (
+    id         VARCHAR(64)  NOT NULL DEFAULT uuid_generate_v4(),
     subject    VARCHAR(128) NOT NULL,
     purpose    VARCHAR(64)  NOT NULL,
+    tenant_id  VARCHAR(64),
     attributes JSONB        NOT NULL,
     created    TIMESTAMP    NOT NULL,
     updated    TIMESTAMP    NOT NULL,
 
-    PRIMARY KEY (subject, purpose)
+    PRIMARY KEY (id)
 );
+
+CREATE UNIQUE INDEX IDX_BUCKETS_TENANT_SUBJECT_PURPOSE on buckets (tenant_id, subject, purpose);
+CREATE UNIQUE INDEX IDX_BUCKETS_TENANT_SUBJECT_PURPOSE_DEFAULT on buckets (subject, purpose) WHERE tenant_id IS NULL;
 
 CREATE INDEX IDX_BUCKETS_ATTRIBUTES ON buckets USING GIN (attributes);
 
+COMMENT ON COLUMN buckets.id IS 'Unique ID of the bucket';
 COMMENT ON COLUMN buckets.subject IS 'The subject that together with the purpose identify this bucket';
 COMMENT ON COLUMN buckets.purpose IS 'The purpose of this bucket, eg. "login_attempt_counter"';
+COMMENT ON COLUMN buckets.tenant_id IS 'The tenant ID of this bucket';
 COMMENT ON COLUMN buckets.attributes IS 'All attributes stored for this subject/purpose';
 COMMENT ON COLUMN buckets.created IS 'When this bucket was created';
 COMMENT ON COLUMN buckets.updated IS 'When this bucket was last updated';
