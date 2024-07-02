@@ -32,6 +32,12 @@ Also get a License File for the Curity Identity Server and copy it to the root f
 - Sign in to the [Curity Developer Portal](https://developer.curity.io/) with your Github account.
 - You can get a [Free Community Edition License](https://curity.io/product/community/) if you are new to the Curity Identity Server.
 
+Also, ensure that your computer's Curity Docker image is up to date:
+
+```bash
+docker pull curity.azurecr.io/curity/idsvr
+```
+
 ## Build the Code
 
 This will compile projects and build Docker images:
