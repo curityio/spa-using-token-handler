@@ -33,6 +33,12 @@ Ensure that these tools are installed locally:
 Contact Curity to get a trial license with access to financial grade features.\
 Then copy the `license.json` file to the folder where you have cloned this repository.
 
+Also, ensure that your computer's Curity Docker image is up to date:
+
+```bash
+docker pull curity.azurecr.io/curity/idsvr
+```
+
 ## Build the Code
 
 This will compile projects, build Docker images and generate development certificates if needed:
