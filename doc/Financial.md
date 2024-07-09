@@ -61,7 +61,7 @@ OAUTH_PROXY supported values:
 
 ## Configure SSL Trust
 
-Configure the browser to trust the root certificate authority at `./resources/certs/example.ca.pem`.\
+Configure the browser to trust the root certificate authority at `./deployments/financial/certs/example.ca.pem`.\
 For most browsers this can be done by importing it to the system trust store, eg Keychain Access / System / Certificates.
 
 ## Deploy the System
