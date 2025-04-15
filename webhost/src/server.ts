@@ -44,8 +44,6 @@ app.use((request: express.Request, response: express.Response, next: express.Nex
 if (process.env.NODE_ENV === 'production') {
     app.use(express.static('./content'));
 } else {
-    const x = path.resolve(process.cwd(), '../../spa/dist');
-    console.log(x);
     app.use(express.static(path.resolve(process.cwd(), '../spa/dist')));
 }
 
