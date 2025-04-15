@@ -18,21 +18,21 @@
         "uitests": "cypress run --headed --no-exit --browser chrome"
     },
     "dependencies": {
-        "axios": "^1.7.7",
-        "react": "^18.3.1",
-        "react-dom": "^18.3.1"
+        "axios": "^1.8.4",
+        "react": "^19.1.0",
+        "react-dom": "^19.1.0"
     },
     "devDependencies": {
-        "@types/react": "^18.3.3",
-        "@types/react-dom": "^18.3.0",
+        "@types/react": "^19.1.2",
+        "@types/react-dom": "^19.1.0",
         "cypress": "^13.14.2",
         "mochawesome": "^7.1.3",
         "ts-loader": "^9.5.1",
-        "tsx": "^4.19.0",
-        "typescript": "^5.5.4",
-        "webpack": "^5.93.0",
-        "webpack-cli": "^5.1.4",
-        "webpack-dev-server": "^5.0.4",
+        "tsx": "^4.19.3",
+        "typescript": "^5.8.3",
+        "webpack": "^5.99.5",
+        "webpack-cli": "^6.0.1",
+        "webpack-dev-server": "^5.2.1",
         "webpack-merge": "^6.0.1"
     }
 }

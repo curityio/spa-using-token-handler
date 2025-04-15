@@ -1,8 +1,9 @@
 {
     "port": 3002,
-    "jwksUrl": "$JWKS_ENDPOINT",
+    "jwksUri": "$JWKS_ENDPOINT",
     "issuer": "$ISSUER_URI",
     "audience": "api.example.com",
+    "algorithm": "PS256",
     "keystoreFilePath": "",
     "keystorePassword": ""
 }

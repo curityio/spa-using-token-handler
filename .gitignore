@@ -2,7 +2,6 @@
 license.json
 node_modules
 dist
-webhost/config.json
 spa/cypress/reports/
 deployments/*/components/api/config.json
 deployments/*/components/spa/config.json

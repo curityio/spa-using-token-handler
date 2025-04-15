@@ -1,8 +1,9 @@
 export interface Configuration {
     port: number;
-    jwksUrl: string;
+    jwksUri: string;
     issuer: string;
     audience: string;
+    algorithm: string;
     keystoreFilePath: string;
     keystorePassword: string;
 };

@@ -1,4 +1,4 @@
-FROM kong:3.7.0-ubuntu
+FROM kong:3.9.0-ubuntu
 
 # Fetch from luarocks, and set git options if required
 USER root

@@ -55,7 +55,7 @@ services:
   # A gateway that uses Kong and LUA plugins
   #
   kong-api-gateway:
-    image: custom_kong:3.7.0
+    image: custom_kong:3.9.0
     hostname: apigateway
     ports:
       - 80:3000
@@ -75,7 +75,7 @@ services:
   # Use NGINX and C modules
   #
   nginx-api-gateway:
-    image: custom_nginx:1.25.1-alpine
+    image: custom_nginx:1.25.5-alpine
     hostname: apigateway
     ports:
       - 80:3000
@@ -89,7 +89,7 @@ services:
   # Use OpenResty and LUA plugins
   #
   openresty-api-gateway:
-    image: custom_openresty/openresty:1.25.3.1-jammy
+    image: custom_openresty/openresty:1.27.1.2-noble
     hostname: apigateway
     ports:
       - 80:3000
@@ -102,7 +102,7 @@ services:
   # A SQL database used by the Curity Identity Server
   #
   curity-data:
-    image: postgres:16.3
+    image: postgres:17.4
     hostname: dbserver
     volumes:
       - ./components/idsvr/data-backup.sql:/docker-entrypoint-initdb.d/data-backup.sql
