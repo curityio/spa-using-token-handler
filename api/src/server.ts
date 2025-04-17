@@ -1,20 +1,14 @@
 import express from 'express';
 import fs from 'fs';
 import https from 'https';
-import {secure} from 'express-oauth-jwt';
-import {createRemoteJWKSet} from 'jose';
-import {Configuration} from './configuration';
+import {Configuration} from './configuration.js';
+import {OAuthFilter} from './oauthFilter.js';
 
 /*
  * First load configuration
  */
-const buffer = fs.readFileSync('config.json');
-const configuration = JSON.parse(buffer.toString()) as Configuration;
-
-/*
- * Create a service for getting token signing public keys
- */
-const jwksService = createRemoteJWKSet(new URL(configuration.jwksUrl));
+const configurationJson = fs.readFileSync('config.json', 'utf8');
+const configuration = JSON.parse(configurationJson) as Configuration;
 
 /*
  * Configure Express
@@ -23,21 +17,10 @@ const app = express();
 app.set('etag', false);
 
 /*
- * Implement JWT validation and check for the expected issuer and audience
+ * Run an OAuth filter before the API's business logic
  */
-const options = {
-    claims: [
-        {
-            name: 'iss',
-            value: configuration.issuer,
-        },
-        {
-            name: 'aud',
-            value: configuration.audience,
-        },
-    ]
-};
-app.use('/data', secure(jwksService, options));
+const oauthFilter = new OAuthFilter(configuration);
+app.use('/data', oauthFilter.validateAccessToken);
 
 /*
  * Business logic that runs after JWT validation

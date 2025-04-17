@@ -7,8 +7,8 @@ import {Configuration} from './configuration';
 /*
  * First load configuration
  */
-const buffer = fs.readFileSync('config.json');
-const configuration = JSON.parse(buffer.toString()) as Configuration;
+const configurationJson = fs.readFileSync('config.json', 'utf8');
+const configuration = JSON.parse(configurationJson) as Configuration;
 
 /*
  * Write security headers when a request is first received
@@ -44,7 +44,7 @@ app.use((request: express.Request, response: express.Response, next: express.Nex
 if (process.env.NODE_ENV === 'production') {
     app.use(express.static('./content'));
 } else {
-    app.use(express.static(path.resolve(__dirname, '../../spa/dist')));
+    app.use(express.static(path.resolve(process.cwd(), '../spa/dist')));
 }
 
 /*
@@ -60,12 +60,12 @@ if (configuration.keystoreFilePath) {
 
     const httpsServer = https.createServer(sslOptions, app);
     httpsServer.listen(configuration.port, () => {
-        console.log(`Web Host is listening on HTTPS port ${configuration.port}`);
+        console.log(`Web host is listening on HTTPS port ${configuration.port}`);
     });
 
 } else {
 
     app.listen(configuration.port, () => {
-        console.log(`Web Host is listening on HTTP port ${configuration.port}`);
+        console.log(`Web host is listening on HTTP port ${configuration.port}`);
     });
 }

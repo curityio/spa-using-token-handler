@@ -77,6 +77,7 @@
       <token-issuers>
         <default-token-issuer>
           <jwt-issuer-settings>
+            <algorithm>PS256</algorithm>
             <signing-key-id>default-signing-key</signing-key-id>
           </jwt-issuer-settings>
           <default-data-source>default-datasource</default-data-source>
@@ -366,6 +367,7 @@
       <token-issuers>
         <default-token-issuer>
           <jwt-issuer-settings>
+            <algorithm>PS256</algorithm>
             <signing-key-id>default-signing-key</signing-key-id>
           </jwt-issuer-settings>
           <default-data-source>default-datasource</default-data-source>
