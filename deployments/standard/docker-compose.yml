@@ -75,7 +75,7 @@ services:
   # Use NGINX and C modules
   #
   nginx-api-gateway:
-    image: custom_nginx:1.25.5-alpine
+    image: custom_nginx:1.27.4-alpine
     hostname: apigateway
     ports:
       - 80:3000

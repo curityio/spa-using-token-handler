@@ -45,7 +45,7 @@ fi
 #
 if [ "$OAUTH_PROXY" == 'NGINX' ]; then
 
-  docker build --no-cache -f nginx/Dockerfile -t custom_nginx:1.25.5-alpine .
+  docker build --no-cache -f nginx/Dockerfile -t custom_nginx:1.27.4-alpine .
   if [ $? -ne 0 ]; then
     echo "Problem encountered building the NGINX docker image"
     exit 1
