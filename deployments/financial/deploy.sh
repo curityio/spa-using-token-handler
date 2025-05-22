@@ -170,6 +170,7 @@ if [ "$OAUTH_PROXY" == 'KONG' ]; then
 
 elif [ "$OAUTH_PROXY" == 'NGINX' ]; then
 
+  export INTROSPECTION_CREDENTIAL="$(echo -n 'api-gateway-client:Password1' | base64)"
   envsubst < ./nginx/default.conf.template | sed -e 's/§/$/g' > ./nginx/default.conf
 
 elif [ "$OAUTH_PROXY" == 'OPENRESTY' ]; then

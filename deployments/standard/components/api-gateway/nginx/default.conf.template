@@ -40,7 +40,6 @@ server {
 
         # Then run the Phantom Token plugin to translate opaque access tokens to JWT access tokens
         phantom_token on;
-        phantom_token_client_credential api-gateway-client Password1;
         phantom_token_introspection_endpoint curity;
         
         # Then forward the JWT to the below API
@@ -52,11 +51,21 @@ server {
         # Use the Docker embedded DNS server
         resolver 127.0.0.11;
 
-        # Do the introspection when required
-        proxy_pass $INTROSPECTION_ENDPOINT;
+        # Avoid exposing this route externally
+        internal;
+        
+        # Configure introspection headers
+        proxy_pass_request_headers off;
+        proxy_set_header Accept "application/jwt";
+        proxy_set_header Content-Type "application/x-www-form-urlencoded";
+        proxy_set_header Authorization "Basic $INTROSPECTION_CREDENTIAL";
+        
+        # Configure the introspection results cache
         proxy_cache_methods POST;
         proxy_cache api_cache;
         proxy_cache_key §request_body;
         proxy_ignore_headers Set-Cookie;
+
+        proxy_pass $INTROSPECTION_ENDPOINT;
     }
 }
