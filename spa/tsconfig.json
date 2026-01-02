@@ -5,7 +5,7 @@
         "lib": ["ES2022", "DOM"],
         "jsx": "react",
         "module": "ES2015",
-        "moduleResolution": "Node",
+        "moduleResolution": "Bundler",
         "allowSyntheticDefaultImports": true,
         "outDir": "dist",
     },

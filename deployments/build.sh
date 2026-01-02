@@ -82,6 +82,9 @@ if [ "$OAUTH_AGENT" == 'NODE' ]; then
   fi
   cd oauth-agent
 
+  # TODO: delete after merge
+  git checkout feature/dependency-updates
+
   npm install
   if [ $? -ne 0 ]; then
     echo "Problem encountered installing the OAuth Agent dependencies"
