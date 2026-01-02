@@ -52,7 +52,10 @@ export class AppViewModel {
                     isLoggedIn: false,
                     handled: false,
                 }
+                return;
             }
+
+            throw e;
 
         } finally {
             

@@ -42,8 +42,6 @@ export default function App(props: AppProps) {
 
             setPageLoadError(ErrorRenderer.toDisplayFormat(e));
         }
-
-        
     }
 
     /*
