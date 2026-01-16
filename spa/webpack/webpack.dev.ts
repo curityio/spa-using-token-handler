@@ -16,6 +16,9 @@ const devConfig: webpack.Configuration = {
     allowedHosts: [
         'www.example.com'
     ],
+    devMiddleware: {
+        writeToDisk: true,
+    },
   },
 }
 

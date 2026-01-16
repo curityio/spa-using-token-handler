@@ -1,4 +1,4 @@
-FROM node:20-bookworm-slim
+FROM node:22-bookworm-slim
 
 RUN groupadd --gid 10000 apiuser \
   && useradd --uid 10001 --gid apiuser --shell /bin/bash --create-home apiuser

@@ -7,6 +7,14 @@
 cd "$(dirname "${BASH_SOURCE[0]}")"
 
 #
+# Get the platform for Docker builds and default to x64
+#
+export PLATFORM='x64'
+if [ "$(uname -m)" == 'arm64' ]; then
+  PLATFORM='arm64'
+fi
+
+#
 # Get the OAuth agent and default to Node.js
 #
 OAUTH_AGENT="$1"
@@ -45,6 +53,11 @@ fi
 #
 if [ "$OAUTH_PROXY" == 'NGINX' ]; then
 
+  if [ "$(uname -m)" != 'x64' ]; then
+    echo 'NGINX modules are currently only supported on x64 hosts'
+    exit 1
+  fi
+  
   docker build --no-cache -f nginx/Dockerfile -t custom_nginx:1.27.4-alpine .
   if [ $? -ne 0 ]; then
     echo "Problem encountered building the NGINX docker image"
@@ -82,6 +95,9 @@ if [ "$OAUTH_AGENT" == 'NODE' ]; then
   fi
   cd oauth-agent
 
+  # TODO: delete after merge
+  git checkout feature/dependency-updates
+
   npm install
   if [ $? -ne 0 ]; then
     echo "Problem encountered installing the OAuth Agent dependencies"
@@ -103,7 +119,10 @@ elif [ "$OAUTH_AGENT" == 'NET' ]; then
   fi
   cd oauth-agent
 
-  dotnet publish oauth-agent.csproj -c Release -r linux-x64 --no-self-contained
+  # TODO: delete after merge
+  git checkout feature/dependency-updates
+
+  dotnet publish oauth-agent.csproj -c Release -r "linux-$PLATFORM" --no-self-contained
   if [ $? -ne 0 ]; then
     echo "Problem encountered building the OAuth Agent's Java code"
     exit 1
@@ -139,7 +158,8 @@ elif [ "$OAUTH_AGENT" == 'FINANCIAL' ]; then
     exit 1
   fi
 fi
-docker build -t oauthagent:1.0.0 .
+
+docker build --build-arg "PLATFORM=$PLATFORM" -t oauthagent:1.0.0 .
 if [ $? -ne 0 ]; then
   echo "Problem encountered building the OAuth Agent docker image"
   exit 1

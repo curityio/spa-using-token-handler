@@ -23,7 +23,7 @@ Add these entries to your /etc/hosts file:
 
 Ensure that these tools are installed locally:
 
-- [Node.js 20 or later](https://nodejs.org/en/download/)
+- [Node.js 22 or later](https://nodejs.org/en/download/)
 - [Java 17 or later](https://openjdk.java.net/projects/jdk/17/)
 - [Docker](https://www.docker.com/products/docker-desktop)
 - [openssl](https://www.openssl.org/source/)
@@ -118,15 +118,6 @@ docker logs -f $OAUTH_AGENT_CONTAINER_ID
 ```bash
 API_GATEWAY_CONTAINER_ID=$(docker container ls | grep api-gateway | awk '{print $1}')
 docker logs -f $API_GATEWAY_CONTAINER_ID
-```
-
-## Run UI Tests
-
-If required, run the SPA's [automated UI tests](Cypress.md) for login related operations:
-
-```bash
-cd spa
-npm run uitests
 ```
 
 ## Free Resources

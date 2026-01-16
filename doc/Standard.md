@@ -22,7 +22,7 @@ Add these entries to your /etc/hosts file:
 
 Ensure that these tools are installed locally:
 
-- [Node.js 20 or later](https://nodejs.org/en/download/)
+- [Node.js 22 or later](https://nodejs.org/en/download/)
 - [Docker](https://www.docker.com/products/docker-desktop)
 - [jq](https://stedolan.github.io/jq/download/)
 - [envsubst](https://www.gnu.org/software/gettext/)
@@ -61,7 +61,7 @@ OAUTH_AGENT supported values:
 
 OAUTH_PROXY supported values:
   - KONG (default)
-  - NGINX
+  - NGINX (only supported for x64 host computers)
   - OPENRESTY
 
 ## Deploy the System
@@ -119,15 +119,6 @@ docker logs -f $OAUTH_AGENT_CONTAINER_ID
 ```bash
 API_GATEWAY_CONTAINER_ID=$(docker container ls | grep api-gateway | awk '{print $1}')
 docker logs -f $API_GATEWAY_CONTAINER_ID
-```
-
-## Run UI Tests
-
-If required, run the SPA's [automated UI tests](Cypress.md) for login related operations:
-
-```bash
-cd spa
-npm run uitests
 ```
 
 ## Free Resources
