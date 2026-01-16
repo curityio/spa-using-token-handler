@@ -61,7 +61,7 @@ OAUTH_AGENT supported values:
 
 OAUTH_PROXY supported values:
   - KONG (default)
-  - NGINX
+  - NGINX (only supported for x64 host computers)
   - OPENRESTY
 
 ## Deploy the System
