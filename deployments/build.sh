@@ -7,9 +7,12 @@
 cd "$(dirname "${BASH_SOURCE[0]}")"
 
 #
-# Get the platform for Docker builds
+# Get the platform for Docker builds and default to x64
 #
-export PLATFORM=$(uname -m)
+export PLATFORM='x64'
+if [ "$(uname -m)" == 'arm64' ]; then
+  PLATFORM='arm64'
+fi
 
 #
 # Get the OAuth agent and default to Node.js
